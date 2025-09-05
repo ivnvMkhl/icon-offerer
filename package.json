@@ -5,7 +5,7 @@
   "homepage": "https://ivnvMkhl.github.io/icon-refferer",
   "main": "index.js",
   "scripts": {
-    "extract-icons": "node scripts/extract-svg-paths.js && node scripts/extract-mui-icons.js",
+    "extract-icons": "node scripts/extract-svg-paths.js && node scripts/extract-mui-icons.js && node scripts/extract-unicode-icons.js",
     "build": "npm run extract-icons && ELEVENTY_ENV=production eleventy",
     "serve": "npm run extract-icons && ELEVENTY_ENV=production eleventy --serve",
     "dev": "ELEVENTY_ENV=development eleventy --serve --watch",

@@ -1,0 +1,39 @@
+---
+layout: base.njk
+title: Unicode
+description: Подбор иконок из Unicode символов
+---
+
+<div class="container">
+    <h1>Unicode Иконки</h1>
+    
+    <div class="search-section">
+        <div class="search-container">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Поиск по Unicode коду, символу или категории..."
+                class="search-input"
+            >
+        </div>
+        <div class="results-info">
+            <span id="resultsCount"></span>
+            <div id="noResults" class="no-results" style="display: none;">
+                <p>Ничего не найдено. Попробуйте изменить поисковый запрос.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="iconsContainer">
+        <div class="loading-indicator" id="loadingIndicator">
+            <div class="loading-spinner"></div>
+            Загрузка Unicode иконок...
+        </div>
+    </div>
+</div>
+
+<script>
+    window.baseUrl = '{{ baseUrl }}' || '';
+</script>
+<script src="{{ baseUrl }}/js/paginated-icons.js"></script>
+<script src="{{ baseUrl }}/js/unicode-icons.js"></script>
