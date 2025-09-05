@@ -188,7 +188,7 @@ a:hover {
 /* Сетка иконок */
 .icons-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 16px;
     margin: 2rem 0;
 }
@@ -200,6 +200,10 @@ a:hover {
     background: #fff;
     transition: all 0.3s ease;
     cursor: pointer;
+}
+
+.icon-card.hidden {
+    display: none;
 }
 
 .icon-card:hover {
@@ -230,6 +234,11 @@ a:hover {
     border: 1px solid #e8e8e8;
 }
 
+.icon-placeholder svg {
+    width: 20px;
+    height: 20px;
+}
+
 .icon-info {
     margin-bottom: 12px;
 }
@@ -243,9 +252,7 @@ a:hover {
 }
 
 .icon-keywords {
-    font-size: 11px;
-    color: #8c8c8c;
-    line-height: 1.4;
+    display: none;
 }
 
 .icon-actions {
