@@ -32,7 +32,6 @@ description: Подбор иконок из библиотеки Ant Design Icon
             </div>
             <div class="icon-info">
                 <div class="icon-name">{{ icon.name }}</div>
-                <div class="icon-keywords">{{ icon.keywords.join(', ') }}</div>
             </div>
             <div class="icon-actions">
                 <button class="copy-btn" data-icon="{{ icon.name }}" title="Копировать название">
