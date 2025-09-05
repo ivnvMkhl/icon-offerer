@@ -23,9 +23,12 @@ description: Подбор иконок из библиотеки Material Design
         </div>
     </div>
     
-    <div class="icons-grid" id="iconsGrid">
-        <!-- Иконки будут загружены через JavaScript -->
-    </div>
+               <div id="iconsContainer">
+               <div class="loading-indicator" id="loadingIndicator">
+                   <div class="loading-spinner"></div>
+                   Загрузка иконок...
+               </div>
+           </div>
     
     <div class="no-results" id="noResults" style="display: none;">
         <p>Иконки не найдены. Попробуйте изменить поисковый запрос.</p>
@@ -73,5 +76,10 @@ fetch('{{ baseUrl }}/js/mui-icon-paths.json')
     });
 </script>
 
+<script>
+    // Устанавливаем глобальную переменную baseUrl для JavaScript
+    window.baseUrl = '{{ baseUrl }}';
+</script>
+<script src="{{ baseUrl }}/js/paginated-icons.js"></script>
 <script src="{{ baseUrl }}/js/mui-icons.js"></script>
 {% endblock %}
