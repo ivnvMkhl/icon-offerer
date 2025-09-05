@@ -153,6 +153,140 @@ a:hover {
     margin: 0;
 }
 
+/* Поисковый интерфейс */
+.search-section {
+    margin: 2rem 0;
+}
+
+.search-input-container {
+    margin-bottom: 1rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    background: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.search-results-info {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 1rem;
+}
+
+/* Сетка иконок */
+.icons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 2rem 0;
+}
+
+.icon-card {
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    padding: 16px;
+    background: #fff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.icon-card:hover {
+    border-color: #1890ff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.icon-preview {
+    text-align: center;
+    margin-bottom: 12px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-placeholder {
+    width: 32px;
+    height: 32px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #666;
+    border: 1px solid #e8e8e8;
+}
+
+.icon-info {
+    margin-bottom: 12px;
+}
+
+.icon-name {
+    font-weight: 500;
+    font-size: 13px;
+    color: #262626;
+    margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.icon-keywords {
+    font-size: 11px;
+    color: #8c8c8c;
+    line-height: 1.4;
+}
+
+.icon-actions {
+    text-align: center;
+}
+
+.copy-btn {
+    background: #f5f5f5;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: #595959;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.copy-btn:hover {
+    background: #1890ff;
+    border-color: #1890ff;
+    color: #fff;
+}
+
+.copy-btn.copied {
+    background: #52c41a;
+    border-color: #52c41a;
+    color: #fff;
+}
+
+.no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #8c8c8c;
+}
+
+.no-results p {
+    margin: 0;
+    font-size: 14px;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .container {
@@ -172,6 +306,25 @@ a:hover {
     }
     
     .platforms h2 {
+        font-size: 16px;
+    }
+    
+    .icons-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+    }
+    
+    .icon-card {
+        padding: 12px;
+    }
+    
+    .icon-preview {
+        height: 40px;
+    }
+    
+    .icon-placeholder {
+        width: 28px;
+        height: 28px;
         font-size: 16px;
     }
 }

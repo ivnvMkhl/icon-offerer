@@ -5,6 +5,14 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/images/**/*");
   eleventyConfig.addPassthroughCopy("src/fonts/**/*");
 
+  // Добавляем глобальные данные
+  eleventyConfig.addGlobalData("isDev", process.env.ELEVENTY_ENV === 'development');
+  eleventyConfig.addGlobalData("isProduction", process.env.ELEVENTY_ENV === 'production');
+  
+  // Определяем базовый URL
+  const baseUrl = process.env.ELEVENTY_ENV === 'development' ? '' : '/icon-refferer';
+  eleventyConfig.addGlobalData("baseUrl", baseUrl);
+
   // Настройки для входной и выходной директорий
   return {
     dir: {

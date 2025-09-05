@@ -5,16 +5,23 @@
   "homepage": "https://ivnvMkhl.github.io/icon-refferer",
   "main": "index.js",
   "scripts": {
-    "build": "eleventy",
-    "serve": "eleventy --serve",
-    "dev": "eleventy --serve --watch",
-    "start": "eleventy --serve"
+    "build": "ELEVENTY_ENV=production eleventy",
+    "serve": "ELEVENTY_ENV=production eleventy --serve",
+    "dev": "ELEVENTY_ENV=development eleventy --serve --watch",
+    "start": "ELEVENTY_ENV=production eleventy --serve"
   },
-  "keywords": ["11ty", "eleventy", "static-site-generator", "icons"],
+  "keywords": [
+    "11ty",
+    "eleventy",
+    "static-site-generator",
+    "icons"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@ant-design/icons": "^6.0.1"
+  }
 }
