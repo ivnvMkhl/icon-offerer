@@ -18,7 +18,7 @@
     </header>
 
     <main class="main">
-        {{ content | safe }}
+        {% block content %}{{ content | safe }}{% endblock %}
     </main>
 
     <footer class="footer">
