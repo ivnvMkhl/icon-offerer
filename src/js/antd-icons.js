@@ -121,7 +121,7 @@ function initAntdIcons(iconPaths) {
         const textElement = button.querySelector('.copy-text');
         
         button.classList.add('copied');
-        textElement.textContent = 'Скопировано!';
+        textElement.textContent = 'Скопировано';
         
         setTimeout(() => {
             button.classList.remove('copied');
@@ -176,11 +176,11 @@ function initAntdIcons(iconPaths) {
     function loadAntdIcon(placeholder, iconName, iconPaths) {
         // Создаем SVG элемент для иконки
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('width', '24');
-        svg.setAttribute('height', '24');
+        svg.setAttribute('width', '32');
+        svg.setAttribute('height', '32');
         svg.setAttribute('viewBox', '0 0 1024 1024');
         svg.setAttribute('fill', 'currentColor');
-        svg.style.color = '#1890ff';
+        svg.style.color = '#666';
         
         // Создаем path элемент (базовая форма для большинства иконок Ant Design)
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
