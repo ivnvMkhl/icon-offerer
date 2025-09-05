@@ -1,0 +1,20 @@
+{
+  "name": "icon-offerer",
+  "version": "1.0.0",
+  "description": "Приложение на 11ty для работы с иконками",
+  "homepage": "https://ivnvMkhl.github.io/icon-refferer",
+  "main": "index.js",
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve",
+    "dev": "eleventy --serve --watch",
+    "start": "eleventy --serve"
+  },
+  "keywords": ["11ty", "eleventy", "static-site-generator", "icons"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1"
+  },
+  "dependencies": {}
+}
