@@ -249,6 +249,7 @@ a:hover {
     color: #262626;
     margin-bottom: 4px;
     font-family: 'JetBrains Mono', monospace;
+    text-align: center;
 }
 
 .icon-keywords {

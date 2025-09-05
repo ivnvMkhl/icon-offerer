@@ -5,10 +5,11 @@
   "homepage": "https://ivnvMkhl.github.io/icon-refferer",
   "main": "index.js",
   "scripts": {
-    "build": "ELEVENTY_ENV=production eleventy",
-    "serve": "ELEVENTY_ENV=production eleventy --serve",
+    "extract-icons": "node scripts/extract-svg-paths.js",
+    "build": "npm run extract-icons && ELEVENTY_ENV=production eleventy",
+    "serve": "npm run extract-icons && ELEVENTY_ENV=production eleventy --serve",
     "dev": "ELEVENTY_ENV=development eleventy --serve --watch",
-    "start": "ELEVENTY_ENV=production eleventy --serve"
+    "start": "npm run extract-icons && ELEVENTY_ENV=production eleventy --serve"
   },
   "keywords": [
     "11ty",

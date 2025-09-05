@@ -19,32 +19,59 @@ description: Подбор иконок из библиотеки Ant Design Icon
             >
         </div>
         <div class="search-results-info">
-            <span id="resultsCount">Найдено иконок: <strong>{{ antdIcons.length }}</strong></span>
+            <span id="resultsCount">Загрузка иконок...</span>
         </div>
     </div>
     
     <div class="icons-grid" id="iconsGrid">
-        {% for icon in antdIcons %}
-        <div class="icon-card" data-name="{{ icon.name }}" data-keywords="{{ icon.keywords.join(',') }}">
-            <div class="icon-preview">
-                <div class="icon-placeholder" data-icon="{{ icon.name }}">
-                    <!-- Иконка будет загружена через JavaScript -->
-                </div>
-            </div>
-            <div class="icon-info">
-                <div class="icon-name">{{ icon.name }}</div>
-            </div>
-            <div class="icon-actions">
-                <button class="copy-btn" data-icon="{{ icon.name }}" title="Копировать название">
-                    <span class="copy-text">Копировать</span>
-                </button>
-            </div>
-        </div>
-        {% endfor %}
+        <!-- Иконки будут загружены через JavaScript -->
     </div>
     
     <div class="no-results" id="noResults" style="display: none;">
         <p>Иконки не найдены. Попробуйте изменить поисковый запрос.</p>
     </div>
 </div>
+
+<script>
+// Загружаем данные иконок и генерируем HTML
+fetch('{{ baseUrl }}/js/antd-icon-paths.json')
+    .then(response => response.json())
+    .then(iconPaths => {
+        const iconsGrid = document.getElementById('iconsGrid');
+        const resultsCount = document.getElementById('resultsCount');
+        
+        // Генерируем HTML для всех иконок
+        const iconsHtml = Object.keys(iconPaths).map(iconName => `
+            <div class="icon-card" data-name="${iconName}" data-keywords="">
+                <div class="icon-preview">
+                    <div class="icon-placeholder" data-icon="${iconName}">
+                        <!-- Иконка будет загружена через JavaScript -->
+                    </div>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-name">${iconName}</div>
+                </div>
+                <div class="icon-actions">
+                    <button class="copy-btn" data-icon="${iconName}" title="Копировать название">
+                        <span class="copy-text">Копировать</span>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+        
+        iconsGrid.innerHTML = iconsHtml;
+        resultsCount.innerHTML = `Найдено иконок: <strong>${Object.keys(iconPaths).length}</strong>`;
+        
+        // Инициализируем функциональность после загрузки иконок
+        if (typeof initAntdIcons === 'function') {
+            initAntdIcons(iconPaths);
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка загрузки иконок:', error);
+        document.getElementById('resultsCount').innerHTML = 'Ошибка загрузки иконок';
+    });
+</script>
+
+<script src="{{ baseUrl }}/js/antd-icons.js"></script>
 {% endblock %}
