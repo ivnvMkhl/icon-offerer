@@ -11,12 +11,20 @@ if (!fs.existsSync(distJsDir)) {
   fs.mkdirSync(distJsDir, { recursive: true });
 }
 
-// Получаем список всех файлов иконок
+// Получаем список всех файлов иконок (Outlined, Filled, TwoTone)
 const iconFiles = fs.readdirSync(iconsPath)
-  .filter(file => file.endsWith('.js') && file.includes('Outlined'))
+  .filter(file => file.endsWith('.js') && (file.includes('Outlined') || file.includes('Filled') || file.includes('TwoTone')))
   .sort();
 
-console.log(`Найдено ${iconFiles.length} иконок Outlined`);
+const outlinedCount = iconFiles.filter(f => f.includes('Outlined')).length;
+const filledCount = iconFiles.filter(f => f.includes('Filled')).length;
+const twotoneCount = iconFiles.filter(f => f.includes('TwoTone')).length;
+
+console.log(`Найдено иконок:`);
+console.log(`- Outlined: ${outlinedCount}`);
+console.log(`- Filled: ${filledCount}`);
+console.log(`- TwoTone: ${twotoneCount}`);
+console.log(`- Всего: ${iconFiles.length}`);
 
 const iconPaths = {};
 
@@ -27,14 +35,25 @@ iconFiles.forEach(file => {
     const iconModule = require(iconPath);
     const iconData = iconModule.default;
     
-    if (iconData && iconData.icon && iconData.icon.children) {
+    if (iconData && iconData.icon) {
       const iconName = file.replace('.js', '');
       
       // Извлекаем SVG путь
-      const svgPath = iconData.icon.children
-        .filter(child => child.tag === 'path')
-        .map(child => child.attrs.d)
-        .join(' ');
+      let svgPath = '';
+      
+      // Для TwoTone иконок используем специальную логику
+      if (iconName.includes('TwoTone')) {
+        // TwoTone иконки имеют другую структуру - они используют CSS переменные
+        // Пока что пропускаем их, так как они требуют специальной обработки
+        console.log(`Пропускаем TwoTone иконку: ${iconName}`);
+        return;
+      } else if (iconData.icon.children) {
+        // Для Outlined и Filled иконок берем первый path
+        const pathElement = iconData.icon.children.find(child => child.tag === 'path');
+        if (pathElement) {
+          svgPath = pathElement.attrs.d;
+        }
+      }
       
       if (svgPath) {
         iconPaths[iconName] = svgPath;
