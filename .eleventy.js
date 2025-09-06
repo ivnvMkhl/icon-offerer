@@ -4,8 +4,8 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/js/**/*");
   eleventyConfig.addPassthroughCopy("src/images/**/*");
   eleventyConfig.addPassthroughCopy("src/fonts/**/*");
-  eleventyConfig.addPassthroughCopy("src/favicon*");
-  eleventyConfig.addPassthroughCopy("src/apple-touch-icon*");
+  eleventyConfig.addPassthroughCopy("src/favicon.svg");
+  eleventyConfig.addPassthroughCopy("src/apple-touch-icon.svg");
 
   // Добавляем глобальные данные
   eleventyConfig.addGlobalData("isDev", process.env.ELEVENTY_ENV === 'development');
