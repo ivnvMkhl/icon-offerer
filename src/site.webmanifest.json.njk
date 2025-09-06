@@ -9,10 +9,19 @@ permalink: site.webmanifest.json
     "description": "Умный поиск иконок по описанию на естественном языке",
     "icons": [
         {
-            "src": "{{ baseUrl }}/favicon.svg",
-            "sizes": "any",
-            "type": "image/svg+xml",
-            "purpose": "any maskable"
+            "src": "{{ baseUrl }}/favicon.ico",
+            "sizes": "32x32",
+            "type": "image/x-icon"
+        },
+        {
+            "src": "{{ baseUrl }}/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "{{ baseUrl }}/icon-512.png",
+            "sizes": "512x512", 
+            "type": "image/png"
         }
     ],
     "theme_color": "#1a1a1a",
@@ -20,5 +29,31 @@ permalink: site.webmanifest.json
     "display": "standalone",
     "orientation": "portrait-primary",
     "start_url": "{{ baseUrl }}/",
-    "scope": "{{ baseUrl }}/"
+    "scope": "{{ baseUrl }}/",
+    "lang": "ru",
+    "dir": "ltr",
+    "categories": ["utilities", "productivity"],
+    "screenshots": [
+        {
+            "src": "{{ baseUrl }}/screenshot-desktop.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Главная страница Icon Offerer на десктопе"
+        },
+        {
+            "src": "{{ baseUrl }}/screenshot-mobile.png",
+            "sizes": "390x844",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Главная страница Icon Offerer на мобильном устройстве"
+        },
+        {
+            "src": "{{ baseUrl }}/screenshot-icons.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Страница с иконками Material Design"
+        }
+    ]
 }
