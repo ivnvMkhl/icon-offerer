@@ -59,14 +59,10 @@
         {% block content %}{{ content | safe }}{% endblock %}
     </main>
 
-    <footer class="footer">
-        <p>AI-поиск иконок по описанию</p>
-    </footer>
-
     <script src="{{ baseUrl }}/js/logger.js"></script>
     <script src="{{ baseUrl }}/js/main.js"></script>
     
-    <!-- Скрипт для переключения темы -->
+
     <script>
         // Обновление кнопки переключения (только иконки)
         function updateThemeToggle(theme) {
@@ -105,5 +101,16 @@
             }
         });
     </script>
+    
+    <footer class="footer">
+        <div class="footer__content">
+            <p class="footer__text">
+                <b>icon-offerer</b> - AI-поиск иконок по описанию 2025 
+                <a href="https://github.com/ivnvMkhl" target="_blank" rel="noopener noreferrer" class="footer__link">iMkhl</a>
+                • 
+                <a href="https://github.com/ivnvMkhl/icon-refferer" target="_blank" rel="noopener noreferrer" class="footer__link">GitHub</a>
+            </p>
+        </div>
+    </footer>
 </body>
 </html>

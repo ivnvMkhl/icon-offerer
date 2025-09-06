@@ -82,6 +82,9 @@ body {
     overflow-x: hidden;
     scrollbar-gutter: stable;
     transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Предотвращаем FOUC - применяем темную тему сразу */
@@ -96,6 +99,11 @@ html[data-theme="dark"] body {
     margin: 0 auto;
     padding: 0 20px;
     width: 100%;
+}
+
+/* Основной контент */
+main {
+    flex: 1;
 }
 
 /* Навигация */
@@ -142,6 +150,39 @@ html[data-theme="dark"] body {
     width: 32px;
     height: 32px;
     flex-shrink: 0;
+}
+
+/* Футер */
+.footer {
+    margin-top: auto;
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-primary);
+}
+
+.footer__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.footer__text {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.footer__link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer__link:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
 }
 
 .theme-toggle:hover {
