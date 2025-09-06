@@ -210,9 +210,9 @@ class IconPageBase {
                         <span class="pagination-info">1-50 из 1000</span>
                     </div>
                     <div class="pagination-center">
-                        <button class="pagination-btn" data-action="prev">← Назад</button>
+                        <button class="pagination-btn" data-action="prev">←</button>
                         <button class="pagination-btn active">1</button>
-                        <button class="pagination-btn" data-action="next">Вперед →</button>
+                        <button class="pagination-btn" data-action="next">→</button>
                     </div>
                 </div>
             </div>

@@ -54,9 +54,9 @@ class PaginatedIcons {
           <span class="results-count" id="resultsCount">Найдено иконок: 0</span>
         </div>
         <div class="pagination-center">
-          <button class="pagination-btn" id="prevBtn" disabled>← Назад</button>
+          <button class="pagination-btn" id="prevBtn" disabled><-</button>
           <span class="pagination-info" id="paginationInfo">1 из 1</span>
-          <button class="pagination-btn" id="nextBtn" disabled>Вперед →</button>
+          <button class="pagination-btn" id="nextBtn" disabled>-></button>
         </div>
       </div>
     `;

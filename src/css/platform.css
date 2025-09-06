@@ -70,7 +70,7 @@
 .results-count {
     font-size: 0.9rem;
     color: var(--text-secondary);
-    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     transition: color 0.3s ease;
 }
 
@@ -83,10 +83,10 @@
     color: var(--text-primary);
     cursor: pointer;
     transition: all 0.2s ease;
-    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     font-weight: 500;
+    min-width: 50px;
     box-shadow: 0 2px 4px var(--shadow);
-    min-width: 100px;
 }
 
 .pagination-btn:hover:not(:disabled) {
@@ -111,10 +111,41 @@
     box-shadow: none;
 }
 
+/* Стили для кнопок навигации со стрелками */
+.pagination-btn[data-action="prev"],
+.pagination-btn[data-action="next"] {
+    min-width: 50px;
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Унифицированные стрелки */
+.pagination-btn[data-action="prev"]::before {
+    content: "←";
+    font-size: 16px;
+    line-height: 1;
+}
+
+.pagination-btn[data-action="next"]::before {
+    content: "→";
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* Скрываем текст в кнопках навигации */
+.pagination-btn[data-action="prev"] span,
+.pagination-btn[data-action="next"] span {
+    display: none;
+}
+
 .pagination-info {
     font-size: 14px;
     color: var(--text-secondary);
-    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     transition: color 0.3s ease;
     font-weight: 500;
     padding: 8px 12px;
@@ -143,7 +174,7 @@
     border: 1px solid #d9d9d9;
     border-radius: 6px;
     font-size: 14px;
-    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     background: #fff;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -318,7 +349,7 @@
     text-align: center;
     font-size: 12px;
     color: var(--text-primary);
-    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     margin-bottom: 8px;
     white-space: nowrap;
     overflow: hidden;
@@ -340,7 +371,7 @@
     color: var(--text-primary);
     cursor: pointer;
     transition: all 0.2s ease;
-    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     text-decoration: none;
     display: inline-block;
     min-height: 28px; /* Улучшает touch-интерфейс */
@@ -375,7 +406,7 @@
     border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 1rem;
-    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     background: var(--bg-primary);
     color: var(--text-primary);
     transition: border-color 0.2s ease, background-color 0.3s ease, color 0.3s ease;
@@ -394,7 +425,7 @@
     border-radius: 4px;
     color: var(--text-primary);
     font-size: 0.9rem;
-    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
