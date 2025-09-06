@@ -348,7 +348,7 @@
 .icon-name {
     text-align: center;
     font-size: 12px;
-    color: var(--text-primary);
+    color: var(--text-secondary);
     font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     margin-bottom: 8px;
     white-space: nowrap;
@@ -477,7 +477,7 @@
 }
 
 .ai-result-icon .icon-name {
-    color: #262626;
+    color: var(--text-secondary);
     font-weight: 500;
 }
 

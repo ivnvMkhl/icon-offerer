@@ -9,7 +9,7 @@
     "build": "npm run extract-icons && ELEVENTY_ENV=production eleventy && ELEVENTY_ENV=production npm run hash-assets",
     "hash-assets": "node scripts/hash-assets.js",
     "serve": "npm run extract-icons && ELEVENTY_ENV=production eleventy --serve",
-    "dev": "ELEVENTY_ENV=development eleventy --serve --watch",
+    "dev": "npm run extract-icons && ELEVENTY_ENV=development eleventy --serve --watch",
     "start": "npm run extract-icons && ELEVENTY_ENV=production eleventy --serve"
   },
   "keywords": [

@@ -332,6 +332,14 @@ class IconPageBase {
             this.filterIcons(query);
         });
 
+        // AI поиск по клавише Enter
+        this.searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                this.performAISearch();
+            }
+        });
+
         // AI поиск по кнопке
         const aiSearchButton = document.getElementById('aiSearchButton');
         if (aiSearchButton) {

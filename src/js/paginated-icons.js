@@ -101,6 +101,9 @@ class PaginatedIcons {
   }
   
   render() {
+    // Показываем результаты обратно (если они были скрыты)
+    this.showFilterResults();
+    
     this.renderIcons();
     this.updatePagination();
   }
@@ -261,6 +264,48 @@ class PaginatedIcons {
     });
   }
 
+  // Скрывает результаты обычной фильтрации
+  hideFilterResults() {
+    // Скрываем контейнер с иконками
+    const iconsContainer = this.container.querySelector('.icons-grid');
+    if (iconsContainer) {
+      iconsContainer.style.display = 'none';
+    }
+    
+    // Скрываем пагинацию
+    const pagination = this.container.querySelector('.pagination');
+    if (pagination) {
+      pagination.style.display = 'none';
+    }
+    
+    // Скрываем счетчик результатов
+    const resultsCount = this.container.querySelector('.results-count');
+    if (resultsCount) {
+      resultsCount.style.display = 'none';
+    }
+  }
+
+  // Показывает результаты обратно
+  showFilterResults() {
+    // Показываем контейнер с иконками
+    const iconsContainer = this.container.querySelector('.icons-grid');
+    if (iconsContainer) {
+      iconsContainer.style.display = '';
+    }
+    
+    // Показываем пагинацию
+    const pagination = this.container.querySelector('.pagination');
+    if (pagination) {
+      pagination.style.display = '';
+    }
+    
+    // Показываем счетчик результатов
+    const resultsCount = this.container.querySelector('.results-count');
+    if (resultsCount) {
+      resultsCount.style.display = '';
+    }
+  }
+
   // Методы для AI поиска
   async performAISearch(query) {
     if (!this.options.enableAISearch || !window.aiSearch) {
@@ -277,6 +322,9 @@ class PaginatedIcons {
     try {
       // Показываем индикатор загрузки
       this.showAILoadingIndicator();
+      
+      // Скрываем результаты обычной фильтрации при запуске AI поиска
+      this.hideFilterResults();
       
       // Выполняем AI поиск
       const result = await window.aiSearch.searchIcons(this.options.platform, query);

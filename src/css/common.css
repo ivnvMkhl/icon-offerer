@@ -603,6 +603,7 @@ a:hover {
     .icon-name {
         font-size: 11px;
         margin-bottom: 6px;
+        color: var(--text-secondary);
     }
     
     .copy-btn {
