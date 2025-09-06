@@ -2,6 +2,7 @@
  * Модуль для AI-поиска иконок через Yandex Cloud Functions
  */
 
+if (typeof AISearch === 'undefined') {
 class AISearch {
   constructor() {
     // Прямой запрос к Yandex Cloud Functions
@@ -19,7 +20,7 @@ class AISearch {
    */
   async searchIcons(platform, request) {
     if (this.isSearching) {
-      console.log('AI поиск уже выполняется, отменяем предыдущий запрос');
+      window.logger.log('AI поиск уже выполняется, отменяем предыдущий запрос');
       this.cancelCurrentRequest();
     }
 
@@ -31,7 +32,7 @@ class AISearch {
         request: request
       };
 
-      console.log('Отправляем AI запрос:', requestData);
+      window.logger.log('Отправляем AI запрос:', requestData);
 
       // Создаем AbortController для возможности отмены запроса
       this.currentRequest = new AbortController();
@@ -54,21 +55,23 @@ class AISearch {
 
       const result = await response.json();
       
-      console.log('AI ответ получен:', result);
+      window.logger.log('AI ответ получен:', result);
       
       if (result.success && result.data && result.data.icon_names) {
+        window.logger.log(`AI сервис вернул ${result.data.icon_names.length} иконок:`, result.data.icon_names);
         return {
           success: true,
           icons: result.data.icon_names,
           meta: result.meta
         };
       } else {
+        window.logger.error('Неверный формат ответа от AI сервиса:', result);
         throw new Error('Неверный формат ответа от AI сервиса');
       }
 
     } catch (error) {
       if (error.name === 'AbortError') {
-        console.log('AI запрос был отменен');
+        window.logger.log('AI запрос был отменен');
         return { success: false, error: 'Запрос отменен' };
       }
       
@@ -76,7 +79,7 @@ class AISearch {
       if (error.message.includes('CORS') || error.message.includes('cross-origin') || 
           error.message.includes('blocked') || error.message.includes('Mixed Content') ||
           error.message.includes('Access-Control-Allow-Origin')) {
-        console.warn('CORS ошибка, AI-поиск недоступен');
+        window.logger.warn('CORS ошибка, AI-поиск недоступен');
         this.isAvailable = false;
         return { 
           success: false, 
@@ -84,7 +87,7 @@ class AISearch {
         };
       }
       
-      console.error('Ошибка AI поиска:', error);
+      window.logger.error('Ошибка AI поиска:', error);
       
       // Детальная диагностика ошибок
       let errorMessage = error.message || 'Ошибка при выполнении AI поиска';
@@ -136,3 +139,4 @@ class AISearch {
 
 // Создаем глобальный экземпляр
 window.aiSearch = new AISearch();
+}

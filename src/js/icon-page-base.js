@@ -3,6 +3,7 @@
  * Содержит общую функциональность для всех платформ
  */
 
+if (typeof IconPageBase === 'undefined') {
 class IconPageBase {
     constructor(config) {
         this.config = config;
@@ -46,7 +47,7 @@ class IconPageBase {
                 this.loadingIndicator.style.display = 'none';
             }
         } catch (error) {
-            console.error(`Ошибка при загрузке ${this.config.dataFile}:`, error);
+            window.logger.error(`Ошибка при загрузке ${this.config.dataFile}:`, error);
             if (this.loadingIndicator) {
                 this.loadingIndicator.innerHTML = '<div class="loading-spinner"></div>Ошибка загрузки иконок';
             }
@@ -75,7 +76,7 @@ class IconPageBase {
 
     loadIcon(placeholder, iconName, iconPath) {
         // Переопределяется в дочерних классах
-        console.warn('loadIcon не реализован для платформы:', this.config.platform);
+        window.logger.warn('loadIcon не реализован для платформы:', this.config.platform);
     }
 
     copyIcon(iconName, button) {
@@ -86,7 +87,7 @@ class IconPageBase {
                     this.showCopySuccess(button);
                 })
                 .catch(err => {
-                    console.error('Не удалось скопировать текст: ', err);
+                    window.logger.error('Не удалось скопировать текст: ', err);
                     this.fallbackCopy(iconName, button);
                 });
         } else {
@@ -106,7 +107,7 @@ class IconPageBase {
             document.execCommand('copy');
             this.showCopySuccess(button);
         } catch (err) {
-            console.error('Fallback: Не удалось скопировать текст: ', err);
+            window.logger.error('Fallback: Не удалось скопировать текст: ', err);
         }
         document.body.removeChild(textArea);
     }
@@ -219,7 +220,7 @@ class IconPageBase {
             const success = await this.paginatedIcons.performAISearch(query);
             
         } catch (error) {
-            console.error('Ошибка AI поиска:', error);
+            window.logger.error('Ошибка AI поиска:', error);
             alert('Произошла ошибка при выполнении AI поиска');
         } finally {
             // Восстанавливаем кнопку
@@ -232,3 +233,4 @@ class IconPageBase {
 
 // Экспортируем класс для использования в других модулях
 window.IconPageBase = IconPageBase;
+}

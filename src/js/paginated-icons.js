@@ -1,6 +1,7 @@
 /**
  * Пагинированный список иконок для оптимизации производительности
  */
+if (typeof PaginatedIcons === 'undefined') {
 class PaginatedIcons {
   constructor(container, options = {}) {
     this.container = container;
@@ -263,13 +264,13 @@ class PaginatedIcons {
   // Методы для AI поиска
   async performAISearch(query) {
     if (!this.options.enableAISearch || !window.aiSearch) {
-      console.warn('AI поиск отключен или недоступен');
+      window.logger.warn('AI поиск отключен или недоступен');
       return false;
     }
 
     // Проверяем доступность AI-поиска
     if (!window.aiSearch.isAISearchAvailable()) {
-      console.warn('AI поиск недоступен из-за CORS ограничений');
+      window.logger.warn('AI поиск недоступен из-за CORS ограничений');
       return false;
     }
 
@@ -281,6 +282,8 @@ class PaginatedIcons {
       const result = await window.aiSearch.searchIcons(this.options.platform, query);
       
       if (result.success && result.icons && result.icons.length > 0) {
+        window.logger.log(`AI вернул ${result.icons.length} результатов:`, result.icons);
+        
         // Переключаемся в режим AI поиска
         this.isAISearchMode = true;
         this.aiSearchResults = result.icons;
@@ -289,6 +292,8 @@ class PaginatedIcons {
         this.filteredItems = this.items.filter(item => 
           this.aiSearchResults.includes(item.name)
         );
+        
+        window.logger.log(`Найдено ${this.filteredItems.length} иконок в базе данных из ${result.icons.length} предложенных AI`);
         
         this.currentPage = 1;
         this.updatePagination();
@@ -308,7 +313,7 @@ class PaginatedIcons {
       }
       
     } catch (error) {
-      console.error('Ошибка AI поиска:', error);
+      window.logger.error('Ошибка AI поиска:', error);
       this.showAISearchError(error.message);
       return false;
     }
@@ -387,3 +392,4 @@ class PaginatedIcons {
 
 // Экспортируем для использования в других модулях
 window.PaginatedIcons = PaginatedIcons;
+}

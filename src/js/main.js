@@ -1,11 +1,10 @@
 // Основной JavaScript файл для Icon Offerer
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Icon Offerer загружен!');
+    window.logger.log('Icon Offerer загружен!');
     
     // Инициализация функций
     initSmoothScrolling();
-    initSearch();
     initIconInteractions();
     
     // Загружаем специфичную функциональность для страниц
@@ -54,19 +53,6 @@ function initSmoothScrolling() {
     });
 }
 
-// Инициализация поиска (заглушка для будущего функционала)
-function initSearch() {
-    const searchInput = document.querySelector('.search-input');
-    
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            const query = this.value.toLowerCase();
-            console.log('Поиск:', query);
-            // Здесь будет логика поиска иконок
-        });
-    }
-}
-
 // Взаимодействие с иконками
 function initIconInteractions() {
     const iconItems = document.querySelectorAll('.icon-item');
@@ -74,7 +60,7 @@ function initIconInteractions() {
     iconItems.forEach(item => {
         item.addEventListener('click', function() {
             const iconName = this.querySelector('span').textContent;
-            console.log('Выбрана иконка:', iconName);
+            window.logger.log('Выбрана иконка:', iconName);
             
             // Добавляем визуальную обратную связь
             this.style.transform = 'scale(0.95)';
@@ -127,6 +113,5 @@ function showNotification(message, type = 'info') {
 window.IconOfferer = {
     showNotification,
     initSmoothScrolling,
-    initSearch,
     initIconInteractions
 };

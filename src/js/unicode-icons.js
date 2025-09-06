@@ -2,6 +2,7 @@
  * Модуль для Unicode иконок (рефакторированная версия)
  */
 
+if (typeof UnicodeIconPage === 'undefined') {
 class UnicodeIconPage extends IconPageBase {
     constructor(config) {
         super(config);
@@ -39,10 +40,6 @@ class UnicodeIconPage extends IconPageBase {
                 placeholder.style.justifyContent = 'center';
                 placeholder.style.minWidth = '32px';
                 placeholder.style.minHeight = '32px';
-                
-                console.log(`Загружена Unicode иконка: ${iconName} = ${icon.char}`);
-            } else {
-                console.warn(`Не найдена иконка с именем: ${iconName}`);
             }
         }
     }
@@ -62,3 +59,4 @@ document.addEventListener('DOMContentLoaded', function() {
         new UnicodeIconPage(window.iconPageConfig);
     }
 });
+}

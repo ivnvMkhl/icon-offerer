@@ -2,6 +2,7 @@
  * Модуль для Ant Design иконок (рефакторированная версия)
  */
 
+if (typeof AntdIconPage === 'undefined') {
 class AntdIconPage extends IconPageBase {
     constructor(config) {
         super(config);
@@ -30,3 +31,4 @@ document.addEventListener('DOMContentLoaded', function() {
         new AntdIconPage(window.iconPageConfig);
     }
 });
+}

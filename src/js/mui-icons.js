@@ -2,6 +2,7 @@
  * Модуль для Material Design иконок (рефакторированная версия)
  */
 
+if (typeof MuiIconPage === 'undefined') {
 class MuiIconPage extends IconPageBase {
     constructor(config) {
         super(config);
@@ -30,3 +31,4 @@ document.addEventListener('DOMContentLoaded', function() {
         new MuiIconPage(window.iconPageConfig);
     }
 });
+}

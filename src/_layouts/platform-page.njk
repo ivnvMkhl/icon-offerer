@@ -62,8 +62,8 @@ layout: base.njk
 </script>
 
 <!-- Дополнительные мета-теги для поисковых систем -->
-<meta name="theme-color" content="#1890ff">
-<meta name="msapplication-TileColor" content="#1890ff">
+<meta name="theme-color" content="#666666">
+<meta name="msapplication-TileColor" content="#666666">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="{{ platformTitle }}">
@@ -151,18 +151,18 @@ layout: base.njk
 
 </div>
 
-<script>
-    // Устанавливаем глобальную переменную baseUrl для JavaScript
-    window.baseUrl = '{{ baseUrl }}';
-    window.iconPageConfig = {
-        platform: '{{ platform }}',
-        dataFile: '{{ dataFile }}',
-        jsFile: '{{ jsFile }}'
-    };
-</script>
+     <script>
+         // Устанавливаем глобальную переменную baseUrl для JavaScript
+         window.baseUrl = '{{ baseUrl }}';
+         window.iconPageConfig = {
+             platform: '{{ platform }}',
+             dataFile: '{{ dataFile }}',
+             jsFile: '{{ jsFile }}'
+         };
+     </script>
 
-<script src="{{ baseUrl }}/js/ai-search.js"></script>
-<script src="{{ baseUrl }}/js/paginated-icons.js"></script>
-<script src="{{ baseUrl }}/js/icon-page-base.js"></script>
-<script src="{{ baseUrl }}/{{ jsFile }}"></script>
+     <script src="{{ baseUrl }}/js/ai-search.js"></script>
+     <script src="{{ baseUrl }}/js/paginated-icons.js"></script>
+     <script src="{{ baseUrl }}/js/icon-page-base.js"></script>
+     <script src="{{ baseUrl }}/{{ jsFile }}"></script>
 {% endblock %}
