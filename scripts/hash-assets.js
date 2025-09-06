@@ -89,10 +89,19 @@ function updateHtmlFiles(manifest) {
         
         // Заменяем ссылки на JS файлы
         Object.entries(manifest).forEach(([original, hashed]) => {
-            const regex = new RegExp(`src="[^"]*${original}"`, 'g');
-            const newContent = content.replace(regex, `src="/icon-refferer/js/${hashed}"`);
-            if (newContent !== content) {
-                content = newContent;
+            // Заменяем src атрибуты
+            const srcRegex = new RegExp(`src="[^"]*${original}"`, 'g');
+            const newSrcContent = content.replace(srcRegex, `src="/icon-refferer/js/${hashed}"`);
+            if (newSrcContent !== content) {
+                content = newSrcContent;
+                updated = true;
+            }
+            
+            // Заменяем jsFile переменные
+            const jsFileRegex = new RegExp(`jsFile: 'js/${original}'`, 'g');
+            const newJsFileContent = content.replace(jsFileRegex, `jsFile: 'js/${hashed}'`);
+            if (newJsFileContent !== content) {
+                content = newJsFileContent;
                 updated = true;
             }
         });
