@@ -1,0 +1,168 @@
+---
+# Переиспользуемый шаблон для страниц платформ иконок
+# Принимает параметры:
+# - platform: название платформы (antd, mui, unicode)
+# - platformTitle: заголовок платформы для отображения
+# - dataFile: путь к JSON файлу с данными иконок
+# - jsFile: путь к JS файлу для инициализации
+layout: base.njk
+---
+
+{% block head %}
+<!-- Дополнительные мета-теги для SEO -->
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+<meta name="bingbot" content="index, follow">
+
+<!-- Open Graph для социальных сетей -->
+<meta property="og:url" content="{{ baseUrl }}/{{ platform }}/">
+<meta property="og:image" content="{{ baseUrl }}/images/{{ platform }}-icons-preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ platformTitle }} - {{ description }}">
+
+<!-- Twitter Card -->
+<meta name="twitter:image" content="{{ baseUrl }}/images/{{ platform }}-icons-preview.jpg">
+<meta name="twitter:image:alt" content="{{ platformTitle }} - {{ description }}">
+
+<!-- Дополнительные SEO теги -->
+<meta name="keywords" content="{% if platform == 'antd' %}ant design иконки, antd icons, react иконки, ant design поиск, ant design AI поиск{% elif platform == 'mui' %}material design иконки, mui icons, material ui иконки, material design поиск, mui AI поиск{% elif platform == 'unicode' %}unicode символы, unicode иконки, unicode поиск, unicode AI поиск, emoji символы{% endif %}, {{ title | lower }}, {{ description | lower }}, поиск иконок онлайн, AI поиск иконок, копирование кода иконки, бесплатные иконки">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ baseUrl }}/{{ platform }}/">
+
+<!-- Структурированные данные JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "{{ platformTitle }}",
+  "description": "{{ description }}",
+  "url": "{{ baseUrl }}/{{ platform }}/",
+  "applicationCategory": "DesignApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "creator": {
+    "@type": "Organization",
+    "name": "Icon Offerer",
+    "url": "{{ baseUrl }}/"
+  },
+  "featureList": [
+    "AI-поиск иконок по описанию",
+    "Копирование кода иконок",
+    "Превью иконок онлайн",
+    "Бесплатное использование"
+  ],
+  "screenshot": "{{ baseUrl }}/images/{{ platform }}-icons-preview.jpg"
+}
+</script>
+
+<!-- Дополнительные мета-теги для поисковых систем -->
+<meta name="theme-color" content="#1890ff">
+<meta name="msapplication-TileColor" content="#1890ff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="{{ platformTitle }}">
+
+<!-- Дополнительные Open Graph теги -->
+<meta property="og:site_name" content="Icon Offerer">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:type" content="website">
+
+<!-- Дополнительные Twitter теги -->
+<meta name="twitter:site" content="@iconofferer">
+<meta name="twitter:creator" content="@iconofferer">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Дополнительные мета-теги для мобильных устройств -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="format-detection" content="telephone=no">
+
+<!-- Preconnect для оптимизации загрузки -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+<!-- Дополнительные стили для SEO -->
+<style>
+  .seo-hidden {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ platformTitle }}</h1>
+    
+    <div class="search-section">
+        <div class="search-container">
+            <input 
+                type="text" 
+                id="iconSearch" 
+                class="search-input" 
+                placeholder="Найти по имени или вопрос AI"
+                autocomplete="off"
+            >
+            <button id="aiSearchButton" class="ai-search-button">
+                <span class="ai-search-text">Спросить AI</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Контейнер для AI сообщений -->
+    <div id="aiMessagesContainer" style="display: none;"></div>
+    
+    <div id="iconsContainer">
+        <div class="loading-indicator" id="loadingIndicator">
+            <div class="loading-spinner"></div>
+            Загрузка иконок...
+        </div>
+    </div>
+
+    <div class="no-results" id="noResults" style="display: none;">
+        <p>Иконки не найдены. Попробуйте изменить поисковый запрос.</p>
+    </div>
+</div>
+
+<!-- Скрытый SEO контент -->
+<div class="seo-hidden">
+    <h2>{% if platform == 'antd' %}Ant Design Icons{% elif platform == 'mui' %}Material Design Icons{% elif platform == 'unicode' %}Unicode Symbols{% endif %} - Полное руководство</h2>
+    <p>{% if platform == 'antd' %}Ant Design Icons - это обширная коллекция иконок для React приложений. Наш AI-поиск поможет найти нужную иконку по описанию на русском языке.{% elif platform == 'mui' %}Material Design Icons - официальные иконки Google Material Design. Используйте AI-поиск для быстрого нахождения иконок по описанию.{% elif platform == 'unicode' %}Unicode символы и эмодзи - универсальные символы для любых приложений. AI-поиск поможет найти нужный символ по описанию.{% endif %}</p>
+    
+    <h3>Возможности поиска:</h3>
+    <ul>
+        <li>AI-поиск по описанию на естественном языке</li>
+        <li>Обычный поиск по названию иконки</li>
+        <li>Копирование кода одним кликом</li>
+        <li>Превью иконок в реальном времени</li>
+        <li>Бесплатное использование</li>
+    </ul>
+
+</div>
+
+<script>
+    // Устанавливаем глобальную переменную baseUrl для JavaScript
+    window.baseUrl = '{{ baseUrl }}';
+    window.iconPageConfig = {
+        platform: '{{ platform }}',
+        dataFile: '{{ dataFile }}',
+        jsFile: '{{ jsFile }}'
+    };
+</script>
+
+<script src="{{ baseUrl }}/js/ai-search.js"></script>
+<script src="{{ baseUrl }}/js/paginated-icons.js"></script>
+<script src="{{ baseUrl }}/js/icon-page-base.js"></script>
+<script src="{{ baseUrl }}/{{ jsFile }}"></script>
+{% endblock %}
