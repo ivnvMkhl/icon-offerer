@@ -27,6 +27,12 @@ function hashJavaScriptFiles() {
         return (file.endsWith('.js') || file.endsWith('.json')) && !/\.([a-f0-9]{8})\.(js|json)$/.test(file);
     });
     
+    // Обрабатываем CSS файлы
+    const cssDir = path.join(__dirname, '../dist/css');
+    const cssFiles = fs.existsSync(cssDir) ? fs.readdirSync(cssDir).filter(file => {
+        return file.endsWith('.css') && !/\.([a-f0-9]{8})\.css$/.test(file);
+    }) : [];
+    
     console.log(`Найдено ${jsFiles.length} JS/JSON файлов для хеширования:`);
     
     jsFiles.forEach(file => {
@@ -47,6 +53,29 @@ function hashJavaScriptFiles() {
         
         console.log(`  ${file} -> ${newFileName} (удален оригинал)`);
     });
+    
+    // Хешируем CSS файлы
+    if (cssFiles.length > 0) {
+        console.log(`Найдено ${cssFiles.length} CSS файлов для хеширования:`);
+        
+        cssFiles.forEach(file => {
+            const originalPath = path.join(cssDir, file);
+            const hash = createFileHash(originalPath);
+            const newFileName = file.replace('.css', `.${hash}.css`);
+            const newPath = path.join(cssDir, newFileName);
+            
+            // Копируем файл с новым именем
+            fs.copyFileSync(originalPath, newPath);
+            
+            // Удаляем оригинальный файл
+            fs.unlinkSync(originalPath);
+            
+            // Сохраняем маппинг
+            manifest[file] = newFileName;
+            
+            console.log(`  ${file} -> ${newFileName} (удален оригинал)`);
+        });
+    }
     
     // Сохраняем манифест
     const manifestPath = path.join(__dirname, '../dist/js-manifest.json');
@@ -115,6 +144,16 @@ function updateHtmlFiles(manifest) {
                     updated = true;
                 }
             }
+            
+            // Заменяем CSS файлы
+            if (original.endsWith('.css')) {
+                const cssRegex = new RegExp(`href="[^"]*${original}"`, 'g');
+                const newCssContent = content.replace(cssRegex, `href="/icon-refferer/css/${hashed}"`);
+                if (newCssContent !== content) {
+                    content = newCssContent;
+                    updated = true;
+                }
+            }
         });
         
         if (updated) {
@@ -138,6 +177,23 @@ function cleanupOriginalFiles() {
     
     const allFiles = fs.readdirSync(jsDir);
     const jsFiles = allFiles.filter(file => file.endsWith('.js') || file.endsWith('.json'));
+    
+    // Очищаем CSS файлы
+    const cssDir = path.join(__dirname, '../dist/css');
+    if (fs.existsSync(cssDir)) {
+        const allCssFiles = fs.readdirSync(cssDir);
+        const cssFiles = allCssFiles.filter(file => file.endsWith('.css'));
+        
+        cssFiles.forEach(file => {
+            const hasHash = /\.([a-f0-9]{8})\.css$/.test(file);
+            
+            if (!hasHash) {
+                const filePath = path.join(cssDir, file);
+                fs.unlinkSync(filePath);
+                console.log(`  Удален: ${file}`);
+            }
+        });
+    }
     
     console.log('Очищаем оригинальные файлы без хешей:');
     
