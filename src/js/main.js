@@ -7,30 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScrolling();
     initIconInteractions();
     
-    // Загружаем специфичную функциональность для страниц
-    loadPageSpecificScripts();
+    // Специфичная функциональность для страниц инициализируется автоматически
 });
 
-// Загрузка специфичных скриптов для разных страниц
-function loadPageSpecificScripts() {
-    const currentPath = window.location.pathname;
-    
-    if (currentPath.includes('/antd/')) {
-        loadAntdIconsScript();
-    }
-    // Здесь можно добавить другие страницы
-}
-
-// Загрузка скрипта для Ant Design Icons
-function loadAntdIconsScript() {
-    const script = document.createElement('script');
-    // Определяем правильный путь в зависимости от окружения
-    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const baseUrl = isDev ? '' : '/icon-refferer';
-    script.src = `${baseUrl}/js/antd-icons.js`;
-    script.async = true;
-    document.head.appendChild(script);
-}
 
 // Плавная прокрутка для якорных ссылок
 function initSmoothScrolling() {

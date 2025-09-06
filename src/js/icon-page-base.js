@@ -36,7 +36,19 @@ class IconPageBase {
     async loadIconPaths() {
         try {
             const baseUrl = window.baseUrl || '';
-            const response = await fetch(`${baseUrl}/js/${this.config.dataFile}`);
+            
+            // В разработке используем оригинальное имя файла, в продакшене - хешированное
+            const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            let dataFile = this.config.dataFile;
+            
+            // Если это продакшен и файл хешированный, используем его
+            // Если это разработка, убираем хеш из имени файла
+            if (isDev && dataFile.includes('.')) {
+                // Убираем хеш из имени файла для разработки
+                dataFile = dataFile.replace(/\.[a-f0-9]{8}\.json$/, '.json');
+            }
+            
+            const response = await fetch(`${baseUrl}/js/${dataFile}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

@@ -24,15 +24,16 @@ function hashJavaScriptFiles() {
     
     const jsFiles = fs.readdirSync(jsDir).filter(file => {
         // Исключаем файлы, которые уже содержат хеш (8 символов после точки)
-        return file.endsWith('.js') && !/\.([a-f0-9]{8})\.js$/.test(file);
+        return (file.endsWith('.js') || file.endsWith('.json')) && !/\.([a-f0-9]{8})\.(js|json)$/.test(file);
     });
     
-    console.log(`Найдено ${jsFiles.length} JS файлов для хеширования:`);
+    console.log(`Найдено ${jsFiles.length} JS/JSON файлов для хеширования:`);
     
     jsFiles.forEach(file => {
         const originalPath = path.join(jsDir, file);
         const hash = createFileHash(originalPath);
-        const newFileName = file.replace('.js', `.${hash}.js`);
+        const extension = file.endsWith('.json') ? '.json' : '.js';
+        const newFileName = file.replace(extension, `.${hash}${extension}`);
         const newPath = path.join(jsDir, newFileName);
         
         // Копируем файл с новым именем
@@ -104,6 +105,16 @@ function updateHtmlFiles(manifest) {
                 content = newJsFileContent;
                 updated = true;
             }
+            
+            // Заменяем dataFile переменные для JSON файлов
+            if (original.endsWith('.json')) {
+                const dataFileRegex = new RegExp(`dataFile: '${original}'`, 'g');
+                const newDataFileContent = content.replace(dataFileRegex, `dataFile: '${hashed}'`);
+                if (newDataFileContent !== content) {
+                    content = newDataFileContent;
+                    updated = true;
+                }
+            }
         });
         
         if (updated) {
@@ -126,13 +137,13 @@ function cleanupOriginalFiles() {
     }
     
     const allFiles = fs.readdirSync(jsDir);
-    const jsFiles = allFiles.filter(file => file.endsWith('.js'));
+    const jsFiles = allFiles.filter(file => file.endsWith('.js') || file.endsWith('.json'));
     
     console.log('Очищаем оригинальные файлы без хешей:');
     
     jsFiles.forEach(file => {
         // Проверяем, что файл не содержит хеш (8 символов после точки)
-        const hasHash = /\.([a-f0-9]{8})\.js$/.test(file);
+        const hasHash = /\.([a-f0-9]{8})\.(js|json)$/.test(file);
         
         if (!hasHash) {
             const filePath = path.join(jsDir, file);
@@ -186,6 +197,12 @@ function createHtaccess() {
 
 // Основная функция
 function main() {
+    // Проверяем, что мы в продакшене
+    if (process.env.ELEVENTY_ENV !== 'production') {
+        console.log('⚠️  Хеширование отключено в режиме разработки');
+        return;
+    }
+    
     console.log('🚀 Начинаем хеширование JavaScript файлов...');
     
     try {
