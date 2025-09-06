@@ -9,6 +9,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/icon-192.png");
   eleventyConfig.addPassthroughCopy("src/icon-512.png");
   eleventyConfig.addPassthroughCopy("src/screenshot-*.png");
+  eleventyConfig.addPassthroughCopy("src/.htaccess");
 
   // Добавляем глобальные данные
   eleventyConfig.addGlobalData("isDev", process.env.ELEVENTY_ENV === 'development');
