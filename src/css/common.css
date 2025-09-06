@@ -23,6 +23,48 @@
     src: url('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTOlOV.woff2') format('woff2');
 }
 
+/* CSS переменные для тем */
+:root {
+    /* Светлая тема (по умолчанию) */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+    --border-color: #e5e5e5;
+    --border-hover: #d0d0d0;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --shadow-hover: rgba(0, 0, 0, 0.15);
+    --accent-color: #666666;
+    --accent-hover: #555555;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --error-color: #dc3545;
+    --info-color: #17a2b8;
+}
+
+/* Предотвращаем FOUC - применяем темную тему сразу если она была сохранена */
+html[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #404040;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-muted: #999999;
+    --border-color: #404040;
+    --border-hover: #555555;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow-hover: rgba(0, 0, 0, 0.4);
+    --accent-color: #888888;
+    --accent-hover: #aaaaaa;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --error-color: #dc3545;
+    --info-color: #17a2b8;
+}
+
+
 /* Reset и базовые стили */
 * {
     margin: 0;
@@ -33,12 +75,19 @@
 body {
     font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     line-height: 1.6;
-    color: #1a1a1a;
-    background-color: #ffffff;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
     font-size: 14px;
     /* Предотвращаем смещение при появлении скролла */
     overflow-x: hidden;
     scrollbar-gutter: stable;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Предотвращаем FOUC - применяем темную тему сразу */
+html[data-theme="dark"] body {
+    background-color: #1a1a1a;
+    color: #ffffff;
 }
 
 /* Контейнер */
@@ -51,35 +100,90 @@ body {
 
 /* Навигация */
 .header {
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid var(--border-color);
     padding: 20px 0;
+    background-color: var(--bg-primary);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .nav {
     text-align: left;
     padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .nav__logo {
     font-size: 16px;
     font-weight: 500;
-    color: #1a1a1a;
+    color: var(--text-primary);
     text-decoration: none;
     font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    transition: color 0.2s ease;
 }
 
 .nav__logo:hover {
-    color: #666;
+    color: var(--accent-color);
+}
+
+/* Кнопка переключения темы */
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.theme-toggle:hover {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-hover);
+}
+
+.theme-toggle:active {
+    transform: scale(0.98);
+}
+
+.theme-toggle__icon {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle__icon.sun {
+    display: block;
+}
+
+.theme-toggle__icon.moon {
+    display: none;
+}
+
+
+[data-theme="dark"] .theme-toggle__icon.sun {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle__icon.moon {
+    display: block;
 }
 
 /* Основной контент */
 .main {
     padding: 40px 0;
     min-height: calc(100vh - 200px);
+    background-color: var(--bg-primary);
     /* Предотвращаем смещение при загрузке контента и изменении размера */
     contain: layout;
     /* Плавные переходы при изменении размера */
-    transition: all 0.2s ease;
+    transition: all 0.2s ease, background-color 0.3s ease;
 }
 
 /* Заголовки */
@@ -87,8 +191,9 @@ h1 {
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 20px;
-    color: #1a1a1a;
+    color: var(--text-primary);
     line-height: 1.3;
+    transition: color 0.3s ease;
 }
 
 h2 {
@@ -110,36 +215,40 @@ h3 {
 /* Параграфы */
 p {
     margin-bottom: 16px;
-    color: #4a4a4a;
+    color: var(--text-secondary);
     line-height: 1.6;
+    transition: color 0.3s ease;
 }
 
 /* Ссылки */
 a {
-    color: #1a1a1a;
+    color: var(--text-primary);
     text-decoration: underline;
-    text-decoration-color: #ccc;
+    text-decoration-color: var(--border-color);
     text-underline-offset: 2px;
     transition: all 0.2s ease;
 }
 
 a:hover {
-    color: #666;
-    text-decoration-color: #666;
+    color: var(--accent-color);
+    text-decoration-color: var(--accent-color);
 }
 
 /* Футер */
 .footer {
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid var(--border-color);
     padding: 20px 0;
     margin-top: 60px;
+    background-color: var(--bg-primary);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .footer p {
     font-size: 12px;
-    color: #999;
+    color: var(--text-muted);
     text-align: center;
     margin: 0;
+    transition: color 0.3s ease;
 }
 
 /* Адаптивность */
@@ -384,6 +493,12 @@ a:hover {
     
     .nav__logo {
         font-size: 14px;
+    }
+    
+    .theme-toggle {
+        padding: 6px;
+        width: 28px;
+        height: 28px;
     }
     
     h1 {

@@ -4,18 +4,20 @@
     justify-content: center;
     align-items: center;
     height: 200px;
-    color: #666;
+    color: var(--text-secondary);
     font-size: 14px;
+    transition: color 0.3s ease;
 }
 
 .loading-spinner {
     width: 20px;
     height: 20px;
-    border: 2px solid #e5e5e5;
-    border-top: 2px solid #666;
+    border: 2px solid var(--border-color);
+    border-top: 2px solid var(--accent-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-right: 10px;
+    transition: border-color 0.3s ease;
 }
 
 @keyframes spin {
@@ -30,14 +32,15 @@
     margin-top: 20px;
     text-align: center;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--bg-primary);
     backdrop-filter: blur(10px);
     border-radius: 12px;
     padding: 8px;
-    border: 1px solid rgba(229, 229, 229, 0.8);
+    border: 1px solid var(--border-color);
     /* Предотвращаем смещение при появлении скролла */
     contain: layout;
     will-change: transform;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .pagination {
@@ -66,56 +69,58 @@
 
 .results-count {
     font-size: 0.9rem;
-    color: #666;
+    color: var(--text-secondary);
     font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    transition: color 0.3s ease;
 }
 
 .pagination-btn {
-    background: #fff;
-    border: 1px solid #d9d9d9;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 10px 18px;
     font-size: 14px;
-    color: #1a1a1a;
+    color: var(--text-primary);
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     font-weight: 500;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 4px var(--shadow);
     min-width: 100px;
 }
 
 .pagination-btn:hover:not(:disabled) {
-    border-color: #666;
-    color: #666;
-    background: #f8f8f8;
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    background: var(--bg-secondary);
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--shadow-hover);
 }
 
 .pagination-btn:active:not(:disabled) {
     transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 4px var(--shadow);
 }
 
 .pagination-btn:disabled {
-    background: #f5f5f5;
-    color: #bfbfbf;
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
     cursor: not-allowed;
-    border-color: #f0f0f0;
+    border-color: var(--border-color);
     transform: none;
     box-shadow: none;
 }
 
 .pagination-info {
     font-size: 14px;
-    color: #666;
+    color: var(--text-secondary);
     font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    transition: color 0.3s ease;
     font-weight: 500;
     padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--bg-secondary);
     border-radius: 6px;
-    border: 1px solid rgba(229, 229, 229, 0.6);
+    border: 1px solid var(--border-color);
     min-width: 120px;
     text-align: center;
 }
@@ -167,10 +172,10 @@
 }
 
 .icon-card {
-    border: 1px solid #f0f0f0;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 12px;
-    background: #fff;
+    background: var(--bg-primary);
     transition: all 0.3s ease;
     cursor: pointer;
     user-select: none;
@@ -186,15 +191,15 @@
 }
 
 .icon-card:hover {
-    border-color: #666;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-color);
+    box-shadow: 0 2px 8px var(--shadow);
     transform: translateY(-2px);
 }
 
 .icon-card:active {
     transform: translateY(0);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-    background: #f8f8f8;
+    box-shadow: 0 1px 4px var(--shadow);
+    background: var(--bg-secondary);
 }
 
 .icon-preview {
@@ -215,8 +220,8 @@
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    color: #666;
-    border: 1px solid #e8e8e8;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
 }
@@ -229,7 +234,7 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    background: linear-gradient(90deg, transparent, var(--border-color), transparent);
     animation: skeleton-loading 1.5s infinite;
 }
 
@@ -244,7 +249,7 @@
 
 /* Skeleton loading для текста и кнопок */
 .icon-name.skeleton {
-    background: #f0f0f0;
+    background: var(--bg-tertiary);
     height: 16px; /* Примерная высота текста 12px + line-height */
     border-radius: 4px;
     margin-bottom: 8px;
@@ -261,7 +266,7 @@
 }
 
 .copy-btn.skeleton {
-    background: #f0f0f0;
+    background: var(--bg-tertiary);
     min-height: 28px; /* Используем min-height как у реального элемента */
     border-radius: 4px;
     border: none;
@@ -292,10 +297,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 1px solid #f0f0f0;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 12px;
-    background: #fff;
+    background: var(--bg-primary);
 }
 
 /* Убираем skeleton анимацию для placeholder'ов с контентом */
@@ -306,19 +311,20 @@
 .icon-placeholder svg {
     width: 32px;
     height: 32px;
-    color: #666;
+    color: var(--text-secondary);
 }
 
 .icon-name {
     text-align: center;
     font-size: 12px;
-    color: #1a1a1a;
+    color: var(--text-primary);
     font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     margin-bottom: 8px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
+    transition: color 0.3s ease;
 }
 
 .icon-actions {
@@ -331,7 +337,7 @@
     border-bottom: 1px solid transparent;
     padding: 4px 0;
     font-size: 11px;
-    color: #1a1a1a;
+    color: var(--text-primary);
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
@@ -343,14 +349,14 @@
 }
 
 .copy-btn:hover {
-    color: #666;
-    border-bottom-color: #e5e5e5;
+    color: var(--accent-color);
+    border-bottom-color: var(--border-color);
 }
 
 .copy-btn.copied {
-    background: #666;
-    color: #fff;
-    border-bottom-color: #666;
+    background: var(--accent-color);
+    color: var(--bg-primary);
+    border-bottom-color: var(--accent-color);
     padding: 4px 8px;
     border-radius: 4px;
 }
@@ -366,26 +372,27 @@
 .search-input {
     flex: 1;
     padding: 0.75rem 1rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 1rem;
     font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
-    background: #fff;
-    transition: border-color 0.2s ease;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 .search-input:focus {
     outline: none;
-    border-color: #999;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--shadow);
 }
 
 .ai-search-button {
     padding: 0.75rem 1.5rem;
-    background: #f8f9fa;
-    border: 1px solid #ddd;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
-    color: #333;
+    color: var(--text-primary);
     font-size: 0.9rem;
     font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     cursor: pointer;
@@ -397,26 +404,26 @@
 }
 
 .ai-search-button:hover {
-    background: #e9ecef;
-    border-color: #999;
+    background: var(--bg-tertiary);
+    border-color: var(--accent-color);
 }
 
 .ai-search-button:active {
-    background: #dee2e6;
+    background: var(--bg-tertiary);
     transform: translateY(1px);
 }
 
 .ai-search-button:disabled {
-    background: #f8f9fa;
-    color: #999;
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
     cursor: not-allowed;
     opacity: 0.6;
 }
 
 .ai-search-button.loading {
-    background: #f5f5f5;
-    border-color: #999;
-    color: #666;
+    background: var(--bg-tertiary);
+    border-color: var(--accent-color);
+    color: var(--text-secondary);
 }
 
 /* Контейнер для AI сообщений - занимает всю ширину страницы */
@@ -461,7 +468,8 @@
     justify-content: center;
     padding: 3rem 1rem;
     text-align: center;
-    color: #666;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
 }
 
 .ai-loading-spinner {
@@ -517,7 +525,8 @@
 .ai-search-error {
     text-align: center;
     padding: 3rem 1rem;
-    color: #666;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
 }
 
 .ai-no-results p,
