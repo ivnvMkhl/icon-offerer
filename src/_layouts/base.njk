@@ -15,6 +15,13 @@
     <meta name="twitter:description" content="{{ description or 'Умный поиск иконок по описанию на русском языке' }}">
     <link rel="preload" href="https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTOlOV.woff2" as="font" type="font/woff2" crossorigin>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ baseUrl }}/favicon.svg">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="{{ baseUrl }}/favicon-32x32.svg">
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="{{ baseUrl }}/favicon-16x16.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ baseUrl }}/apple-touch-icon.svg">
+    <link rel="manifest" href="{{ baseUrl }}/site.webmanifest">
+    
     <!-- Предотвращаем FOUC (flash of unstyled content) для темной темы -->
     <script>
         (function() {

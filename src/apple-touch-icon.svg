@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <rect width="180" height="180" fill="#1a1a1a" rx="40"/>
+  <text x="90" y="120" font-family="JetBrains Mono, SF Mono, Monaco, Inconsolata, Roboto Mono, Courier New, monospace" 
+        font-size="100" font-weight="600" text-anchor="middle" fill="#ffffff">i</text>
+</svg>
