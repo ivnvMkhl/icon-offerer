@@ -43,4 +43,71 @@
     margin-left: 8px;
 }
 
+/* Мобильные стили для главной страницы */
+@media (max-width: 767px) {
+    .platforms {
+        margin-top: 30px;
+    }
+    
+    .platforms h2 {
+        font-size: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .platform-link {
+        padding: 12px 0;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        padding-left: 12px;
+        padding-right: 12px;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        transition: all 0.2s ease;
+    }
+    
+    .platform-link:hover {
+        background: #e9ecef;
+        border-color: #dee2e6;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .platform-name {
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .platform-desc {
+        font-size: 11px;
+        margin-left: 0;
+        margin-top: 4px;
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .platforms {
+        margin-top: 20px;
+    }
+    
+    .platforms h2 {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+    
+    .platform-link {
+        padding: 10px 12px;
+        margin-bottom: 6px;
+    }
+    
+    .platform-name {
+        font-size: 13px;
+    }
+    
+    .platform-desc {
+        font-size: 10px;
+        margin-top: 2px;
+    }
+}
+
 

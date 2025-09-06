@@ -55,7 +55,7 @@ class PaginatedIcons {
         </div>
         <div class="pagination-center">
           <button class="pagination-btn" id="prevBtn" disabled>← Назад</button>
-          <span class="pagination-info" id="paginationInfo">Страница 1 из 1</span>
+          <span class="pagination-info" id="paginationInfo">1 из 1</span>
           <button class="pagination-btn" id="nextBtn" disabled>Вперед →</button>
         </div>
       </div>
@@ -194,7 +194,7 @@ class PaginatedIcons {
     prevBtn.disabled = this.currentPage <= 1;
     nextBtn.disabled = this.currentPage >= this.totalPages;
     
-    paginationInfo.textContent = `Страница ${this.currentPage} из ${this.totalPages}`;
+    paginationInfo.textContent = `${this.currentPage} из ${this.totalPages}`;
   }
   
   previousPage() {
