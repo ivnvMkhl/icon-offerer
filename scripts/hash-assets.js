@@ -22,7 +22,10 @@ function hashJavaScriptFiles() {
         return manifest;
     }
     
-    const jsFiles = fs.readdirSync(jsDir).filter(file => file.endsWith('.js'));
+    const jsFiles = fs.readdirSync(jsDir).filter(file => {
+        // Исключаем файлы, которые уже содержат хеш (8 символов после точки)
+        return file.endsWith('.js') && !/\.([a-f0-9]{8})\.js$/.test(file);
+    });
     
     console.log(`Найдено ${jsFiles.length} JS файлов для хеширования:`);
     
@@ -35,10 +38,13 @@ function hashJavaScriptFiles() {
         // Копируем файл с новым именем
         fs.copyFileSync(originalPath, newPath);
         
+        // Удаляем оригинальный файл
+        fs.unlinkSync(originalPath);
+        
         // Сохраняем маппинг
         manifest[file] = newFileName;
         
-        console.log(`  ${file} -> ${newFileName}`);
+        console.log(`  ${file} -> ${newFileName} (удален оригинал)`);
     });
     
     // Сохраняем манифест
@@ -54,22 +60,76 @@ function hashJavaScriptFiles() {
  */
 function updateHtmlFiles(manifest) {
     const distDir = path.join(__dirname, '../dist');
-    const htmlFiles = fs.readdirSync(distDir).filter(file => file.endsWith('.html'));
     
+    // Рекурсивно находим все HTML файлы
+    function findHtmlFiles(dir) {
+        const files = [];
+        const items = fs.readdirSync(dir);
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item);
+            const stat = fs.statSync(fullPath);
+            
+            if (stat.isDirectory()) {
+                files.push(...findHtmlFiles(fullPath));
+            } else if (item.endsWith('.html')) {
+                files.push(fullPath);
+            }
+        }
+        
+        return files;
+    }
+    
+    const htmlFiles = findHtmlFiles(distDir);
     console.log(`Обновляем ${htmlFiles.length} HTML файлов:`);
     
-    htmlFiles.forEach(file => {
-        const filePath = path.join(distDir, file);
+    htmlFiles.forEach(filePath => {
         let content = fs.readFileSync(filePath, 'utf8');
+        let updated = false;
         
         // Заменяем ссылки на JS файлы
         Object.entries(manifest).forEach(([original, hashed]) => {
             const regex = new RegExp(`src="[^"]*${original}"`, 'g');
-            content = content.replace(regex, `src="/icon-refferer/js/${hashed}"`);
+            const newContent = content.replace(regex, `src="/icon-refferer/js/${hashed}"`);
+            if (newContent !== content) {
+                content = newContent;
+                updated = true;
+            }
         });
         
-        fs.writeFileSync(filePath, content);
-        console.log(`  Обновлен: ${file}`);
+        if (updated) {
+            fs.writeFileSync(filePath, content);
+            const relativePath = path.relative(distDir, filePath);
+            console.log(`  Обновлен: ${relativePath}`);
+        }
+    });
+}
+
+/**
+ * Удаляет оригинальные JS файлы без хешей
+ */
+function cleanupOriginalFiles() {
+    const jsDir = path.join(__dirname, '../dist/js');
+    
+    if (!fs.existsSync(jsDir)) {
+        console.log('JS директория не найдена, пропускаем очистку');
+        return;
+    }
+    
+    const allFiles = fs.readdirSync(jsDir);
+    const jsFiles = allFiles.filter(file => file.endsWith('.js'));
+    
+    console.log('Очищаем оригинальные файлы без хешей:');
+    
+    jsFiles.forEach(file => {
+        // Проверяем, что файл не содержит хеш (8 символов после точки)
+        const hasHash = /\.([a-f0-9]{8})\.js$/.test(file);
+        
+        if (!hasHash) {
+            const filePath = path.join(jsDir, file);
+            fs.unlinkSync(filePath);
+            console.log(`  Удален: ${file}`);
+        }
     });
 }
 
@@ -124,6 +184,7 @@ function main() {
         
         if (Object.keys(manifest).length > 0) {
             updateHtmlFiles(manifest);
+            cleanupOriginalFiles();
             createHtaccess();
             console.log('✅ Хеширование завершено успешно!');
         } else {
