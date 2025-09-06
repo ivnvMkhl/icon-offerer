@@ -26,64 +26,30 @@ description: AI-поиск иконок Ant Design по описанию на р
     <!-- Контейнер для AI сообщений -->
     <div id="aiMessagesContainer" style="display: none;"></div>
     
-               <div id="iconsContainer">
-               <div class="loading-indicator" id="loadingIndicator">
-                   <div class="loading-spinner"></div>
-                   Загрузка иконок...
-               </div>
-           </div>
-    
+    <div id="iconsContainer">
+        <div class="loading-indicator" id="loadingIndicator">
+            <div class="loading-spinner"></div>
+            Загрузка иконок...
+        </div>
+    </div>
+
     <div class="no-results" id="noResults" style="display: none;">
         <p>Иконки не найдены. Попробуйте изменить поисковый запрос.</p>
     </div>
 </div>
 
 <script>
-// Загружаем данные иконок и генерируем HTML
-fetch('{{ baseUrl }}/js/antd-icon-paths.json')
-    .then(response => response.json())
-    .then(iconPaths => {
-        const iconsGrid = document.getElementById('iconsGrid');
-        const resultsCount = document.getElementById('resultsCount');
-        
-        // Генерируем HTML для всех иконок
-        const iconsHtml = Object.keys(iconPaths).map(iconName => `
-            <div class="icon-card" data-name="${iconName}" data-keywords="">
-                <div class="icon-preview">
-                    <div class="icon-placeholder" data-icon="${iconName}">
-                        <!-- Иконка будет загружена через JavaScript -->
-                    </div>
-                </div>
-                <div class="icon-info">
-                    <div class="icon-name">${iconName}</div>
-                </div>
-                <div class="icon-actions">
-                    <button class="copy-btn" data-icon="${iconName}" title="Копировать название">
-                        <span class="copy-text">Копировать</span>
-                    </button>
-                </div>
-            </div>
-        `).join('');
-        
-        iconsGrid.innerHTML = iconsHtml;
-        resultsCount.innerHTML = `Найдено иконок: <strong>${Object.keys(iconPaths).length}</strong>`;
-        
-        // Инициализируем функциональность после загрузки иконок
-        if (typeof initAntdIcons === 'function') {
-            initAntdIcons(iconPaths);
-        }
-    })
-    .catch(error => {
-        console.error('Ошибка загрузки иконок:', error);
-        document.getElementById('resultsCount').innerHTML = 'Ошибка загрузки иконок';
-    });
-</script>
-
-<script>
     // Устанавливаем глобальную переменную baseUrl для JavaScript
     window.baseUrl = '{{ baseUrl }}';
+    window.iconPageConfig = {
+        platform: 'antd',
+        dataFile: 'antd-icon-paths.json',
+        jsFile: 'antd-icons.js'
+    };
 </script>
+
 <script src="{{ baseUrl }}/js/ai-search.js"></script>
 <script src="{{ baseUrl }}/js/paginated-icons.js"></script>
+<script src="{{ baseUrl }}/js/icon-page-base.js"></script>
 <script src="{{ baseUrl }}/js/antd-icons.js"></script>
 {% endblock %}
