@@ -48,10 +48,11 @@ iconFiles.forEach(file => {
         console.log(`Пропускаем TwoTone иконку: ${iconName}`);
         return;
       } else if (iconData.icon.children) {
-        // Для Outlined и Filled иконок берем первый path
-        const pathElement = iconData.icon.children.find(child => child.tag === 'path');
-        if (pathElement) {
-          svgPath = pathElement.attrs.d;
+        // Для Outlined и Filled иконок объединяем все path элементы
+        const pathElements = iconData.icon.children.filter(child => child.tag === 'path');
+        if (pathElements.length > 0) {
+          // Объединяем все path элементы в один SVG
+          svgPath = pathElements.map(path => `<path d="${path.attrs.d}"/>`).join('');
         }
       }
       

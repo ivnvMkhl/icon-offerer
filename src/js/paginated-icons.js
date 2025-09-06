@@ -374,7 +374,7 @@ class PaginatedIcons {
       aiContainer.innerHTML = `
         <div class="ai-loading-indicator">
           <div class="ai-loading-spinner"></div>
-          <p>AI подбирает подходящий вариант...</p>
+          <p>AI подбирает подходящие варианты...</p>
         </div>
       `;
     }
