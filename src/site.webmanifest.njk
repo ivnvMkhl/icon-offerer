@@ -1,31 +1,35 @@
+---
+permalink: site.webmanifest
+---
+
 {
-    "id": "/",
+    "id": "{{ baseUrl }}/",
     "name": "Icon Offerer - AI Поиск иконок",
     "short_name": "Icon Offerer",
     "description": "Умный поиск иконок по описанию на естественном языке",
     "icons": [
         {
-            "src": "/favicon-16x16.svg",
+            "src": "{{ baseUrl }}/favicon-16x16.svg",
             "sizes": "16x16",
             "type": "image/svg+xml"
         },
         {
-            "src": "/favicon-32x32.svg",
+            "src": "{{ baseUrl }}/favicon-32x32.svg",
             "sizes": "32x32",
             "type": "image/svg+xml"
         },
         {
-            "src": "/favicon-192x192.svg",
+            "src": "{{ baseUrl }}/favicon-192x192.svg",
             "sizes": "192x192",
             "type": "image/svg+xml"
         },
         {
-            "src": "/favicon-512x512.svg",
+            "src": "{{ baseUrl }}/favicon-512x512.svg",
             "sizes": "512x512",
             "type": "image/svg+xml"
         },
         {
-            "src": "/apple-touch-icon.svg",
+            "src": "{{ baseUrl }}/apple-touch-icon.svg",
             "sizes": "180x180",
             "type": "image/svg+xml"
         }
@@ -34,6 +38,6 @@
     "background_color": "#ffffff",
     "display": "standalone",
     "orientation": "portrait-primary",
-    "start_url": "/",
-    "scope": "/"
+    "start_url": "{{ baseUrl }}/",
+    "scope": "{{ baseUrl }}/"
 }

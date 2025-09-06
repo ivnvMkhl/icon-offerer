@@ -6,7 +6,6 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/fonts/**/*");
   eleventyConfig.addPassthroughCopy("src/favicon*");
   eleventyConfig.addPassthroughCopy("src/apple-touch-icon*");
-  eleventyConfig.addPassthroughCopy("src/site.webmanifest");
 
   // Добавляем глобальные данные
   eleventyConfig.addGlobalData("isDev", process.env.ELEVENTY_ENV === 'development');
@@ -15,6 +14,7 @@ module.exports = function(eleventyConfig) {
   // Определяем базовый URL
   const baseUrl = process.env.ELEVENTY_ENV === 'development' ? '' : '/icon-refferer';
   eleventyConfig.addGlobalData("baseUrl", baseUrl);
+  
 
   // Настройки для входной и выходной директорий
   return {
