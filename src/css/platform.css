@@ -35,6 +35,9 @@
     border-radius: 12px;
     padding: 8px;
     border: 1px solid rgba(229, 229, 229, 0.8);
+    /* Предотвращаем смещение при появлении скролла */
+    contain: layout;
+    will-change: transform;
 }
 
 .pagination {
@@ -64,7 +67,7 @@
 .results-count {
     font-size: 0.9rem;
     color: #666;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
 }
 
 .pagination-btn {
@@ -76,7 +79,7 @@
     color: #1a1a1a;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     font-weight: 500;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     min-width: 100px;
@@ -107,7 +110,7 @@
 .pagination-info {
     font-size: 14px;
     color: #666;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     font-weight: 500;
     padding: 8px 12px;
     background: rgba(255, 255, 255, 0.8);
@@ -135,7 +138,7 @@
     border: 1px solid #d9d9d9;
     border-radius: 6px;
     font-size: 14px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     background: #fff;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -159,6 +162,8 @@
     gap: 12px;
     margin: 2rem 0;
     width: 100%;
+    /* Предотвращаем CLS при изменении размера */
+    contain: layout;
 }
 
 .icon-card {
@@ -169,6 +174,11 @@
     transition: all 0.3s ease;
     cursor: pointer;
     user-select: none;
+    /* Фиксированные размеры для предотвращения CLS */
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .icon-card.hidden {
@@ -207,6 +217,90 @@
     font-size: 24px;
     color: #666;
     border: 1px solid #e8e8e8;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Skeleton анимация только для пустых placeholder'ов (без контента) */
+.icon-placeholder:empty::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Skeleton loading для текста и кнопок */
+.icon-name.skeleton {
+    background: #f0f0f0;
+    height: 16px; /* Примерная высота текста 12px + line-height */
+    border-radius: 4px;
+    margin-bottom: 8px;
+    animation: skeleton-loading 1.5s infinite;
+    color: transparent;
+    /* Дублируем свойства реального элемента */
+    text-align: center;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
+}
+
+.copy-btn.skeleton {
+    background: #f0f0f0;
+    min-height: 28px; /* Используем min-height как у реального элемента */
+    border-radius: 4px;
+    border: none;
+    animation: skeleton-loading 1.5s infinite;
+    color: transparent;
+    /* Дублируем свойства реального элемента */
+    padding: 4px 0;
+    font-size: 11px;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Убираем анимацию для реальных элементов */
+.icon-name:not(.skeleton) {
+    animation: none;
+}
+
+.copy-btn:not(.skeleton) {
+    animation: none;
+}
+
+/* Дополнительные стили для skeleton карточек */
+.icon-card:has(.skeleton) {
+    /* Убеждаемся, что skeleton карточки имеют точно такие же размеры */
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #f0f0f0;
+    border-radius: 6px;
+    padding: 12px;
+    background: #fff;
+}
+
+/* Убираем skeleton анимацию для placeholder'ов с контентом */
+.icon-placeholder:not(:empty)::before {
+    display: none;
 }
 
 .icon-placeholder svg {
@@ -219,7 +313,7 @@
     text-align: center;
     font-size: 12px;
     color: #1a1a1a;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     margin-bottom: 8px;
     white-space: nowrap;
     overflow: hidden;
@@ -240,7 +334,7 @@
     color: #1a1a1a;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     text-decoration: none;
     display: inline-block;
     min-height: 28px; /* Улучшает touch-интерфейс */
@@ -275,7 +369,7 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1rem;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     background: #fff;
     transition: border-color 0.2s ease;
 }
@@ -293,7 +387,7 @@
     border-radius: 4px;
     color: #333;
     font-size: 0.9rem;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;

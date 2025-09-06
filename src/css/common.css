@@ -1,3 +1,28 @@
+/* Оптимизированная загрузка шрифтов для уменьшения CLS */
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTOlOV.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTOlOV.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTOlOV.woff2') format('woff2');
+}
+
 /* Reset и базовые стили */
 * {
     margin: 0;
@@ -6,11 +31,14 @@
 }
 
 body {
-    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
     line-height: 1.6;
     color: #1a1a1a;
     background-color: #ffffff;
     font-size: 14px;
+    /* Предотвращаем смещение при появлении скролла */
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
 }
 
 /* Контейнер */
@@ -37,7 +65,7 @@ body {
     font-weight: 500;
     color: #1a1a1a;
     text-decoration: none;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
 }
 
 .nav__logo:hover {
@@ -48,6 +76,10 @@ body {
 .main {
     padding: 40px 0;
     min-height: calc(100vh - 200px);
+    /* Предотвращаем смещение при загрузке контента и изменении размера */
+    contain: layout;
+    /* Плавные переходы при изменении размера */
+    transition: all 0.2s ease;
 }
 
 /* Заголовки */

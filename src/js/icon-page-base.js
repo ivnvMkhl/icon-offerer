@@ -21,9 +21,16 @@ class IconPageBase {
     }
 
     async init() {
+        // Вычисляем оптимальное количество элементов до рендеринга
+        this.optimalItemsPerPage = this.calculateItemsPerPage();
+        
+        // Предварительно рендерим контейнер с правильным количеством skeleton элементов
+        this.preRenderIconContainer();
         await this.loadIconPaths();
+        // После загрузки данных заменяем skeleton на реальные иконки
         this.setupPaginatedIcons();
         this.initSearch();
+        this.setupResizeHandler();
     }
 
     async loadIconPaths() {
@@ -59,11 +66,41 @@ class IconPageBase {
         return {};
     }
 
+    preRenderIconContainer() {
+        // Создаем skeleton loading для предотвращения CLS с правильным количеством элементов
+        if (this.iconsContainer) {
+            const skeletonCount = this.optimalItemsPerPage || 12; // fallback на 12 если не вычислено
+            this.iconsContainer.innerHTML = `
+                <div class="icons-grid" id="iconsGrid">
+                    ${Array.from({ length: skeletonCount }, () => `
+                        <div class="icon-card">
+                            <div class="icon-preview">
+                                <div class="icon-placeholder"></div>
+                            </div>
+                            <div class="icon-info">
+                                <div class="icon-name skeleton"></div>
+                            </div>
+                            <div class="icon-actions">
+                                <div class="copy-btn skeleton"></div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+    }
+
     setupPaginatedIcons() {
         if (!this.iconsContainer) return;
 
+        // Очищаем skeleton элементы перед созданием реальных иконок
+        this.iconsContainer.innerHTML = '';
+
+        // Используем предварительно вычисленное количество элементов
+        const itemsPerPage = this.optimalItemsPerPage || this.calculateItemsPerPage();
+
         this.paginatedIcons = new PaginatedIcons(this.iconsContainer, {
-            itemsPerPage: 50,
+            itemsPerPage: itemsPerPage,
             platform: this.config.platform,
             enableAISearch: true,
             loadIcon: this.loadIcon.bind(this),
@@ -72,6 +109,140 @@ class IconPageBase {
         });
 
         this.paginatedIcons.setItems(this.allIcons);
+    }
+
+    calculateItemsPerPage() {
+        const windowHeight = window.innerHeight;
+        const windowWidth = window.innerWidth;
+        
+        // Создаем временный контейнер для точного измерения
+        const tempContainer = this.createMeasurementContainer();
+        document.body.appendChild(tempContainer);
+        
+        try {
+            // Получаем реальные размеры элементов
+            const header = tempContainer.querySelector('.header');
+            const searchSection = tempContainer.querySelector('.search-section');
+            const paginationContainer = tempContainer.querySelector('.pagination-container');
+            const main = tempContainer.querySelector('.main');
+            
+            // Вычисляем высоту header + search
+            let headerHeight = 0;
+            if (header) headerHeight += header.offsetHeight;
+            if (searchSection) headerHeight += searchSection.offsetHeight;
+            
+            // Вычисляем высоту пагинации
+            let paginationHeight = 0;
+            if (paginationContainer) {
+                paginationHeight = paginationContainer.offsetHeight + 20; // + margin
+            }
+            
+            // Вычисляем padding main
+            let mainPadding = 0;
+            if (main) {
+                const computedStyle = window.getComputedStyle(main);
+                mainPadding = parseInt(computedStyle.paddingTop) + parseInt(computedStyle.paddingBottom);
+            }
+            
+            // Доступная высота для иконок
+            const availableHeight = windowHeight - headerHeight - paginationHeight - mainPadding - 40;
+            
+            // Получаем реальную ширину контейнера
+            const container = tempContainer.querySelector('.container');
+            const containerWidth = container ? container.offsetWidth : windowWidth;
+            
+            // Вычисляем размеры карточек в зависимости от размера экрана
+            let iconCardWidth, iconCardHeight, gap;
+            if (windowWidth >= 1200) {
+                iconCardWidth = 180;
+                iconCardHeight = 140;
+                gap = 12;
+            } else if (windowWidth >= 768) {
+                iconCardWidth = 160;
+                iconCardHeight = 140;
+                gap = 12;
+            } else {
+                iconCardWidth = 130;
+                iconCardHeight = 140;
+                gap = 10;
+            }
+            
+            // Вычисляем количество колонок и строк
+            const columns = Math.floor(containerWidth / (iconCardWidth + gap));
+            const rows = Math.floor(availableHeight / (iconCardHeight + gap));
+            
+            // Ограничиваем разумными пределами
+            const itemsPerPage = Math.max(6, Math.min(rows * columns, 100));
+            
+            window.logger.info(`Адаптивная пагинация: ${windowWidth}x${windowHeight} -> контейнер: ${containerWidth}px, ${columns} колонок, ${rows} строк, ${itemsPerPage} элементов на странице (доступная высота: ${availableHeight}px)`);
+            
+            return itemsPerPage;
+        } finally {
+            // Удаляем временный контейнер
+            document.body.removeChild(tempContainer);
+        }
+    }
+
+    createMeasurementContainer() {
+        const tempContainer = document.createElement('div');
+        tempContainer.style.position = 'absolute';
+        tempContainer.style.top = '-9999px';
+        tempContainer.style.left = '-9999px';
+        tempContainer.style.visibility = 'hidden';
+        tempContainer.style.width = window.innerWidth + 'px';
+        tempContainer.innerHTML = `
+            <div class="header">
+                <nav class="nav">
+                    <a href="#" class="nav__logo">icon-offerer</a>
+                </nav>
+            </div>
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Найти по имени или вопрос AI">
+                    <button class="ai-search-button">
+                        <span class="ai-search-text">Спросить AI</span>
+                    </button>
+                </div>
+            </div>
+            <div class="pagination-container">
+                <div class="pagination">
+                    <div class="pagination-left">
+                        <span class="pagination-info">1-50 из 1000</span>
+                    </div>
+                    <div class="pagination-center">
+                        <button class="pagination-btn" data-action="prev">← Назад</button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn" data-action="next">Вперед →</button>
+                    </div>
+                </div>
+            </div>
+            <div class="main">
+                <div class="container"></div>
+            </div>
+        `;
+        return tempContainer;
+    }
+
+
+    setupResizeHandler() {
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            // Дебаунсим обработчик resize для производительности
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (this.paginatedIcons) {
+                    // Пересчитываем оптимальное количество элементов
+                    this.optimalItemsPerPage = this.calculateItemsPerPage();
+                    const newItemsPerPage = this.optimalItemsPerPage;
+                    
+                    if (newItemsPerPage !== this.paginatedIcons.options.itemsPerPage) {
+                        this.paginatedIcons.options.itemsPerPage = newItemsPerPage;
+                        this.paginatedIcons.renderIcons();
+                        this.paginatedIcons.updatePagination();
+                    }
+                }
+            }, 250);
+        });
     }
 
     loadIcon(placeholder, iconName, iconPath) {

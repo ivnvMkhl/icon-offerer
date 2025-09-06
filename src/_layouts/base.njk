@@ -13,15 +13,13 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{{ title or 'AI Поиск иконок по описанию' }}">
     <meta name="twitter:description" content="{{ description or 'Умный поиск иконок по описанию на русском языке' }}">
+    <link rel="preload" href="https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTOlOV.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ baseUrl }}/css/common.css">
     {% if cssModules %}
         {% for module in cssModules %}
     <link rel="stylesheet" href="{{ baseUrl }}/css/{{ module }}.css">
         {% endfor %}
     {% endif %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="header">

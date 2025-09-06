@@ -28,6 +28,10 @@ class UnicodeIconPage extends IconPageBase {
             // Находим иконку по имени для получения символа
             const icon = this.allIcons.find(i => i.name === iconName);
             if (icon && icon.char) {
+                // Плавная загрузка для предотвращения CLS
+                placeholder.style.opacity = '0';
+                placeholder.style.transition = 'opacity 0.3s ease';
+                
                 // Устанавливаем символ в placeholder
                 placeholder.innerHTML = icon.char;
                 placeholder.title = `${iconName}: ${icon.char}`;
@@ -40,6 +44,11 @@ class UnicodeIconPage extends IconPageBase {
                 placeholder.style.justifyContent = 'center';
                 placeholder.style.minWidth = '32px';
                 placeholder.style.minHeight = '32px';
+                
+                // Плавное появление символа
+                requestAnimationFrame(() => {
+                    placeholder.style.opacity = '1';
+                });
             }
         }
     }
