@@ -236,7 +236,22 @@ class IconPageBase {
                     const newItemsPerPage = this.optimalItemsPerPage;
                     
                     if (newItemsPerPage !== this.paginatedIcons.options.itemsPerPage) {
+                        window.logger.log(`Ресайз: изменяем itemsPerPage с ${this.paginatedIcons.options.itemsPerPage} на ${newItemsPerPage}`);
+                        
                         this.paginatedIcons.options.itemsPerPage = newItemsPerPage;
+                        
+                        // Пересчитываем общее количество страниц
+                        this.paginatedIcons.totalPages = Math.ceil(this.paginatedIcons.filteredItems.length / newItemsPerPage);
+                        
+                        window.logger.log(`Ресайз: новое количество страниц: ${this.paginatedIcons.totalPages} (элементов: ${this.paginatedIcons.filteredItems.length})`);
+                        
+                        // Проверяем, что текущая страница не превышает новое количество страниц
+                        if (this.paginatedIcons.currentPage > this.paginatedIcons.totalPages) {
+                            this.paginatedIcons.currentPage = Math.max(1, this.paginatedIcons.totalPages);
+                            this.paginatedIcons.updateURL();
+                            window.logger.log(`Ресайз: корректируем текущую страницу на ${this.paginatedIcons.currentPage}`);
+                        }
+                        
                         this.paginatedIcons.renderIcons();
                         this.paginatedIcons.updatePagination();
                     }
