@@ -5,9 +5,9 @@
 
 .platforms h2 {
     margin-bottom: 20px;
-    font-size: 18px;
+    font-size: 20px;
     color: var(--text-secondary);
-    font-weight: 400;
+    font-weight: 500;
     transition: color 0.3s ease;
 }
 
@@ -52,7 +52,7 @@
     }
     
     .platforms h2 {
-        font-size: 16px;
+        font-size: 18px;
         margin-bottom: 16px;
     }
     
@@ -62,16 +62,16 @@
         margin-bottom: 4px;
         padding-left: 12px;
         padding-right: 12px;
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
         transition: all 0.2s ease;
     }
     
     .platform-link:hover {
-        background: #e9ecef;
-        border-color: #dee2e6;
+        background: var(--bg-tertiary);
+        border-color: var(--border-hover);
         transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 4px var(--shadow);
     }
     
     .platform-name {
@@ -93,7 +93,7 @@
     }
     
     .platforms h2 {
-        font-size: 14px;
+        font-size: 16px;
         margin-bottom: 12px;
     }
     

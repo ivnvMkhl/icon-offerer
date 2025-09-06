@@ -141,6 +141,7 @@ html[data-theme="dark"] body {
     justify-content: center;
     width: 32px;
     height: 32px;
+    flex-shrink: 0;
 }
 
 .theme-toggle:hover {
@@ -305,20 +306,26 @@ a:hover {
     
     .nav {
         padding: 0 16px;
-        flex-direction: column;
-        gap: 8px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .theme-toggle {
+        flex-shrink: 0;
     }
     
     .nav__logo {
         font-size: 16px;
-        text-align: center;
+        text-align: left;
     }
     
     h1 {
         font-size: 20px;
         line-height: 1.3;
         margin-bottom: 16px;
-        text-align: center;
+        text-align: left;
     }
     
     h2 {
@@ -488,24 +495,29 @@ a:hover {
     
     .nav {
         padding: 0 12px;
-        gap: 6px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
     }
     
     .nav__logo {
         font-size: 14px;
+        text-align: left;
     }
     
     .theme-toggle {
         padding: 6px;
         width: 28px;
         height: 28px;
+        flex-shrink: 0;
     }
     
     h1 {
         font-size: 18px;
         line-height: 1.2;
         margin-bottom: 12px;
-        text-align: center;
+        text-align: left;
     }
     
     h2 {
