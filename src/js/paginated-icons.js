@@ -7,6 +7,8 @@ class PaginatedIcons {
     this.options = {
       itemsPerPage: 50, // Количество иконок на странице
       urlParamName: 'page', // Имя параметра URL для страницы
+      platform: 'antd', // Платформа для AI поиска
+      enableAISearch: true, // Включить AI поиск
       ...options
     };
     
@@ -14,6 +16,8 @@ class PaginatedIcons {
     this.filteredItems = [];
     this.currentPage = 1;
     this.totalPages = 0;
+    this.aiSearchResults = []; // Результаты AI поиска
+    this.isAISearchMode = false; // Режим AI поиска
     
     this.init();
   }
@@ -45,9 +49,14 @@ class PaginatedIcons {
   setupPagination() {
     this.paginationContainer.innerHTML = `
       <div class="pagination">
-        <button class="pagination-btn" id="prevBtn" disabled>← Назад</button>
-        <span class="pagination-info" id="paginationInfo">Страница 1 из 1</span>
-        <button class="pagination-btn" id="nextBtn" disabled>Вперед →</button>
+        <div class="pagination-left">
+          <span class="results-count" id="resultsCount">Найдено иконок: 0</span>
+        </div>
+        <div class="pagination-center">
+          <button class="pagination-btn" id="prevBtn" disabled>← Назад</button>
+          <span class="pagination-info" id="paginationInfo">Страница 1 из 1</span>
+          <button class="pagination-btn" id="nextBtn" disabled>Вперед →</button>
+        </div>
       </div>
     `;
     
@@ -77,6 +86,7 @@ class PaginatedIcons {
       this.updateURL();
     }
     
+    this.updateResultsCount(this.filteredItems.length); // Обновляем счетчик
     this.render();
   }
   
@@ -85,6 +95,7 @@ class PaginatedIcons {
     this.currentPage = 1;
     this.totalPages = Math.ceil(this.filteredItems.length / this.options.itemsPerPage);
     this.updateURL(); // Сбрасываем URL при фильтрации
+    this.updateResultsCount(this.filteredItems.length); // Обновляем счетчик
     this.render();
   }
   
@@ -112,6 +123,11 @@ class PaginatedIcons {
     const iconCard = document.createElement('div');
     iconCard.classList.add('icon-card');
     iconCard.dataset.name = item.name;
+    
+    // Добавляем класс для AI результатов
+    if (this.isAISearchMode && this.aiSearchResults.includes(item.name)) {
+      iconCard.classList.add('ai-result-icon');
+    }
 
     iconCard.innerHTML = `
       <div class="icon-preview">
@@ -120,7 +136,7 @@ class PaginatedIcons {
         </div>
       </div>
       <div class="icon-info">
-        <div class="icon-name">${item.name}</div>
+        <div class="icon-name" title="${item.name}">${item.name}</div>
       </div>
       <div class="icon-actions">
         <button class="copy-btn" data-icon="${item.name}" title="Копировать название">
@@ -242,6 +258,130 @@ class PaginatedIcons {
       this.loadStateFromURL();
       this.render();
     });
+  }
+
+  // Методы для AI поиска
+  async performAISearch(query) {
+    if (!this.options.enableAISearch || !window.aiSearch) {
+      console.warn('AI поиск отключен или недоступен');
+      return false;
+    }
+
+    // Проверяем доступность AI-поиска
+    if (!window.aiSearch.isAISearchAvailable()) {
+      console.warn('AI поиск недоступен из-за CORS ограничений');
+      return false;
+    }
+
+    try {
+      // Показываем индикатор загрузки
+      this.showAILoadingIndicator();
+      
+      // Выполняем AI поиск
+      const result = await window.aiSearch.searchIcons(this.options.platform, query);
+      
+      if (result.success && result.icons && result.icons.length > 0) {
+        // Переключаемся в режим AI поиска
+        this.isAISearchMode = true;
+        this.aiSearchResults = result.icons;
+        
+        // Фильтруем иконки по найденным именам
+        this.filteredItems = this.items.filter(item => 
+          this.aiSearchResults.includes(item.name)
+        );
+        
+        this.currentPage = 1;
+        this.updatePagination();
+        this.render();
+        
+        // Скрываем AI контейнер после успешного поиска
+        const aiContainer = document.getElementById('aiMessagesContainer');
+        if (aiContainer) {
+          aiContainer.style.display = 'none';
+        }
+        
+        return true;
+      } else {
+        // Показываем сообщение об отсутствии результатов
+        this.showNoAISearchResults();
+        return false;
+      }
+      
+    } catch (error) {
+      console.error('Ошибка AI поиска:', error);
+      this.showAISearchError(error.message);
+      return false;
+    }
+  }
+
+  showAILoadingIndicator() {
+    const aiContainer = document.getElementById('aiMessagesContainer');
+    if (aiContainer) {
+      aiContainer.style.display = 'flex';
+      aiContainer.innerHTML = `
+        <div class="ai-loading-indicator">
+          <div class="ai-loading-spinner"></div>
+          <p>AI подбирает подходящий вариант...</p>
+        </div>
+      `;
+    }
+    this.iconsContainer.innerHTML = '';
+  }
+
+
+  showNoAISearchResults() {
+    const aiContainer = document.getElementById('aiMessagesContainer');
+    if (aiContainer) {
+      aiContainer.style.display = 'flex';
+      aiContainer.innerHTML = `
+        <div class="ai-no-results">
+          <p>AI не смог найти подходящие иконки для вашего запроса</p>
+          <p>Попробуйте изменить формулировку или использовать точное название иконки</p>
+        </div>
+      `;
+    }
+    this.iconsContainer.innerHTML = '';
+  }
+
+  showAISearchError(message) {
+    const aiContainer = document.getElementById('aiMessagesContainer');
+    if (aiContainer) {
+      aiContainer.style.display = 'flex';
+      aiContainer.innerHTML = `
+        <div class="ai-search-error">
+          <p>Ошибка AI поиска: ${message}</p>
+          <p>Попробуйте использовать обычный поиск по названию</p>
+        </div>
+      `;
+    }
+    this.iconsContainer.innerHTML = '';
+  }
+
+  clearAISearch() {
+    this.isAISearchMode = false;
+    this.aiSearchResults = [];
+    this.filteredItems = this.items;
+    this.currentPage = 1;
+    
+    // Скрываем AI контейнер
+    const aiContainer = document.getElementById('aiMessagesContainer');
+    if (aiContainer) {
+      aiContainer.style.display = 'none';
+    }
+    
+    this.updatePagination();
+    this.render();
+  }
+
+  isInAISearchMode() {
+    return this.isAISearchMode;
+  }
+
+  updateResultsCount(count) {
+    const resultsCount = document.getElementById('resultsCount');
+    if (resultsCount) {
+      resultsCount.innerHTML = `Найдено иконок: <strong>${count}</strong>`;
+    }
   }
 }
 

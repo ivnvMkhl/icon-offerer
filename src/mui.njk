@@ -1,27 +1,30 @@
 ---
 layout: base.njk
-title: Material Design Icons
-description: Подбор иконок из библиотеки Material Design Icons
+title: Material Design Icons - AI поиск иконок по описанию | Копирование кода иконки
+description: AI-поиск иконок Material Design по описанию на русском языке. Найти иконку MUI по словесному запросу, копирование кода иконки, превью иконок Material Design онлайн
 ---
 
 {% block content %}
 <div class="container">
-    <h1>Подобрать иконку Material Design Icons</h1>
+    <h1>AI Поиск иконок Material Design по описанию</h1>
     
     <div class="search-section">
-        <div class="search-input-container">
+        <div class="search-container">
             <input 
                 type="text" 
                 id="iconSearch" 
                 class="search-input" 
-                placeholder="Поиск иконок по названию..."
+                placeholder="Найти по имени или вопрос AI"
                 autocomplete="off"
             >
-        </div>
-        <div class="search-results-info">
-            <span id="resultsCount">Загрузка иконок...</span>
+            <button id="aiSearchButton" class="ai-search-button">
+                <span class="ai-search-text">Спросить AI</span>
+            </button>
         </div>
     </div>
+    
+    <!-- Контейнер для AI сообщений -->
+    <div id="aiMessagesContainer" style="display: none;"></div>
     
                <div id="iconsContainer">
                <div class="loading-indicator" id="loadingIndicator">
@@ -80,6 +83,7 @@ fetch('{{ baseUrl }}/js/mui-icon-paths.json')
     // Устанавливаем глобальную переменную baseUrl для JavaScript
     window.baseUrl = '{{ baseUrl }}';
 </script>
+<script src="{{ baseUrl }}/js/ai-search.js"></script>
 <script src="{{ baseUrl }}/js/paginated-icons.js"></script>
 <script src="{{ baseUrl }}/js/mui-icons.js"></script>
 {% endblock %}

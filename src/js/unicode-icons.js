@@ -201,36 +201,122 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Инициализируем пагинацию
     paginatedIcons = new PaginatedIcons(container, {
       itemsPerPage: 50,
+      platform: 'unicode', // Платформа для AI поиска
+      enableAISearch: true, // Включить AI поиск
       renderItem: renderUnicodeIconCard,
       loadIcon: loadUnicodeIcon,
       copyIcon: copyUnicodeCode,
-      resultsCountElement: document.getElementById('resultsCount'),
       noResultsElement: document.getElementById('noResults')
     });
     
     // Устанавливаем иконки
     paginatedIcons.setItems(unicodeIcons);
     
-    // Настраиваем поиск
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
-        
-        if (query === '') {
-          paginatedIcons.setItems(unicodeIcons);
+      // Настраиваем поиск
+  const searchInput = document.getElementById('searchInput');
+  const noResults = document.getElementById('noResults');
+  
+  if (searchInput) {
+    // Обычный поиск по названию
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.trim();
+      
+      if (query === '') {
+        // Очищаем AI поиск если он был активен
+        if (paginatedIcons.isInAISearchMode()) {
+          paginatedIcons.clearAISearch();
         } else {
-          paginatedIcons.filterItems(icon => 
-            icon.searchText.includes(query)
-          );
+          // Принудительно скрываем AI контейнер даже если AI поиск не был активен
+          const aiContainer = document.getElementById('aiMessagesContainer');
+          if (aiContainer) {
+            aiContainer.style.display = 'none';
+          }
         }
-      });
+        paginatedIcons.setItems(unicodeIcons);
+        
+        // Скрываем сообщение "не найдено" при очистке поля поиска
+        if (noResults) {
+          noResults.style.display = 'none';
+        }
+      } else {
+        // Очищаем AI поиск если он был активен
+        if (paginatedIcons.isInAISearchMode()) {
+          paginatedIcons.clearAISearch();
+        }
+        
+        // Обычный поиск
+        paginatedIcons.filterItems(icon => 
+          icon.searchText.includes(query.toLowerCase())
+        );
+      }
+      
+      // Показываем/скрываем сообщение "не найдено" только если не в режиме AI поиска
+      if (noResults && !paginatedIcons.isInAISearchMode()) {
+        if (paginatedIcons.filteredItems.length === 0) {
+          noResults.style.display = 'block';
+        } else {
+          noResults.style.display = 'none';
+        }
+      }
+    });
+
+    // AI поиск по кнопке
+    const aiSearchButton = document.getElementById('aiSearchButton');
+    if (aiSearchButton) {
+      aiSearchButton.addEventListener('click', performAISearch);
     }
+  }
     
     console.log('Unicode иконки успешно загружены и отображены');
     
   } catch (error) {
     console.error('Ошибка инициализации Unicode иконок:', error);
     container.innerHTML = '<p>Произошла ошибка при загрузке иконок</p>';
+  }
+
+  // Функция AI поиска
+  async function performAISearch() {
+    const query = searchInput.value.trim();
+    
+    if (!query) {
+      alert('Введите описание иконки для AI поиска');
+      return;
+    }
+
+    if (query.length < 3) {
+      alert('Запрос должен содержать минимум 3 символа');
+      return;
+    }
+
+    if (!paginatedIcons) return;
+
+    const aiSearchButton = document.getElementById('aiSearchButton');
+    const aiSearchText = aiSearchButton.querySelector('.ai-search-text');
+    const originalText = aiSearchText.textContent;
+
+    try {
+      // Скрываем сообщение "не найдено" при начале AI поиска
+      if (noResults) {
+        noResults.style.display = 'none';
+      }
+      
+      // Показываем состояние загрузки
+      aiSearchButton.disabled = true;
+      aiSearchButton.classList.add('loading');
+      aiSearchText.textContent = 'AI думает';
+
+      const success = await paginatedIcons.performAISearch(query);
+      
+      // Не показываем сообщение "не найдено" для AI поиска
+      // AI поиск сам обрабатывает случаи отсутствия результатов
+    } catch (error) {
+      console.error('Ошибка AI поиска:', error);
+      alert('Произошла ошибка при выполнении AI поиска');
+    } finally {
+      // Восстанавливаем кнопку
+      aiSearchButton.disabled = false;
+      aiSearchButton.classList.remove('loading');
+      aiSearchText.textContent = originalText;
+    }
   }
 });

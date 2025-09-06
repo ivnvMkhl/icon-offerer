@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if title %}{{ title }} - {% endif %}Icon Offerer</title>
-    <meta name="description" content="{{ description or 'Сервис для подбора иконок по словесному запросу' }}">
+    <title>{% if title %}{{ title }}{% else %}AI Поиск иконок по описанию - Ant Design, Material Design, Unicode{% endif %}</title>
+    <meta name="description" content="{{ description or 'Умный поиск иконок по описанию на русском языке. AI-поиск иконок из Ant Design, Material Design, Unicode. Найти иконку по словесному описанию, копирование кода иконки' }}">
+    <meta name="keywords" content="поиск иконок, AI поиск иконок, иконки по описанию, ant design иконки, material design иконки, unicode символы, копирование кода иконки, подбор иконок, поиск иконок онлайн">
+    <meta name="author" content="Icon Offerer">
+    <meta property="og:title" content="{{ title or 'AI Поиск иконок по описанию' }}">
+    <meta property="og:description" content="{{ description or 'Умный поиск иконок по описанию на русском языке' }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ title or 'AI Поиск иконок по описанию' }}">
+    <meta name="twitter:description" content="{{ description or 'Умный поиск иконок по описанию на русском языке' }}">
     <link rel="stylesheet" href="{{ baseUrl }}/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +30,7 @@
     </main>
 
     <footer class="footer">
-        <p>icon-offerer — подбор иконок по словесному запросу</p>
+        <p>AI-поиск иконок по описанию</p>
     </footer>
 
     <script src="{{ baseUrl }}/js/main.js"></script>

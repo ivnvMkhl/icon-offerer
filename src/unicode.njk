@@ -1,30 +1,35 @@
 ---
 layout: base.njk
-title: Unicode
-description: Подбор иконок из Unicode символов
+title: Unicode Icons - AI поиск символов по описанию | Копирование Unicode кода
+description: AI-поиск Unicode символов по описанию на русском языке. Найти Unicode иконку по словесному запросу, копирование Unicode кода, превью символов Unicode онлайн
 ---
 
 <div class="container">
-    <h1>Unicode Иконки</h1>
+    <h1>AI Поиск Unicode символов по описанию</h1>
     
     <div class="search-section">
         <div class="search-container">
             <input 
                 type="text" 
                 id="searchInput" 
-                placeholder="Поиск по Unicode коду, символу или категории..."
+                placeholder="Найти по имени или вопрос AI"
                 class="search-input"
             >
+            <button id="aiSearchButton" class="ai-search-button">
+                <span class="ai-search-text">Спросить AI</span>
+            </button>
         </div>
         <div class="results-info">
-            <span id="resultsCount"></span>
             <div id="noResults" class="no-results" style="display: none;">
-                <p>Ничего не найдено. Попробуйте изменить поисковый запрос.</p>
+                <p>Иконки не найдены. Попробуйте изменить поисковый запрос.</p>
             </div>
         </div>
     </div>
     
-    <div id="iconsContainer">
+    <!-- Контейнер для AI сообщений -->
+    <div id="aiMessagesContainer" style="display: none;"></div>
+    
+               <div id="iconsContainer">
         <div class="loading-indicator" id="loadingIndicator">
             <div class="loading-spinner"></div>
             Загрузка Unicode иконок...
@@ -35,5 +40,6 @@ description: Подбор иконок из Unicode символов
 <script>
     window.baseUrl = '{{ baseUrl }}' || '';
 </script>
+<script src="{{ baseUrl }}/js/ai-search.js"></script>
 <script src="{{ baseUrl }}/js/paginated-icons.js"></script>
 <script src="{{ baseUrl }}/js/unicode-icons.js"></script>
