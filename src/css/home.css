@@ -1,0 +1,46 @@
+/* Список платформ */
+.platforms {
+    margin-top: 40px;
+}
+
+.platforms h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #666;
+    font-weight: 400;
+}
+
+.platform-list {
+    list-style: none;
+    padding: 0;
+}
+
+.platform-item {
+    margin-bottom: 8px;
+}
+
+.platform-link {
+    display: block;
+    padding: 8px 0;
+    text-decoration: none;
+    color: #1a1a1a;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.platform-link:hover {
+    color: #666;
+    border-bottom-color: #e5e5e5;
+}
+
+.platform-name {
+    font-weight: 500;
+}
+
+.platform-desc {
+    font-size: 12px;
+    color: #999;
+    margin-left: 8px;
+}
+
+

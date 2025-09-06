@@ -1,0 +1,15 @@
+/* Стили для Unicode иконок */
+.unicode-icon {
+    font-size: 24px;
+    background: transparent;
+    color: #1a1a1a;
+    width: auto;
+    height: auto;
+    min-width: 32px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+

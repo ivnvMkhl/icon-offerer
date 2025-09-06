@@ -1,0 +1,240 @@
+/* Reset и базовые стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background-color: #ffffff;
+    font-size: 14px;
+}
+
+/* Контейнер */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+/* Навигация */
+.header {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 20px 0;
+}
+
+.nav {
+    text-align: left;
+    padding: 0 20px;
+}
+
+.nav__logo {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a1a1a;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.nav__logo:hover {
+    color: #666;
+}
+
+/* Основной контент */
+.main {
+    padding: 40px 0;
+    min-height: calc(100vh - 200px);
+}
+
+/* Заголовки */
+h1 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #1a1a1a;
+    line-height: 1.3;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #1a1a1a;
+    line-height: 1.3;
+}
+
+h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    line-height: 1.3;
+}
+
+/* Параграфы */
+p {
+    margin-bottom: 16px;
+    color: #4a4a4a;
+    line-height: 1.6;
+}
+
+/* Ссылки */
+a {
+    color: #1a1a1a;
+    text-decoration: underline;
+    text-decoration-color: #ccc;
+    text-underline-offset: 2px;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: #666;
+    text-decoration-color: #666;
+}
+
+/* Футер */
+.footer {
+    border-top: 1px solid #e5e5e5;
+    padding: 20px 0;
+    margin-top: 60px;
+}
+
+.footer p {
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    margin: 0;
+}
+
+/* Адаптивность */
+/* Большие экраны (1200px+) */
+@media (min-width: 1200px) {
+    .icons-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+    }
+}
+
+/* Планшеты (768px - 1199px) */
+@media (max-width: 1199px) and (min-width: 768px) {
+    .container {
+        padding: 0 24px;
+    }
+    
+    .icons-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 14px;
+    }
+}
+
+/* Мобильные устройства (до 767px) */
+@media (max-width: 767px) {
+    .container {
+        padding: 0 16px;
+    }
+    
+    .main {
+        padding: 30px 0;
+    }
+    
+    h1 {
+        font-size: 20px;
+    }
+    
+    h2 {
+        font-size: 18px;
+    }
+    
+    .platforms h2 {
+        font-size: 16px;
+    }
+    
+    .icons-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+    }
+    
+    .icon-card {
+        padding: 10px;
+    }
+    
+    .icon-preview {
+        height: 56px;
+    }
+    
+    .icon-placeholder {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .icon-placeholder svg {
+        width: 28px;
+        height: 28px;
+    }
+    
+    
+    /* Адаптивная пагинация для мобильных */
+    .pagination-container {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        margin: 0;
+    }
+    
+    .pagination {
+        gap: 8px;
+    }
+    
+    .pagination-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        min-width: 80px;
+    }
+    
+    .pagination-info {
+        font-size: 12px;
+        padding: 6px 8px;
+        min-width: 100px;
+    }
+}
+
+/* Очень маленькие экраны (до 480px) */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 12px;
+    }
+    
+    .icons-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 8px;
+    }
+    
+    .icon-card {
+        padding: 8px;
+    }
+    
+    .icon-preview {
+        height: 48px;
+    }
+    
+    .icon-placeholder {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+    }
+    
+    .icon-placeholder svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .copy-btn {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+}

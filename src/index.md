@@ -2,6 +2,7 @@
 layout: base.njk
 title: Поиск иконок по описанию - AI-поиск иконок Ant Design, Material Design, Unicode
 description: Умный поиск иконок по описанию на русском языке. AI-поиск иконок из Ant Design, Material Design, Unicode. Найти иконку по словесному описанию, копирование кода иконки, бесплатный сервис подбора иконок для разработчиков
+cssModules: ['home']
 ---
 
 <div class="container">
