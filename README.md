@@ -2,7 +2,7 @@
 
 Современное веб-приложение с AI-поиском иконок по словесному запросу, созданное с помощью 11ty (Eleventy). Использует искусственный интеллект для умного подбора иконок из популярных библиотек по естественному языку.
 
-🌐 **Демо**: [https://ivnvMkhl.github.io/icon-refferer](https://ivnvMkhl.github.io/icon-offerer)
+🌐 **Демо**: [https://ivnvMkhl.github.io/icon-offerer](https://ivnvMkhl.github.io/icon-offerer)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub](https://img.shields.io/badge/GitHub-ivnvMkhl%2Ficon--offerer-blue)](https://github.com/ivnvMkhl/icon-offerer)
