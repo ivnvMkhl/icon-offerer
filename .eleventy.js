@@ -16,7 +16,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addGlobalData("isProduction", process.env.ELEVENTY_ENV === 'production');
   
   // Определяем базовый URL
-  const baseUrl = process.env.ELEVENTY_ENV === 'development' ? '' : '/icon-refferer';
+  const baseUrl = process.env.ELEVENTY_ENV === 'development' ? '' : '/icon-offerer';
   eleventyConfig.addGlobalData("baseUrl", baseUrl);
   
 
