@@ -2,7 +2,7 @@
   "name": "icon-offerer",
   "version": "1.0.0",
   "description": "Приложение на 11ty для работы с иконками",
-  "homepage": "https://ivnvMkhl.github.io/icon-refferer",
+  "homepage": "https://ivnvMkhl.github.io/icon-offerer",
   "main": "index.js",
   "scripts": {
     "extract-icons": "node scripts/extract-svg-paths.js && node scripts/extract-mui-icons.js && node scripts/extract-unicode-icons.js",

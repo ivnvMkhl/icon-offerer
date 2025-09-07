@@ -58,8 +58,8 @@
 
 1. Клонируйте репозиторий:
 ```bash
-git clone https://github.com/ivnvMkhl/icon-refferer.git
-cd icon-refferer
+git clone https://github.com/ivnvMkhl/icon-offerer.git
+cd icon-offerer
 ```
 
 2. Установите зависимости:
@@ -155,7 +155,7 @@ npm run build
 ### GitHub Pages URL
 
 После деплоя сайт будет доступен по адресу:
-`https://ivnvMkhl.github.io/icon-refferer/`
+`https://ivnvMkhl.github.io/icon-offerer/`
 
 ## AI-поиск иконок
 
