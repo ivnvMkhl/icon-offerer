@@ -5,11 +5,10 @@
 if (typeof AISearch === 'undefined') {
 class AISearch {
   constructor() {
-    // Прямой запрос к Yandex Cloud Functions
-    this.apiUrl = 'https://functions.yandexcloud.net/d4ej3hujkeaaoaun3kh8';
+    this.apiUrl = window.aiSerchUrl;
     this.isSearching = false;
     this.currentRequest = null;
-    this.isAvailable = true; // Флаг доступности AI-поиска
+    this.isAvailable = true;
   }
 
   /**

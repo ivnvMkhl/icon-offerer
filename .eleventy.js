@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = function(eleventyConfig) {
   // Копируем статические файлы
   eleventyConfig.addPassthroughCopy("src/css/**/*");
@@ -17,8 +19,8 @@ module.exports = function(eleventyConfig) {
   
   // Определяем базовый URL
   const baseUrl = process.env.ELEVENTY_ENV === 'development' ? '' : '/icon-offerer';
-  eleventyConfig.addGlobalData("baseUrl", baseUrl);
-  
+  eleventyConfig.addGlobalData("baseUrl", baseUrl);  
+  eleventyConfig.addGlobalData("aiSearchUrl", process.env.AI_SEARCH_URL);
 
   // Настройки для входной и выходной директорий
   return {
