@@ -41,18 +41,19 @@ iconFiles.forEach(file => {
       // Извлекаем SVG путь
       let svgPath = '';
       
-      // Для TwoTone иконок используем специальную логику
-      if (iconName.includes('TwoTone')) {
-        // TwoTone иконки имеют другую структуру - они используют CSS переменные
-        // Пока что пропускаем их, так как они требуют специальной обработки
-        console.log(`Пропускаем TwoTone иконку: ${iconName}`);
-        return;
-      } else if (iconData.icon.children) {
-        // Для Outlined и Filled иконок объединяем все path элементы
+      if (iconData.icon.children) {
+        // Обрабатываем все типы иконок (Outlined, Filled, TwoTone)
         const pathElements = iconData.icon.children.filter(child => child.tag === 'path');
         if (pathElements.length > 0) {
           // Объединяем все path элементы в один SVG
-          svgPath = pathElements.map(path => `<path d="${path.attrs.d}"/>`).join('');
+          svgPath = pathElements.map(path => {
+            // Обрабатываем атрибуты path элемента
+            const attrs = path.attrs || {};
+            const pathAttrs = Object.entries(attrs)
+              .map(([key, value]) => `${key}="${value}"`)
+              .join(' ');
+            return `<path ${pathAttrs}/>`;
+          }).join('');
         }
       }
       

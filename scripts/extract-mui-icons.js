@@ -22,21 +22,37 @@ const iconPaths = {};
 let successCount = 0;
 let errorCount = 0;
 
-// Функция для извлечения SVG пути из исходного кода файла
-function extractSvgPathFromFile(filePath) {
+// Функция для извлечения всех SVG path элементов из исходного кода файла
+function extractSvgPathsFromFile(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     
-    // Ищем path элемент с d атрибутом
-    const pathMatch = content.match(/jsx\("path",\s*\{\s*d:\s*"([^"]+)"/);
-    if (pathMatch) {
-      return pathMatch[1];
+    // Ищем все path элементы с d атрибутом
+    const pathMatches = content.match(/jsx\("path",\s*\{[^}]*d:\s*"([^"]+)"[^}]*\}/g);
+    if (pathMatches && pathMatches.length > 0) {
+      // Извлекаем все path элементы
+      const paths = pathMatches.map(match => {
+        const dMatch = match.match(/d:\s*"([^"]+)"/);
+        return dMatch ? dMatch[1] : null;
+      }).filter(Boolean);
+      
+      if (paths.length > 0) {
+        // Объединяем все path элементы в один SVG
+        return paths.map(d => `<path d="${d}"/>`).join('');
+      }
     }
     
-    // Альтернативный паттерн для других форматов
-    const altPathMatch = content.match(/d:\s*"([^"]+)"/);
-    if (altPathMatch) {
-      return altPathMatch[1];
+    // Альтернативный паттерн для других форматов - ищем все d атрибуты
+    const allPathMatches = content.match(/d:\s*"([^"]+)"/g);
+    if (allPathMatches && allPathMatches.length > 0) {
+      const paths = allPathMatches.map(match => {
+        const dMatch = match.match(/d:\s*"([^"]+)"/);
+        return dMatch ? dMatch[1] : null;
+      }).filter(Boolean);
+      
+      if (paths.length > 0) {
+        return paths.map(d => `<path d="${d}"/>`).join('');
+      }
     }
     
     return null;
@@ -52,8 +68,8 @@ iconFiles.forEach(file => {
     const iconPath = path.join(iconsPath, file);
     const iconName = file.replace('.js', '');
     
-    // Извлекаем SVG путь из исходного кода
-    const svgPath = extractSvgPathFromFile(iconPath);
+    // Извлекаем все SVG path элементы из исходного кода
+    const svgPath = extractSvgPathsFromFile(iconPath);
     
     if (svgPath) {
       iconPaths[iconName] = svgPath;
