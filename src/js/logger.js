@@ -1,24 +1,25 @@
 class Logger {
+    #devHostnames = new Set(['localhost', '127.0.0.1', '0.0.0.0']);
+    #isDev;
+
     constructor() {
-        this.isDev = window.location.hostname === 'localhost' || 
-                     window.location.hostname === '127.0.0.1' ||
-                     window.location.hostname === '0.0.0.0';
+        this.#isDev = this.#devHostnames.has(window.location.hostname);
     }
     
     log(...args) {
-        if (this.isDev) console.log(...args);
+        if (this.#isDev) console.log(...args);
     }
     
     error(...args) {
-        if (this.isDev) console.error(...args);
+        if (this.#isDev) console.error(...args);
     }
     
     warn(...args) {
-        if (this.isDev) console.warn(...args);
+        if (this.#isDev) console.warn(...args);
     }
     
     info(...args) {
-        if (this.isDev) console.info(...args);
+        if (this.#isDev) console.info(...args);
     }
 }
 

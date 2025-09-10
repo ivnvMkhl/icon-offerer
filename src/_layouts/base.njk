@@ -2,15 +2,25 @@
 <html lang="ru">
 <head>
     {% include "base-meta.njk" %}
-    
-    {% include "base-theme.njk" %}
 
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const theme = savedTheme || 'light';
+
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    
     <link rel="stylesheet" href="{{ baseUrl }}/css/common.css">
     {% if cssModules %}
         {% for module in cssModules %}
     <link rel="stylesheet" href="{{ baseUrl }}/css/{{ module }}.css">
         {% endfor %}
     {% endif %}
+    
+    <script src="{{ baseUrl }}/js/logger.js" defer></script>
+    <script src="{{ baseUrl }}/js/theme.js" defer></script>
 </head>
 <body>
     <header class="header">
@@ -30,9 +40,6 @@
     <main class="main">
         {% block content %}{{ content | safe }}{% endblock %}
     </main>
-
-    <script src="{{ baseUrl }}/js/logger.js"></script>
-    <script src="{{ baseUrl }}/js/theme-toggle.js"></script>
 
     <footer class="footer">
         <div class="footer__content">
