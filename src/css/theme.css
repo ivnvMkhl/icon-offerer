@@ -1,0 +1,65 @@
+:root {
+    /* Light theme colors */
+    --light-bg-primary: #ffffff;
+    --light-bg-secondary: #f8f9fa;
+    --light-bg-tertiary: #e9ecef;
+    --light-text-primary: #1a1a1a;
+    --light-text-secondary: #666666;
+    --light-text-muted: #999999;
+    --light-border-color: #e5e5e5;
+    --light-border-hover: #d0d0d0;
+    --light-shadow: rgba(0, 0, 0, 0.1);
+    --light-shadow-hover: rgba(0, 0, 0, 0.15);
+    --light-accent-color: #666666;
+    --light-accent-hover: #555555;
+
+    /* Dark theme colors */
+    --dark-bg-primary: #1a1a1a;
+    --dark-bg-secondary: #2d2d2d;
+    --dark-bg-tertiary: #404040;
+    --dark-text-primary: #ffffff;
+    --dark-text-secondary: #cccccc;
+    --dark-text-muted: #999999;
+    --dark-border-color: #404040;
+    --dark-border-hover: #555555;
+    --dark-shadow: rgba(0, 0, 0, 0.3);
+    --dark-shadow-hover: rgba(0, 0, 0, 0.4);
+    --dark-accent-color: #888888;
+    --dark-accent-hover: #aaaaaa;
+
+    /* Common colors (same for both themes) */
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --error-color: #dc3545;
+    --info-color: #17a2b8;
+
+    /* Define light theme variables */
+    --bg-primary: var(--light-bg-primary);
+    --bg-secondary: var(--light-bg-secondary);
+    --bg-tertiary: var(--light-bg-tertiary);
+    --text-primary: var(--light-text-primary);
+    --text-secondary: var(--light-text-secondary);
+    --text-muted: var(--light-text-muted);
+    --border-color: var(--light-border-color);
+    --border-hover: var(--light-border-hover);
+    --shadow: var(--light-shadow);
+    --shadow-hover: var(--light-shadow-hover);
+    --accent-color: var(--light-accent-color);
+    --accent-hover: var(--light-accent-hover);
+}
+
+:root[data-theme="dark"] {
+    /* Define dark theme variables */
+    --bg-primary: var(--dark-bg-primary);
+    --bg-secondary: var(--dark-bg-secondary);
+    --bg-tertiary: var(--dark-bg-tertiary);
+    --text-primary: var(--dark-text-primary);
+    --text-secondary: var(--dark-text-secondary);
+    --text-muted: var(--dark-text-muted);
+    --border-color: var(--dark-border-color);
+    --border-hover: var(--dark-border-hover);
+    --shadow: var(--dark-shadow);
+    --shadow-hover: var(--dark-shadow-hover);
+    --accent-color: var(--dark-accent-color);
+    --accent-hover: var(--dark-accent-hover);
+}
