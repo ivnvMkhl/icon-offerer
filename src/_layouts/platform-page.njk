@@ -10,6 +10,21 @@ layout: base.njk
 
 {% block head %}
 {% include "platform-page-meta.njk" %}
+
+<script>
+    window.baseUrl = '{{ baseUrl }}';
+    window.iconPageConfig = {
+        platform: '{{ platform }}',
+        dataFile: '{{ dataFile }}',
+        jsFile: '{{ jsFile }}'
+    };
+    window.aiSerchUrl = '{{ aiSearchUrl }}';
+</script>
+
+<script src="{{ baseUrl }}/js/ai-search.js" defer></script>
+<script src="{{ baseUrl }}/js/paginated-icons.js" defer></script>
+<script src="{{ baseUrl }}/js/icon-page-base.js" defer></script>
+<script src="{{ baseUrl }}/{{ jsFile }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -46,19 +61,4 @@ layout: base.njk
 </div>
 
 {% include "platform-page-seo.njk" %}
-
-     <script>
-         window.baseUrl = '{{ baseUrl }}';
-         window.iconPageConfig = {
-             platform: '{{ platform }}',
-             dataFile: '{{ dataFile }}',
-             jsFile: '{{ jsFile }}'
-         };
-         window.aiSerchUrl = '{{ aiSearchUrl }}';
-     </script>
-
-     <script src="{{ baseUrl }}/js/ai-search.js"></script>
-     <script src="{{ baseUrl }}/js/paginated-icons.js"></script>
-     <script src="{{ baseUrl }}/js/icon-page-base.js"></script>
-     <script src="{{ baseUrl }}/{{ jsFile }}"></script>
 {% endblock %}

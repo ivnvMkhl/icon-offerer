@@ -13,15 +13,11 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/screenshot-*.png");
   eleventyConfig.addPassthroughCopy("src/.htaccess");
 
-  // Добавляем глобальные данные
-  eleventyConfig.addGlobalData("isDev", process.env.ELEVENTY_ENV === 'development');
-  eleventyConfig.addGlobalData("isProduction", process.env.ELEVENTY_ENV === 'production');
-  
-  // Определяем базовый URL
-  const baseUrl = process.env.ELEVENTY_ENV === 'development' ? '' : '/icon-offerer';
-  eleventyConfig.addGlobalData("baseUrl", baseUrl);  
+  eleventyConfig.addGlobalData("baseUrl", process.env.ELEVENTY_ENV === 'development' ? '' : process.env.BASE_URL);  
   eleventyConfig.addGlobalData("aiSearchUrl", process.env.AI_SEARCH_URL);
   eleventyConfig.addGlobalData("smartCaptchaSitekey", process.env.SMART_CAPTCHA_SITEKEY);
+  eleventyConfig.addGlobalData("isDev", process.env.ELEVENTY_ENV === 'development');
+  eleventyConfig.addGlobalData("isProduction", process.env.ELEVENTY_ENV === 'production');
 
   // Настройки для входной и выходной директорий
   return {

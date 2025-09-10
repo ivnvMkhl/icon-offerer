@@ -41,6 +41,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
+          BASE_URL: ${{ secrets.BASE_URL }}
           AI_SEARCH_URL: ${{ secrets.AI_SEARCH_URL }} 
           SMART_CAPTCHA_SITEKEY: ${{ secrets.SMART_CAPTCHA_SITEKEY }}
 

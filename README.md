@@ -22,12 +22,14 @@ npm run dev
 
 ## Переменные окружения
 
+Для продакшен сборки будет требоваться переменная `BASE_URL`.
+
 Добавьте переменную `AI_SEARCH_URL` полный URL до функции AI поиска [репозиторий](https://github.com/ivnvMkhl/icon-offerer-cf) с кодом функции.
 
 ## CI/CD
 
 Добавлен GitHub Actions workflow для деплоя проекта на GithubPages. 
-Для корректной работы workflow требудется секрет `AI_SEARCH_URL`.
+Для корректной работы workflow требудется секрет `BASE_URL` и `AI_SEARCH_URL`.
 
 ## Использование
 
