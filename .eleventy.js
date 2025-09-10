@@ -21,6 +21,7 @@ module.exports = function(eleventyConfig) {
   const baseUrl = process.env.ELEVENTY_ENV === 'development' ? '' : '/icon-offerer';
   eleventyConfig.addGlobalData("baseUrl", baseUrl);  
   eleventyConfig.addGlobalData("aiSearchUrl", process.env.AI_SEARCH_URL);
+  eleventyConfig.addGlobalData("smartCaptchaSitekey", process.env.SMART_CAPTCHA_SITEKEY);
 
   // Настройки для входной и выходной директорий
   return {

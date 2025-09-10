@@ -1,39 +1,9 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if title %}{{ title }}{% else %}AI Поиск иконок по описанию - Ant Design, Material Design, Unicode{% endif %}</title>
-    <meta name="description" content="{{ description or 'Умный поиск иконок по описанию на русском языке. AI-поиск иконок из Ant Design, Material Design, Unicode. Найти иконку по словесному описанию, копирование кода иконки' }}">
-    <meta name="keywords" content="поиск иконок, AI поиск иконок, иконки по описанию, ant design иконки, material design иконки, unicode символы, копирование кода иконки, подбор иконок, поиск иконок онлайн">
-    <meta name="author" content="Icon Offerer">
-    <meta property="og:title" content="{{ title or 'AI Поиск иконок по описанию' }}">
-    <meta property="og:description" content="{{ description or 'Умный поиск иконок по описанию на русском языке' }}">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="{{ title or 'AI Поиск иконок по описанию' }}">
-    <meta name="twitter:description" content="{{ description or 'Умный поиск иконок по описанию на русском языке' }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ baseUrl }}/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ baseUrl }}/apple-touch-icon.svg">
-    <link rel="manifest" href="{{ baseUrl }}/site.webmanifest.json">
-
-    <!-- Предотвращаем FOUC (flash of unstyled content) для темной темы -->
-    <script>
-        (function() {
-            // Получаем сохраненную тему или системную
-            const savedTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-            // Применяем тему сразу, до загрузки CSS
-            document.documentElement.setAttribute('data-theme', theme);
-        })();
-    </script>
+    {% include "base-meta.njk" %}
+    
+    {% include "base-theme.njk" %}
 
     <link rel="stylesheet" href="{{ baseUrl }}/css/common.css">
     {% if cssModules %}
@@ -63,46 +33,7 @@
 
     <script src="{{ baseUrl }}/js/logger.js"></script>
     <script src="{{ baseUrl }}/js/main.js"></script>
-
-
-    <script>
-        // Обновление кнопки переключения (только иконки)
-        function updateThemeToggle(theme) {
-            // Иконки переключаются автоматически через CSS
-        }
-
-        // Переключение темы
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeToggle(newTheme);
-        }
-
-        // Инициализация кнопки при загрузке (тема уже установлена в head)
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            updateThemeToggle(currentTheme);
-        });
-
-        // Обработчик клика на кнопку
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('#themeToggle')) {
-                toggleTheme();
-            }
-        });
-
-        // Слушатель изменения системной темы
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-            if (!localStorage.getItem('theme')) {
-                const theme = e.matches ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', theme);
-                updateThemeToggle(theme);
-            }
-        });
-    </script>
+    <script src="{{ baseUrl }}/js/theme-toggle.js"></script>
 
     <footer class="footer">
         <div class="footer__content">

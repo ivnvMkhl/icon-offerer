@@ -1,0 +1,83 @@
+<!-- Дополнительные мета-теги для SEO -->
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+<meta name="bingbot" content="index, follow">
+
+<!-- Open Graph для социальных сетей -->
+<meta property="og:url" content="{{ baseUrl }}/{{ platform }}/">
+<meta property="og:image" content="{{ baseUrl }}/images/{{ platform }}-icons-preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ platformTitle }} - {{ description }}">
+
+<!-- Twitter Card -->
+<meta name="twitter:image" content="{{ baseUrl }}/images/{{ platform }}-icons-preview.jpg">
+<meta name="twitter:image:alt" content="{{ platformTitle }} - {{ description }}">
+
+<!-- Платформо-специфичные SEO теги -->
+<meta name="keywords" content="{% if platform == 'antd' %}ant design иконки, antd icons, react иконки, ant design поиск, ant design AI поиск{% elif platform == 'mui' %}material design иконки, mui icons, material ui иконки, material design поиск, mui AI поиск{% elif platform == 'unicode' %}unicode символы, unicode иконки, unicode поиск, unicode AI поиск, emoji символы{% endif %}, {{ title | lower }}, {{ description | lower }}, поиск иконок онлайн, AI поиск иконок, копирование кода иконки, бесплатные иконки">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ baseUrl }}/{{ platform }}/">
+
+<!-- Структурированные данные JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "{{ platformTitle }}",
+  "description": "{{ description }}",
+  "url": "{{ baseUrl }}/{{ platform }}/",
+  "applicationCategory": "DesignApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "creator": {
+    "@type": "Organization",
+    "name": "Icon Offerer",
+    "url": "{{ baseUrl }}/"
+  },
+  "featureList": [
+    "AI-поиск иконок по описанию",
+    "Копирование кода иконок",
+    "Превью иконок онлайн",
+    "Бесплатное использование"
+  ],
+  "screenshot": "{{ baseUrl }}/images/{{ platform }}-icons-preview.jpg"
+}
+</script>
+
+<!-- Дополнительные мета-теги для поисковых систем -->
+<meta name="theme-color" content="#666666">
+<meta name="msapplication-TileColor" content="#666666">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="{{ platformTitle }}">
+
+<!-- Дополнительные Open Graph теги -->
+<meta property="og:site_name" content="Icon Offerer">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:type" content="website">
+
+<!-- Дополнительные Twitter теги -->
+<meta name="twitter:site" content="@iconofferer">
+<meta name="twitter:creator" content="@iconofferer">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Дополнительные мета-теги для мобильных устройств -->
+<meta name="format-detection" content="telephone=no">
+
+<!-- Дополнительные стили для SEO -->
+<style>
+  .seo-hidden {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>

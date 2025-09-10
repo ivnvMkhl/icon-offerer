@@ -1,0 +1,12 @@
+<!-- Предотвращаем FOUC (flash of unstyled content) для темной темы -->
+<script>
+    (function() {
+        // Получаем сохраненную тему или системную
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+        // Применяем тему сразу, до загрузки CSS
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+</script>
