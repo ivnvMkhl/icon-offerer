@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-async function extractUnicodeIcons() {
+export async function extractUnicodeIcons() {
   const outputPathJson = path.resolve('dist/js/unicode-icon-paths.json');
 
   // Создаем директорию если не существует
@@ -64,11 +64,8 @@ const unicodeRanges = [
 
   const unicodeIcons = {};
 
-  console.log('Начинаем извлечение Unicode символов...');
 
 unicodeRanges.forEach(range => {
-  console.log(`\nОбрабатываем диапазон: ${range.name} (U+${range.start.toString(16).toUpperCase()} - U+${range.end.toString(16).toUpperCase()})`);
-  
   let count = 0;
   let validCount = 0;
   
@@ -95,20 +92,12 @@ unicodeRanges.forEach(range => {
     
     count++;
     
-    // Показываем прогресс каждые 100 символов
-    if (count % 100 === 0) {
-      process.stdout.write('.');
-    }
   }
   
-  console.log(`\nНайдено ${validCount} валидных символов из ${count} проверенных`);
   });
-
-  console.log(`\n\nВсего извлечено ${Object.keys(unicodeIcons).length} Unicode символов`);
 
   // Сохраняем в JSON файл
   fs.writeFileSync(outputPathJson, JSON.stringify(unicodeIcons, null, 2));
-  console.log(`JSON файл создан: ${outputPathJson}`);
 
   // Создаем статистику по диапазонам
   const rangeStats = {};
@@ -119,11 +108,9 @@ unicodeRanges.forEach(range => {
     rangeStats[icon.range]++;
   });
 
-  console.log('\nСтатистика по диапазонам:');
-  Object.entries(rangeStats).forEach(([range, count]) => {
-    console.log(`  ${range}: ${count} символов`);
-  });
+  return {
+    total: Object.keys(unicodeIcons).length,
+    ranges: rangeStats
+  };
 }
 
-// Запускаем функцию
-extractUnicodeIcons().catch(console.error);

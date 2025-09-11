@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-async function extractMuiIcons() {
+export async function extractMuiIcons() {
   // Путь к иконкам Material Design
   const iconsPath = path.resolve('node_modules/@mui/icons-material');
   const outputPathJson = path.resolve('dist/js/mui-icon-paths.json');
@@ -17,7 +17,6 @@ async function extractMuiIcons() {
     .filter(file => file.endsWith('.js') && !file.includes('.d.ts') && file !== 'index.js')
     .sort();
 
-  console.log(`Найдено ${iconFiles.length} иконок Material Design`);
 
   const iconPaths = {};
   let successCount = 0;
@@ -76,7 +75,6 @@ async function extractMuiIcons() {
       iconPaths[iconName] = svgPath;
       successCount++;
     } else {
-      console.log(`Не удалось извлечь путь для ${iconName}`);
       errorCount++;
     }
   } catch (error) {
@@ -85,13 +83,12 @@ async function extractMuiIcons() {
   }
   });
 
-  console.log(`Успешно извлечено ${successCount} SVG путей`);
-  console.log(`Ошибок: ${errorCount}`);
-
   // Сохраняем JSON файл в dist
   fs.writeFileSync(outputPathJson, JSON.stringify(iconPaths, null, 2));
-  console.log(`JSON файл создан: ${outputPathJson}`);
+  
+  return {
+    total: iconFiles.length,
+    extracted: successCount,
+    errors: errorCount
+  };
 }
-
-// Запускаем функцию
-extractMuiIcons().catch(console.error);

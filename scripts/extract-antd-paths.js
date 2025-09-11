@@ -2,15 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
 
-async function extractSvgPaths() {
-  console.log('Начинаем извлечение Ant Design иконок...');
-  
+export async function extractAntdPaths() {
   // Путь к иконкам Ant Design
   const iconsPath = path.resolve('node_modules/@ant-design/icons-svg/lib/asn/');
   const outputPathJson = path.resolve('dist/js/antd-icon-paths.json');
-  
-  console.log('Путь к иконкам:', iconsPath);
-  console.log('Путь к выходному файлу:', outputPathJson);
 
   // Создаем директорию dist/js если её нет
   const distJsDir = path.dirname(outputPathJson);
@@ -26,12 +21,6 @@ async function extractSvgPaths() {
   const outlinedCount = iconFiles.filter(f => f.includes('Outlined')).length;
   const filledCount = iconFiles.filter(f => f.includes('Filled')).length;
   const twotoneCount = iconFiles.filter(f => f.includes('TwoTone')).length;
-
-  console.log(`Найдено иконок:`);
-  console.log(`- Outlined: ${outlinedCount}`);
-  console.log(`- Filled: ${filledCount}`);
-  console.log(`- TwoTone: ${twotoneCount}`);
-  console.log(`- Всего: ${iconFiles.length}`);
 
   const iconPaths = {};
 
@@ -75,12 +64,14 @@ async function extractSvgPaths() {
     }
   }
 
-  console.log(`Успешно извлечено ${Object.keys(iconPaths).length} SVG путей`);
-
   // Сохраняем JSON файл в dist
   fs.writeFileSync(outputPathJson, JSON.stringify(iconPaths, null, 2));
-  console.log(`JSON файл создан: ${outputPathJson}`);
+  
+  return {
+    total: iconFiles.length,
+    extracted: Object.keys(iconPaths).length,
+    outlined: outlinedCount,
+    filled: filledCount,
+    twotone: twotoneCount
+  };
 }
-
-// Запускаем функцию
-extractSvgPaths().catch(console.error);
