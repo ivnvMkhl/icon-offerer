@@ -7,7 +7,7 @@ import { extractUnicodeIcons } from './extract-unicode-icons.js';
  * Используется последовательное выполнение для лучшего контроля ошибок
  * и более читаемого вывода в консоли
  */
-async function extractAllIcons() {
+async function extractIcons() {
   console.log('🚀 Начинаем извлечение всех иконок...\n');
   
   const startTime = Date.now();
@@ -15,18 +15,26 @@ async function extractAllIcons() {
   try {
     // Извлекаем Ant Design иконки
     console.log('1️⃣ Извлечение Ant Design иконок...');
-    const antdResult = await extractAntdPaths();
+    const antdResult = await extractAntdPaths({
+      iconsPath: 'node_modules/@ant-design/icons-svg/lib/asn/',
+      outputFile: 'dist/js/antd-icon-paths.json'
+    });
     const antdErrors = antdResult.total - antdResult.extracted;
     console.log(`✅ Ant Design: ${antdResult.extracted}/${antdResult.total} иконок (Outlined: ${antdResult.outlined}, Filled: ${antdResult.filled}, TwoTone: ${antdResult.twotone}, ошибок: ${antdErrors})\n`);
     
     // Извлекаем Material Design иконки
     console.log('2️⃣ Извлечение Material Design иконок...');
-    const muiResult = await extractMuiIcons();
+    const muiResult = await extractMuiIcons({
+      iconsPath: 'node_modules/@mui/icons-material',
+      outputFile: 'dist/js/mui-icon-paths.json'
+    });
     console.log(`✅ Material Design: ${muiResult.extracted}/${muiResult.total} иконок (ошибок: ${muiResult.errors})\n`);
     
     // Извлекаем Unicode символы
     console.log('3️⃣ Извлечение Unicode символов...');
-    const unicodeResult = await extractUnicodeIcons();
+    const unicodeResult = await extractUnicodeIcons({
+      outputFile: 'dist/js/unicode-icon-paths.json'
+    });
     console.log(`✅ Unicode: ${unicodeResult.total} символов\n`);
     
     const endTime = Date.now();
@@ -43,7 +51,7 @@ async function extractAllIcons() {
 
 // Запускаем функцию только если файл выполняется напрямую
 if (import.meta.url === `file://${process.argv[1]}`) {
-  extractAllIcons();
+  extractIcons();
 }
 
-export { extractAllIcons };
+export { extractIcons as extractAllIcons };

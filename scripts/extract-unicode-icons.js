@@ -1,11 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 
-export async function extractUnicodeIcons() {
-  const outputPathJson = path.resolve('dist/js/unicode-icon-paths.json');
+export async function extractUnicodeIcons({ outputFile }) {
+  // Нормализуем путь
+  const normalizedOutputPath = path.resolve(outputFile);
 
   // Создаем директорию если не существует
-  const distJsDir = path.dirname(outputPathJson);
+  const distJsDir = path.dirname(normalizedOutputPath);
   if (!fs.existsSync(distJsDir)) {
     fs.mkdirSync(distJsDir, { recursive: true });
   }
@@ -97,7 +98,7 @@ unicodeRanges.forEach(range => {
   });
 
   // Сохраняем в JSON файл
-  fs.writeFileSync(outputPathJson, JSON.stringify(unicodeIcons, null, 2));
+  fs.writeFileSync(normalizedOutputPath, JSON.stringify(unicodeIcons, null, 2));
 
   // Создаем статистику по диапазонам
   const rangeStats = {};

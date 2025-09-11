@@ -2,19 +2,19 @@ import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
 
-export async function extractAntdPaths() {
-  // Путь к иконкам Ant Design
-  const iconsPath = path.resolve('node_modules/@ant-design/icons-svg/lib/asn/');
-  const outputPathJson = path.resolve('dist/js/antd-icon-paths.json');
+export async function extractAntdPaths({ iconsPath, outputFile }) {
+  // Нормализуем пути
+  const normalizedIconsPath = path.resolve(iconsPath);
+  const normalizedOutputPath = path.resolve(outputFile);
 
-  // Создаем директорию dist/js если её нет
-  const distJsDir = path.dirname(outputPathJson);
+  // Создаем директорию если её нет
+  const distJsDir = path.dirname(normalizedOutputPath);
   if (!fs.existsSync(distJsDir)) {
     fs.mkdirSync(distJsDir, { recursive: true });
   }
 
   // Получаем список всех файлов иконок (Outlined, Filled, TwoTone)
-  const iconFiles = fs.readdirSync(iconsPath)
+  const iconFiles = fs.readdirSync(normalizedIconsPath)
     .filter(file => file.endsWith('.js') && (file.includes('Outlined') || file.includes('Filled') || file.includes('TwoTone')))
     .sort();
 
@@ -27,7 +27,7 @@ export async function extractAntdPaths() {
   // Обрабатываем каждую иконку
   for (const file of iconFiles) {
     try {
-      const iconPath = path.join(iconsPath, file);
+      const iconPath = path.join(normalizedIconsPath, file);
       // Используем createRequire для загрузки CommonJS модулей
       const require = createRequire(import.meta.url);
       const iconModule = require(iconPath);
@@ -64,8 +64,8 @@ export async function extractAntdPaths() {
     }
   }
 
-  // Сохраняем JSON файл в dist
-  fs.writeFileSync(outputPathJson, JSON.stringify(iconPaths, null, 2));
+  // Сохраняем JSON файл
+  fs.writeFileSync(normalizedOutputPath, JSON.stringify(iconPaths, null, 2));
   
   return {
     total: iconFiles.length,
