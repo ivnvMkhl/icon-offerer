@@ -81,7 +81,6 @@ function hashJavaScriptFiles() {
 function updateHtmlFiles(manifest) {
   const distDir = path.join(__dirname, "../dist");
 
-  // Рекурсивно находим все HTML файлы
   function findHtmlFiles(dir) {
     const files = [];
     const items = fs.readdirSync(dir);
@@ -107,9 +106,7 @@ function updateHtmlFiles(manifest) {
     let content = fs.readFileSync(filePath, "utf8");
     let updated = false;
 
-    // Заменяем ссылки на JS файлы
     Object.entries(manifest).forEach(([original, hashed]) => {
-      // Заменяем src атрибуты
       const srcRegex = new RegExp(`src="[^"]*${original}"`, "g");
       const newSrcContent = content.replace(
         srcRegex,
@@ -120,7 +117,6 @@ function updateHtmlFiles(manifest) {
         updated = true;
       }
 
-      // Заменяем jsFile переменные
       const jsFileRegex = new RegExp(`jsFile: 'js/${original}'`, "g");
       const newJsFileContent = content.replace(
         jsFileRegex,
@@ -131,7 +127,6 @@ function updateHtmlFiles(manifest) {
         updated = true;
       }
 
-      // Заменяем dataFile переменные для JSON файлов
       if (original.endsWith(".json")) {
         const dataFileRegex = new RegExp(`dataFile: '${original}'`, "g");
         const newDataFileContent = content.replace(
@@ -144,7 +139,6 @@ function updateHtmlFiles(manifest) {
         }
       }
 
-      // Заменяем CSS файлы
       if (original.endsWith(".css")) {
         const cssRegex = new RegExp(`href="[^"]*${original}"`, "g");
         const newCssContent = content.replace(
