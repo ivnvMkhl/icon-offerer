@@ -6,7 +6,14 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/js/**/*");
   eleventyConfig.addPassthroughCopy("src/images/**/*");
   eleventyConfig.addPassthroughCopy("src/fonts/**/*");
-  eleventyConfig.addPassthroughCopy("src/static/**/*");
+  eleventyConfig.addPassthroughCopy({
+    "src/static/favicon.ico": "favicon.ico",
+    "src/static/apple-touch-icon.svg": "apple-touch-icon.svg", 
+    "src/static/icon-192.png": "icon-192.png",
+    "src/static/icon-512.png": "icon-512.png",
+    "src/static/screenshot-*.png": "./",
+    "src/static/.htaccess": ".htaccess"
+  });
 
   eleventyConfig.addGlobalData("baseUrl", process.env.ELEVENTY_ENV === 'development' ? '' : process.env.BASE_URL);  
   eleventyConfig.addGlobalData("aiSearchUrl", process.env.AI_SEARCH_URL);
