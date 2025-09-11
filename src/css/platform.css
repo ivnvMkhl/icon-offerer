@@ -1,4 +1,3 @@
-/* Стили для Unicode иконок */
 .unicode-icon {
     font-size: 24px;
     background: transparent;
@@ -14,7 +13,6 @@
     transition: color 0.3s ease;
 }
 
-/* Индикатор загрузки */
 .loading-indicator {
     display: flex;
     justify-content: center;
@@ -41,7 +39,6 @@
     100% { transform: rotate(360deg); }
 }
 
-/* Пагинация */
 .pagination-container {
     position: sticky;
     bottom: 20px;
@@ -53,7 +50,6 @@
     border-radius: 12px;
     padding: 8px;
     border: 1px solid var(--border-color);
-    /* Предотвращаем смещение при появлении скролла */
     contain: layout;
     will-change: transform;
     transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -127,7 +123,6 @@
     box-shadow: none;
 }
 
-/* Стили для кнопок навигации со стрелками */
 .pagination-btn[data-action="prev"],
 .pagination-btn[data-action="next"] {
     min-width: 50px;
@@ -139,7 +134,6 @@
     justify-content: center;
 }
 
-/* Унифицированные стрелки */
 .pagination-btn[data-action="prev"]::before {
     content: "←";
     font-size: 16px;
@@ -152,7 +146,6 @@
     line-height: 1;
 }
 
-/* Скрываем текст в кнопках навигации */
 .pagination-btn[data-action="prev"] span,
 .pagination-btn[data-action="next"] span {
     display: none;
@@ -172,51 +165,13 @@
     text-align: center;
 }
 
-/* Поисковый интерфейс */
-.search-section {
-    margin: 2rem 0;
-    width: 100%;
-}
 
-.search-input-container {
-    margin-bottom: 1rem;
-    width: 100%;
-}
-
-.search-input {
-    width: 100%;
-    max-width: 600px;
-    padding: 12px 16px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 2px var(--shadow);
-}
-
-.search-results-info {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-    transition: color 0.3s ease;
-}
-
-/* Сетка иконок */
 .icons-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 12px;
     margin: 2rem 0;
     width: 100%;
-    /* Предотвращаем CLS при изменении размера */
     contain: layout;
 }
 
@@ -228,7 +183,6 @@
     transition: all 0.3s ease;
     cursor: pointer;
     user-select: none;
-    /* Фиксированные размеры для предотвращения CLS */
     min-height: 140px;
     display: flex;
     flex-direction: column;
@@ -276,87 +230,6 @@
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Skeleton анимация только для пустых placeholder'ов (без контента) */
-.icon-placeholder:empty::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-    animation: skeleton-loading 1.5s infinite;
-}
-
-@keyframes skeleton-loading {
-    0% {
-        left: -100%;
-    }
-    100% {
-        left: 100%;
-    }
-}
-
-/* Skeleton loading для текста и кнопок */
-.icon-name.skeleton {
-    background: var(--bg-tertiary);
-    height: 16px; /* Примерная высота текста 12px + line-height */
-    border-radius: 4px;
-    margin-bottom: 8px;
-    animation: skeleton-loading 1.5s infinite;
-    color: transparent;
-    /* Дублируем свойства реального элемента */
-    text-align: center;
-    font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    display: block;
-}
-
-.copy-btn.skeleton {
-    background: var(--bg-tertiary);
-    min-height: 28px; /* Используем min-height как у реального элемента */
-    border-radius: 4px;
-    border: none;
-    animation: skeleton-loading 1.5s infinite;
-    color: transparent;
-    /* Дублируем свойства реального элемента */
-    padding: 4px 0;
-    font-size: 11px;
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    cursor: pointer;
-}
-
-/* Убираем анимацию для реальных элементов */
-.icon-name:not(.skeleton) {
-    animation: none;
-}
-
-.copy-btn:not(.skeleton) {
-    animation: none;
-}
-
-/* Дополнительные стили для skeleton карточек */
-.icon-card:has(.skeleton) {
-    /* Убеждаемся, что skeleton карточки имеют точно такие же размеры */
-    min-height: 140px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 12px;
-    background: var(--bg-primary);
-}
-
-/* Убираем skeleton анимацию для placeholder'ов с контентом */
-.icon-placeholder:not(:empty)::before {
-    display: none;
-}
 
 .icon-placeholder svg {
     width: 32px;
@@ -411,7 +284,6 @@
     border-radius: 4px;
 }
 
-/* Стили для AI поиска */
 .search-container {
     display: flex;
     gap: 0.5rem;
@@ -476,41 +348,6 @@
     color: var(--text-secondary);
 }
 
-/* Контейнер для AI сообщений - занимает всю ширину страницы */
-#aiMessagesContainer {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-    margin: 2rem 0;
-}
-
-/* Стили для AI результатов */
-.ai-result-icon {
-    background: transparent;
-    border: 2px solid rgba(255, 179, 71, 0.6);
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
-    position: relative;
-    overflow: hidden;
-}
-
-.ai-result-icon .icon-name {
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-.ai-result-icon .copy-button {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-.ai-result-icon .copy-button:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--border-hover);
-}
 
 .ai-loading-indicator {
     display: flex;
@@ -539,143 +376,5 @@
     100% { transform: rotate(360deg); }
 }
 
-.ai-search-notification {
-    background: rgba(40, 167, 69, 0.1);
-    border: 1px solid var(--success-color);
-    color: var(--success-color);
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-}
 
-.ai-search-notification.error {
-    background: rgba(220, 53, 69, 0.1);
-    border-color: var(--error-color);
-    color: var(--error-color);
-}
-
-.ai-search-clear {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: inherit;
-    padding: 0;
-    margin-left: 1rem;
-    line-height: 1;
-}
-
-.ai-search-clear:hover {
-    opacity: 0.7;
-}
-
-.ai-no-results,
-.ai-search-error {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-secondary);
-    transition: color 0.3s ease;
-}
-
-.ai-no-results p,
-.ai-search-error p {
-    margin: 0.5rem 0;
-}
-
-.ai-search-error {
-    color: var(--error-color);
-    transition: color 0.3s ease;
-}
-
-/* Дополнительные мобильные стили для страниц платформ */
-@media (max-width: 767px) {
-    .search-section {
-        margin: 1.5rem 0;
-    }
-    
-    .search-input-container {
-        margin-bottom: 0.75rem;
-    }
-    
-    .search-results-info {
-        font-size: 11px;
-        margin-bottom: 0.75rem;
-    }
-    
-    /* Улучшенные стили для карточек иконок */
-    .icon-card {
-        border-radius: 8px;
-        transition: all 0.2s ease;
-    }
-    
-    .icon-card:active {
-        transform: scale(0.98);
-    }
-    
-    .icon-name {
-        font-size: 11px;
-        line-height: 1.3;
-    }
-    
-    .copy-btn {
-        font-size: 10px;
-        padding: 6px 8px;
-        border-radius: 4px;
-    }
-    
-    .copy-btn.copied {
-        padding: 6px 8px;
-    }
-    
-    /* Улучшенные стили для AI результатов */
-    .ai-result-icon {
-        border-radius: 8px;
-    }
-    
-    .ai-result-icon .icon-name {
-        font-size: 11px;
-    }
-    
-    .ai-result-icon .copy-button {
-        font-size: 10px;
-        padding: 6px 8px;
-    }
-}
-
-@media (max-width: 480px) {
-    .search-section {
-        margin: 1rem 0;
-    }
-    
-    .search-results-info {
-        font-size: 10px;
-    }
-    
-    .icon-name {
-        font-size: 10px;
-    }
-    
-    .copy-btn {
-        font-size: 9px;
-        padding: 4px 6px;
-    }
-    
-    .copy-btn.copied {
-        padding: 4px 6px;
-    }
-    
-    .ai-result-icon .icon-name {
-        font-size: 10px;
-    }
-    
-    .ai-result-icon .copy-button {
-        font-size: 9px;
-        padding: 4px 6px;
-    }
-}
 

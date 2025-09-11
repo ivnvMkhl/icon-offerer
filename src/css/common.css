@@ -1,4 +1,3 @@
-/* Reset и базовые стили */
 * {
     margin: 0;
     padding: 0;
@@ -11,7 +10,6 @@ body {
     color: var(--text-primary);
     background-color: var(--bg-primary);
     font-size: 14px;
-    /* Предотвращаем смещение при появлении скролла */
     overflow-x: hidden;
     scrollbar-gutter: stable;
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -20,7 +18,6 @@ body {
     flex-direction: column;
 }
 
-/* Контейнер */
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -28,12 +25,10 @@ body {
     width: 100%;
 }
 
-/* Основной контент */
 main {
     flex: 1;
 }
 
-/* Навигация */
 .header {
     border-bottom: 1px solid var(--border-color);
     padding: 20px 0;
@@ -62,7 +57,6 @@ main {
     color: var(--accent-color);
 }
 
-/* Кнопка переключения темы */
 .theme-toggle {
     background: none;
     border: 1px solid var(--border-color);
@@ -79,12 +73,12 @@ main {
     flex-shrink: 0;
 }
 
-/* Футер */
 .footer {
     margin-top: auto;
     padding: 20px 0;
     border-top: 1px solid var(--border-color);
     background: var(--bg-primary);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .footer__content {
@@ -97,8 +91,9 @@ main {
 .footer__text {
     margin: 0;
     color: var(--text-secondary);
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.5;
+    transition: color 0.3s ease;
 }
 
 .footer__text b {
@@ -149,18 +144,14 @@ main {
     display: block;
 }
 
-/* Основной контент */
 .main {
     padding: 40px 0;
     min-height: calc(100vh - 200px);
     background-color: var(--bg-primary);
-    /* Предотвращаем смещение при загрузке контента и изменении размера */
     contain: layout;
-    /* Плавные переходы при изменении размера */
     transition: all 0.2s ease, background-color 0.3s ease;
 }
 
-/* Заголовки */
 h1 {
     font-size: 24px;
     font-weight: 500;
@@ -188,7 +179,6 @@ h3 {
     transition: color 0.3s ease;
 }
 
-/* Параграфы */
 p {
     margin-bottom: 16px;
     color: var(--text-secondary);
@@ -196,7 +186,6 @@ p {
     transition: color 0.3s ease;
 }
 
-/* Ссылки */
 a {
     color: var(--text-primary);
     text-decoration: underline;
@@ -210,77 +199,13 @@ a:hover {
     text-decoration-color: var(--accent-color);
 }
 
-/* Футер */
-.footer {
-    border-top: 1px solid var(--border-color);
-    padding: 20px 0;
-    margin-top: 60px;
-    background-color: var(--bg-primary);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
 
-.footer p {
-    font-size: 12px;
-    color: var(--text-secondary);
-    text-align: center;
-    margin: 0;
-    transition: color 0.3s ease;
-}
-
-.footer p b {
-    color: var(--text-primary);
-    font-weight: 600;
-}
-
-.footer p a {
-    color: var(--text-primary);
-    text-decoration: underline;
-    transition: color 0.2s ease;
-}
-
-.footer p a:hover {
-    color: var(--accent-color);
-    text-decoration: underline;
-}
-
-/* Адаптивность */
-/* Большие экраны (1200px+) */
-@media (min-width: 1200px) {
-    .icons-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 16px;
-    }
-}
-
-/* Планшеты (768px - 1199px) */
 @media (max-width: 1199px) and (min-width: 768px) {
     .container {
         padding: 0 24px;
     }
-    
-    .icons-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 14px;
-    }
-    
-    /* Улучшенная адаптивность для планшетов */
-    .search-container {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .search-input {
-        width: 100%;
-        max-width: none;
-    }
-    
-    .ai-search-button {
-        width: 100%;
-        justify-content: center;
-    }
 }
 
-/* Мобильные устройства (до 767px) */
 @media (max-width: 767px) {
     .container {
         padding: 0 16px;
@@ -290,7 +215,6 @@ a:hover {
         padding: 30px 0;
     }
     
-    /* Улучшенная навигация для мобильных */
     .header {
         padding: 12px 0;
     }
@@ -327,155 +251,8 @@ a:hover {
     .platforms h2 {
         font-size: 16px;
     }
-    
-    .icons-grid {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 10px;
-        margin: 1.5rem 0;
-    }
-    
-    .icon-card {
-        padding: 10px;
-        border-radius: 8px;
-    }
-    
-    .icon-preview {
-        height: 56px;
-    }
-    
-    .icon-placeholder {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-    }
-    
-    .icon-placeholder svg {
-        width: 28px;
-        height: 28px;
-    }
-    
-    /* Улучшенные стили для поиска на мобильных */
-    .search-container {
-        flex-direction: column;
-        gap: 12px;
-        margin-bottom: 1.5rem;
-    }
-    
-    .search-input {
-        width: 100%;
-        max-width: none;
-        padding: 14px 16px;
-        font-size: 16px; /* Предотвращает зум на iOS */
-        border-radius: 8px;
-    }
-    
-    .ai-search-button {
-        width: 100%;
-        justify-content: center;
-        padding: 14px 16px;
-        font-size: 14px;
-        border-radius: 8px;
-        min-height: 44px; /* Улучшает touch-интерфейс */
-    }
-    
-    /* Улучшенные стили для AI сообщений */
-    .ai-search-notification {
-        padding: 12px;
-        margin-bottom: 12px;
-        border-radius: 8px;
-        font-size: 14px;
-    }
-    
-    .ai-loading-indicator {
-        padding: 2rem 1rem;
-    }
-    
-    .ai-loading-spinner {
-        width: 32px;
-        height: 32px;
-        border-width: 2px;
-    }
-    
-    /* Адаптивная пагинация для мобильных */
-    .pagination-container {
-        bottom: 10px;
-        left: 10px;
-        right: 10px;
-        margin: 0;
-        padding: 10px;
-        border-radius: 12px;
-    }
-    
-    .pagination {
-        gap: 6px;
-        flex-wrap: wrap;
-    }
-    
-    .pagination-btn {
-        padding: 8px 10px;
-        font-size: 11px;
-        min-width: 50px;
-        border-radius: 6px;
-        min-height: 36px; /* Улучшает touch-интерфейс */
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .pagination-info {
-        font-size: 10px;
-        padding: 6px 8px;
-        min-width: 70px;
-        border-radius: 6px;
-    }
-    
-    /* Специальные стили для кнопок навигации */
-    .pagination-btn[data-action="prev"],
-    .pagination-btn[data-action="next"] {
-        min-width: 40px;
-        padding: 8px 12px;
-        font-size: 14px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .pagination-btn[data-action="prev"]::before {
-        content: "←";
-        font-size: 14px;
-        line-height: 1;
-    }
-    
-    .pagination-btn[data-action="next"]::before {
-        content: "→";
-        font-size: 14px;
-        line-height: 1;
-    }
-    
-    .pagination-left {
-        order: 3;
-        flex: 1 1 100%;
-        text-align: center;
-        margin-top: 8px;
-    }
-    
-    .pagination-center {
-        order: 1;
-        flex: 1 1 auto;
-        justify-content: center;
-        min-width: 0;
-    }
-    
-    /* Скрываем текст в кнопках навигации, оставляем только стрелки */
-    .pagination-btn[data-action="prev"] span,
-    .pagination-btn[data-action="next"] span {
-        display: none;
-    }
 }
 
-/* Очень маленькие экраны (до 480px) */
 @media (max-width: 480px) {
     .container {
         padding: 0 12px;
@@ -485,7 +262,6 @@ a:hover {
         padding: 20px 0;
     }
     
-    /* Компактная навигация для очень маленьких экранов */
     .header {
         padding: 10px 0;
     }
@@ -524,158 +300,5 @@ a:hover {
     
     .platforms h2 {
         font-size: 14px;
-    }
-    
-    .icons-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 8px;
-        margin: 1rem 0;
-    }
-    
-    .icon-card {
-        padding: 8px;
-        border-radius: 6px;
-    }
-    
-    .icon-preview {
-        height: 48px;
-    }
-    
-    .icon-placeholder {
-        width: 32px;
-        height: 32px;
-        font-size: 18px;
-    }
-    
-    .icon-placeholder svg {
-        width: 24px;
-        height: 24px;
-    }
-    
-    .icon-name {
-        font-size: 11px;
-        margin-bottom: 6px;
-        color: var(--text-secondary);
-    }
-    
-    .copy-btn {
-        font-size: 10px;
-        padding: 4px 8px;
-        border-radius: 4px;
-        min-height: 32px; /* Улучшает touch-интерфейс */
-        width: 100%;
-        text-align: center;
-    }
-    
-    /* Улучшенные стили для поиска на очень маленьких экранах */
-    .search-container {
-        gap: 10px;
-        margin-bottom: 1rem;
-    }
-    
-    .search-input {
-        padding: 12px 14px;
-        font-size: 16px;
-        border-radius: 6px;
-    }
-    
-    .ai-search-button {
-        padding: 12px 14px;
-        font-size: 13px;
-        border-radius: 6px;
-        min-height: 44px; /* Улучшает touch-интерфейс */
-    }
-    
-    .ai-search-notification {
-        padding: 10px;
-        font-size: 13px;
-        border-radius: 6px;
-    }
-    
-    .ai-loading-indicator {
-        padding: 1.5rem 0.5rem;
-    }
-    
-    .ai-loading-spinner {
-        width: 28px;
-        height: 28px;
-    }
-    
-    /* Компактная пагинация */
-    .pagination-container {
-        bottom: 8px;
-        left: 8px;
-        right: 8px;
-        padding: 8px;
-        border-radius: 10px;
-    }
-    
-    .pagination {
-        gap: 4px;
-        flex-wrap: wrap;
-    }
-    
-    .pagination-btn {
-        padding: 6px 8px;
-        font-size: 10px;
-        min-width: 40px;
-        border-radius: 4px;
-        min-height: 32px; /* Улучшает touch-интерфейс */
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .pagination-info {
-        font-size: 9px;
-        padding: 4px 6px;
-        min-width: 60px;
-        border-radius: 4px;
-    }
-    
-    /* Специальные стили для кнопок навигации на очень маленьких экранах */
-    .pagination-btn[data-action="prev"],
-    .pagination-btn[data-action="next"] {
-        min-width: 32px;
-        padding: 6px 8px;
-        font-size: 12px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .pagination-btn[data-action="prev"]::before {
-        content: "←";
-        font-size: 12px;
-        line-height: 1;
-    }
-    
-    .pagination-btn[data-action="next"]::before {
-        content: "→";
-        font-size: 12px;
-        line-height: 1;
-    }
-    
-    /* Скрываем текст в кнопках навигации на очень маленьких экранах */
-    .pagination-btn[data-action="prev"] span,
-    .pagination-btn[data-action="next"] span {
-        display: none;
-    }
-    
-    /* Улучшенное расположение для очень маленьких экранов */
-    .pagination-left {
-        order: 3;
-        flex: 1 1 100%;
-        text-align: center;
-        margin-top: 6px;
-    }
-    
-    .pagination-center {
-        order: 1;
-        flex: 1 1 auto;
-        justify-content: center;
-        min-width: 0;
     }
 }
