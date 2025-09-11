@@ -9,10 +9,6 @@ const EXTRACTORS_CONFIG = [
     config: {
       iconsPath: 'node_modules/@ant-design/icons-svg/lib/asn/',
       outputFile: 'antd-icon-paths.json'
-    },
-    formatter: (result) => {
-      const errors = result.total - result.extracted;
-      return `Ant Design: ${result.extracted}/${result.total} icons (Outlined: ${result.outlined}, Filled: ${result.filled}, TwoTone: ${result.twotone}, errors: ${errors})`;
     }
   },
   {
@@ -21,36 +17,31 @@ const EXTRACTORS_CONFIG = [
     config: {
       iconsPath: 'node_modules/@mui/icons-material',
       outputFile: 'mui-icon-paths.json'
-    },
-    formatter: (result) => `Material Design: ${result.extracted}/${result.total} icons (errors: ${result.errors})`
+    }
   },
   {
     name: 'Unicode',
     extractor: extractUnicodeIcons,
     config: {
       outputFile: 'unicode-icon-paths.json'
-    },
-    formatter: (result) => `Unicode: ${result.total} symbols`
+    }
   }
 ];
 
-const extractor = async (accPromise, { name, extractor: extractorFn, config, formatter }, outputDir) => {
+const extractor = async (accPromise, { name, extractor: extractorFn, config }, outputDir) => {
   const acc = await accPromise;
-  
-  console.log(`Extracting ${name} icons...`);
-  
   const result = await extractorFn({
     ...config,
     outputFile: `${outputDir}/${config.outputFile}`
   });
   
-  console.log(`${formatter(result)}\n`);
+  console.log(`Extracted ${name}: ${result.extracted}/${result.total} (errors: ${result.errors})`);
   
   return [...acc, { name, result }];
 };
 
 async function extractIcons() {
-  console.log('Starting extraction of all icons...\n');
+  console.log('Starting extraction of all icons...');
   
   const outputDir = process.env.BUILD_OUTPUT_DIR || 'dist/js';
   
@@ -60,7 +51,7 @@ async function extractIcons() {
       Promise.resolve([])
     );
     
-    console.log('All icons successfully extracted!');
+    console.log('All icons successfully extracted\n');
     
   } catch (error) {
     console.error('Error extracting icons:', error.message);

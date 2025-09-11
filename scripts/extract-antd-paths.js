@@ -13,9 +13,6 @@ export async function extractAntdPaths({ iconsPath, outputFile, pretty = false }
     .filter(file => file.endsWith('.js') && (file.includes('Outlined') || file.includes('Filled') || file.includes('TwoTone')))
     .sort();
 
-  const outlinedCount = iconFiles.filter(f => f.includes('Outlined')).length;
-  const filledCount = iconFiles.filter(f => f.includes('Filled')).length;
-  const twotoneCount = iconFiles.filter(f => f.includes('TwoTone')).length;
 
   const iconPaths = {};
 
@@ -58,8 +55,6 @@ export async function extractAntdPaths({ iconsPath, outputFile, pretty = false }
   return {
     total: iconFiles.length,
     extracted: Object.keys(iconPaths).length,
-    outlined: outlinedCount,
-    filled: filledCount,
-    twotone: twotoneCount
+    errors: iconFiles.length - Object.keys(iconPaths).length
   };
 }

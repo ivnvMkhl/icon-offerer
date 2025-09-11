@@ -90,17 +90,10 @@ unicodeRanges.forEach(range => {
 
   fs.writeFileSync(outputFilePath, JSON.stringify(unicodeIcons, null, pretty ? 2 : 0));
 
-  const rangeStats = {};
-  Object.values(unicodeIcons).forEach(icon => {
-    if (!rangeStats[icon.range]) {
-      rangeStats[icon.range] = 0;
-    }
-    rangeStats[icon.range]++;
-  });
-
   return {
     total: Object.keys(unicodeIcons).length,
-    ranges: rangeStats
+    extracted: Object.keys(unicodeIcons).length,
+    errors: 0
   };
 }
 
