@@ -3,13 +3,10 @@ import path from 'path';
 import { ensureDirForFile } from './utils.js';
 
 export async function extractUnicodeIcons({ outputFile, pretty = false }) {
-  // Нормализуем путь
   const outputFilePath = path.resolve(outputFile);
 
-  // Создаем директорию если не существует
   ensureDirForFile(outputFilePath);
 
-// Определяем диапазоны Unicode символов для иконок
 const unicodeRanges = [
   {
     name: 'Miscellaneous Symbols',
@@ -72,14 +69,13 @@ unicodeRanges.forEach(range => {
     try {
       const char = String.fromCodePoint(codePoint);
       
-      // Проверяем, что символ не является пробелом или невидимым
       if (char.trim() && char !== '\uFEFF' && char !== '\u200B') {
         const unicodeName = `U+${codePoint.toString(16).toUpperCase().padStart(4, '0')}`;
         
-                  unicodeIcons[unicodeName] = {
-                    char: char,
-                    code: codePoint
-                  };
+        unicodeIcons[unicodeName] = {
+          char: char,
+          code: codePoint
+        };
         
         validCount++;
       }
@@ -88,15 +84,12 @@ unicodeRanges.forEach(range => {
     }
     
     count++;
-    
   }
   
   });
 
-  // Сохраняем в JSON файл
   fs.writeFileSync(outputFilePath, JSON.stringify(unicodeIcons, null, pretty ? 2 : 0));
 
-  // Создаем статистику по диапазонам
   const rangeStats = {};
   Object.values(unicodeIcons).forEach(icon => {
     if (!rangeStats[icon.range]) {

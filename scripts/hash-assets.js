@@ -6,36 +6,28 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/**
- * Создает хеш для файла на основе его содержимого
- */
 function createFileHash(filePath) {
   const content = fs.readFileSync(filePath);
   return crypto.createHash("md5").update(content).digest("hex").substring(0, 8);
 }
 
-/**
- * Обрабатывает JavaScript файлы и создает хешированные версии
- */
 function hashJavaScriptFiles() {
   const outputDir = process.env.BUILD_OUTPUT_DIR || 'dist/js';
   const jsDir = path.join(__dirname, "..", outputDir);
   const manifest = {};
 
   if (!fs.existsSync(jsDir)) {
-    console.log("JS директория не найдена, пропускаем хеширование");
+    console.log("JS directory not found, skipping hashing");
     return manifest;
   }
 
   const jsFiles = fs.readdirSync(jsDir).filter((file) => {
-    // Исключаем файлы, которые уже содержат хеш (8 символов после точки)
     return (
       (file.endsWith(".js") || file.endsWith(".json")) &&
       !/\.([a-f0-9]{8})\.(js|json)$/.test(file)
     );
   });
 
-  // Обрабатываем CSS файлы
   const cssDir = path.join(__dirname, "../dist/css");
   const cssFiles = fs.existsSync(cssDir)
     ? fs.readdirSync(cssDir).filter((file) => {
@@ -43,7 +35,7 @@ function hashJavaScriptFiles() {
       })
     : [];
 
-  console.log(`Найдено ${jsFiles.length} JS/JSON файлов для хеширования:`);
+  console.log(`Found ${jsFiles.length} JS/JSON files for hashing:`);
 
   jsFiles.forEach((file) => {
     const originalPath = path.join(jsDir, file);
@@ -52,21 +44,15 @@ function hashJavaScriptFiles() {
     const newFileName = file.replace(extension, `.${hash}${extension}`);
     const newPath = path.join(jsDir, newFileName);
 
-    // Копируем файл с новым именем
     fs.copyFileSync(originalPath, newPath);
-
-    // Удаляем оригинальный файл
     fs.unlinkSync(originalPath);
-
-    // Сохраняем маппинг
     manifest[file] = newFileName;
 
-    console.log(`  ${file} -> ${newFileName} (удален оригинал)`);
+    console.log(`  ${file} -> ${newFileName} (original removed)`);
   });
 
-  // Хешируем CSS файлы
   if (cssFiles.length > 0) {
-    console.log(`Найдено ${cssFiles.length} CSS файлов для хеширования:`);
+    console.log(`Found ${cssFiles.length} CSS files for hashing:`);
 
     cssFiles.forEach((file) => {
       const originalPath = path.join(cssDir, file);
@@ -74,23 +60,17 @@ function hashJavaScriptFiles() {
       const newFileName = file.replace(".css", `.${hash}.css`);
       const newPath = path.join(cssDir, newFileName);
 
-      // Копируем файл с новым именем
       fs.copyFileSync(originalPath, newPath);
-
-      // Удаляем оригинальный файл
       fs.unlinkSync(originalPath);
-
-      // Сохраняем маппинг
       manifest[file] = newFileName;
 
-      console.log(`  ${file} -> ${newFileName} (удален оригинал)`);
+      console.log(`  ${file} -> ${newFileName} (original removed)`);
     });
   }
 
-  // Сохраняем манифест
   const manifestPath = path.join(__dirname, "..", outputDir, "js-manifest.json");
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-  console.log(`Манифест сохранен: ${manifestPath}`);
+  console.log(`Manifest saved: ${manifestPath}`);
 
   return manifest;
 }
@@ -121,7 +101,7 @@ function updateHtmlFiles(manifest) {
   }
 
   const htmlFiles = findHtmlFiles(distDir);
-  console.log(`Обновляем ${htmlFiles.length} HTML файлов:`);
+  console.log(`Updating ${htmlFiles.length} HTML files:`);
 
   htmlFiles.forEach((filePath) => {
     let content = fs.readFileSync(filePath, "utf8");
@@ -181,7 +161,7 @@ function updateHtmlFiles(manifest) {
     if (updated) {
       fs.writeFileSync(filePath, content);
       const relativePath = path.relative(distDir, filePath);
-      console.log(`  Обновлен: ${relativePath}`);
+      console.log(`  Updated: ${relativePath}`);
     }
   });
 }
@@ -194,7 +174,7 @@ function cleanupOriginalFiles() {
   const jsDir = path.join(__dirname, "..", outputDir);
 
   if (!fs.existsSync(jsDir)) {
-    console.log("JS директория не найдена, пропускаем очистку");
+    console.log("JS directory not found, skipping cleanup");
     return;
   }
 
@@ -203,7 +183,6 @@ function cleanupOriginalFiles() {
     (file) => file.endsWith(".js") || file.endsWith(".json"),
   );
 
-  // Очищаем CSS файлы
   const cssDir = path.join(__dirname, "../dist/css");
   if (fs.existsSync(cssDir)) {
     const allCssFiles = fs.readdirSync(cssDir);
@@ -215,21 +194,20 @@ function cleanupOriginalFiles() {
       if (!hasHash) {
         const filePath = path.join(cssDir, file);
         fs.unlinkSync(filePath);
-        console.log(`  Удален: ${file}`);
+        console.log(`  Removed: ${file}`);
       }
     });
   }
 
-  console.log("Очищаем оригинальные файлы без хешей:");
+  console.log("Cleaning up original files without hashes:");
 
   jsFiles.forEach((file) => {
-    // Проверяем, что файл не содержит хеш (8 символов после точки)
     const hasHash = /\.([a-f0-9]{8})\.(js|json)$/.test(file);
 
     if (!hasHash) {
       const filePath = path.join(jsDir, file);
       fs.unlinkSync(filePath);
-      console.log(`  Удален: ${file}`);
+      console.log(`  Removed: ${file}`);
     }
   });
 }
@@ -273,18 +251,16 @@ function createHtaccess() {
 
   const htaccessPath = path.join(__dirname, "../dist/.htaccess");
   fs.writeFileSync(htaccessPath, htaccessContent);
-  console.log("Создан .htaccess файл для кеширования");
+  console.log("Created .htaccess file for caching");
 }
 
-// Основная функция
 function main() {
-  // Проверяем, что мы в продакшене
   if (process.env.ELEVENTY_ENV !== "production") {
-    console.log("⚠️  Хеширование отключено в режиме разработки");
+    console.log("⚠️  Hashing disabled in development mode");
     return;
   }
 
-  console.log("🚀 Начинаем хеширование JavaScript файлов...");
+  console.log("🚀 Starting JavaScript file hashing...");
 
   try {
     const manifest = hashJavaScriptFiles();
@@ -293,17 +269,16 @@ function main() {
       updateHtmlFiles(manifest);
       cleanupOriginalFiles();
       createHtaccess();
-      console.log("✅ Хеширование завершено успешно!");
+      console.log("✅ Hashing completed successfully!");
     } else {
-      console.log("⚠️  JS файлы не найдены для хеширования");
+      console.log("⚠️  No JS files found for hashing");
     }
   } catch (error) {
-    console.error("❌ Ошибка при хешировании:", error.message);
+    console.error("❌ Error during hashing:", error.message);
     process.exit(1);
   }
 }
 
-// Запускаем функцию
 main();
 
 export { hashJavaScriptFiles, updateHtmlFiles, createHtaccess };
