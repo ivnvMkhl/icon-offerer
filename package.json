@@ -6,7 +6,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "extract-icons": "node scripts/extract-icons.js",
+    "extract-icons": "BUILD_OUTPUT_DIR=dist/js node scripts/extract-icons.js",
     "build": "npm run extract-icons && ELEVENTY_ENV=production eleventy && ELEVENTY_ENV=production npm run hash-assets",
     "hash-assets": "node scripts/hash-assets.js",
     "serve": "npm run extract-icons && ELEVENTY_ENV=production eleventy --serve",

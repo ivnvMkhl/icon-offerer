@@ -18,7 +18,8 @@ function createFileHash(filePath) {
  * Обрабатывает JavaScript файлы и создает хешированные версии
  */
 function hashJavaScriptFiles() {
-  const jsDir = path.join(__dirname, "../dist/js");
+  const outputDir = process.env.BUILD_OUTPUT_DIR || 'dist/js';
+  const jsDir = path.join(__dirname, "..", outputDir);
   const manifest = {};
 
   if (!fs.existsSync(jsDir)) {
@@ -87,7 +88,7 @@ function hashJavaScriptFiles() {
   }
 
   // Сохраняем манифест
-  const manifestPath = path.join(__dirname, "../dist/js-manifest.json");
+  const manifestPath = path.join(__dirname, "..", outputDir, "js-manifest.json");
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
   console.log(`Манифест сохранен: ${manifestPath}`);
 
@@ -189,7 +190,8 @@ function updateHtmlFiles(manifest) {
  * Удаляет оригинальные JS файлы без хешей
  */
 function cleanupOriginalFiles() {
-  const jsDir = path.join(__dirname, "../dist/js");
+  const outputDir = process.env.BUILD_OUTPUT_DIR || 'dist/js';
+  const jsDir = path.join(__dirname, "..", outputDir);
 
   if (!fs.existsSync(jsDir)) {
     console.log("JS директория не найдена, пропускаем очистку");

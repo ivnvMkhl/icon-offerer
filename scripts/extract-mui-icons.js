@@ -1,19 +1,17 @@
 import fs from 'fs';
 import path from 'path';
+import { ensureDirForFile } from './utils.js';
 
 export async function extractMuiIcons({ iconsPath, outputFile, pretty = false }) {
   // Нормализуем пути
-  const normalizedIconsPath = path.resolve(iconsPath);
-  const normalizedOutputPath = path.resolve(outputFile);
+  const iconsLibPath = path.resolve(iconsPath);
+  const outputFilePath = path.resolve(outputFile);
 
   // Создаем директорию если её нет
-  const distJsDir = path.dirname(normalizedOutputPath);
-  if (!fs.existsSync(distJsDir)) {
-    fs.mkdirSync(distJsDir, { recursive: true });
-  }
+  ensureDirForFile(outputFilePath);
 
   // Получаем список всех файлов иконок
-  const iconFiles = fs.readdirSync(normalizedIconsPath)
+  const iconFiles = fs.readdirSync(iconsLibPath)
     .filter(file => file.endsWith('.js') && !file.includes('.d.ts') && file !== 'index.js')
     .sort();
 
@@ -65,7 +63,7 @@ export async function extractMuiIcons({ iconsPath, outputFile, pretty = false })
   // Обрабатываем каждую иконку
   iconFiles.forEach(file => {
   try {
-    const iconPath = path.join(normalizedIconsPath, file);
+    const iconPath = path.join(iconsLibPath, file);
     const iconName = file.replace('.js', '');
     
     // Извлекаем все SVG path элементы из исходного кода
@@ -84,7 +82,7 @@ export async function extractMuiIcons({ iconsPath, outputFile, pretty = false })
   });
 
   // Сохраняем JSON файл
-  fs.writeFileSync(normalizedOutputPath, JSON.stringify(iconPaths, null, pretty ? 2 : 0));
+  fs.writeFileSync(outputFilePath, JSON.stringify(iconPaths, null, pretty ? 2 : 0));
   
   return {
     total: iconFiles.length,

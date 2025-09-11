@@ -13,11 +13,14 @@ async function extractIcons() {
   const startTime = Date.now();
   
   try {
+    // Получаем директорию для выходных файлов из переменной окружения
+    const outputDir = process.env.BUILD_OUTPUT_DIR || 'dist/js';
+    
     // Извлекаем Ant Design иконки
     console.log('1️⃣ Извлечение Ant Design иконок...');
     const antdResult = await extractAntdPaths({
       iconsPath: 'node_modules/@ant-design/icons-svg/lib/asn/',
-      outputFile: 'dist/js/antd-icon-paths.json'
+      outputFile: `${outputDir}/antd-icon-paths.json`
     });
     const antdErrors = antdResult.total - antdResult.extracted;
     console.log(`✅ Ant Design: ${antdResult.extracted}/${antdResult.total} иконок (Outlined: ${antdResult.outlined}, Filled: ${antdResult.filled}, TwoTone: ${antdResult.twotone}, ошибок: ${antdErrors})\n`);
@@ -26,14 +29,14 @@ async function extractIcons() {
     console.log('2️⃣ Извлечение Material Design иконок...');
     const muiResult = await extractMuiIcons({
       iconsPath: 'node_modules/@mui/icons-material',
-      outputFile: 'dist/js/mui-icon-paths.json'
+      outputFile: `${outputDir}/mui-icon-paths.json`
     });
     console.log(`✅ Material Design: ${muiResult.extracted}/${muiResult.total} иконок (ошибок: ${muiResult.errors})\n`);
     
     // Извлекаем Unicode символы
     console.log('3️⃣ Извлечение Unicode символов...');
     const unicodeResult = await extractUnicodeIcons({
-      outputFile: 'dist/js/unicode-icon-paths.json'
+      outputFile: `${outputDir}/unicode-icon-paths.json`
     });
     console.log(`✅ Unicode: ${unicodeResult.total} символов\n`);
     
@@ -54,4 +57,4 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   extractIcons();
 }
 
-export { extractIcons as extractAllIcons };
+export { extractIcons };

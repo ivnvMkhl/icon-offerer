@@ -1,15 +1,13 @@
 import fs from 'fs';
 import path from 'path';
+import { ensureDirForFile } from './utils.js';
 
 export async function extractUnicodeIcons({ outputFile, pretty = false }) {
   // Нормализуем путь
-  const normalizedOutputPath = path.resolve(outputFile);
+  const outputFilePath = path.resolve(outputFile);
 
   // Создаем директорию если не существует
-  const distJsDir = path.dirname(normalizedOutputPath);
-  if (!fs.existsSync(distJsDir)) {
-    fs.mkdirSync(distJsDir, { recursive: true });
-  }
+  ensureDirForFile(outputFilePath);
 
 // Определяем диапазоны Unicode символов для иконок
 const unicodeRanges = [
@@ -96,7 +94,7 @@ unicodeRanges.forEach(range => {
   });
 
   // Сохраняем в JSON файл
-  fs.writeFileSync(normalizedOutputPath, JSON.stringify(unicodeIcons, null, pretty ? 2 : 0));
+  fs.writeFileSync(outputFilePath, JSON.stringify(unicodeIcons, null, pretty ? 2 : 0));
 
   // Создаем статистику по диапазонам
   const rangeStats = {};

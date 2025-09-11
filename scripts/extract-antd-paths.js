@@ -1,20 +1,18 @@
 import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
+import { ensureDirForFile } from './utils.js';
 
 export async function extractAntdPaths({ iconsPath, outputFile, pretty = false }) {
   // Нормализуем пути
-  const normalizedIconsPath = path.resolve(iconsPath);
-  const normalizedOutputPath = path.resolve(outputFile);
+  const iconsLibPath = path.resolve(iconsPath);
+  const outputFilePath = path.resolve(outputFile);
 
   // Создаем директорию если её нет
-  const distJsDir = path.dirname(normalizedOutputPath);
-  if (!fs.existsSync(distJsDir)) {
-    fs.mkdirSync(distJsDir, { recursive: true });
-  }
+  ensureDirForFile(outputFilePath);
 
   // Получаем список всех файлов иконок (Outlined, Filled, TwoTone)
-  const iconFiles = fs.readdirSync(normalizedIconsPath)
+  const iconFiles = fs.readdirSync(iconsLibPath)
     .filter(file => file.endsWith('.js') && (file.includes('Outlined') || file.includes('Filled') || file.includes('TwoTone')))
     .sort();
 
@@ -27,7 +25,7 @@ export async function extractAntdPaths({ iconsPath, outputFile, pretty = false }
   // Обрабатываем каждую иконку
   for (const file of iconFiles) {
     try {
-      const iconPath = path.join(normalizedIconsPath, file);
+      const iconPath = path.join(iconsLibPath, file);
       // Используем createRequire для загрузки CommonJS модулей
       const require = createRequire(import.meta.url);
       const iconModule = require(iconPath);
@@ -65,7 +63,7 @@ export async function extractAntdPaths({ iconsPath, outputFile, pretty = false }
   }
 
   // Сохраняем JSON файл
-  fs.writeFileSync(normalizedOutputPath, JSON.stringify(iconPaths, null, pretty ? 2 : 0));
+  fs.writeFileSync(outputFilePath, JSON.stringify(iconPaths, null, pretty ? 2 : 0));
   
   return {
     total: iconFiles.length,
