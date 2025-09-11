@@ -301,9 +301,7 @@ function main() {
   }
 }
 
-// Проверяем, что скрипт запущен напрямую
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
-}
+// Запускаем функцию
+main();
 
 export { hashJavaScriptFiles, updateHtmlFiles, createHtaccess };

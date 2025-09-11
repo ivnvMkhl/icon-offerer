@@ -1,14 +1,16 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { createRequire } from 'module';
 
 async function extractSvgPaths() {
+  console.log('Начинаем извлечение Ant Design иконок...');
+  
   // Путь к иконкам Ant Design
   const iconsPath = path.resolve('node_modules/@ant-design/icons-svg/lib/asn/');
   const outputPathJson = path.resolve('dist/js/antd-icon-paths.json');
+  
+  console.log('Путь к иконкам:', iconsPath);
+  console.log('Путь к выходному файлу:', outputPathJson);
 
   // Создаем директорию dist/js если её нет
   const distJsDir = path.dirname(outputPathJson);
@@ -38,7 +40,6 @@ async function extractSvgPaths() {
     try {
       const iconPath = path.join(iconsPath, file);
       // Используем createRequire для загрузки CommonJS модулей
-      const { createRequire } = await import('module');
       const require = createRequire(import.meta.url);
       const iconModule = require(iconPath);
       const iconData = iconModule.default;

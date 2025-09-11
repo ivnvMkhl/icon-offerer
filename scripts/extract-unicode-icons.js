@@ -1,17 +1,14 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+async function extractUnicodeIcons() {
+  const outputPathJson = path.resolve('dist/js/unicode-icon-paths.json');
 
-const outputPathJson = path.resolve('dist/js/unicode-icon-paths.json');
-
-// Создаем директорию если не существует
-const distJsDir = path.dirname(outputPathJson);
-if (!fs.existsSync(distJsDir)) {
-  fs.mkdirSync(distJsDir, { recursive: true });
-}
+  // Создаем директорию если не существует
+  const distJsDir = path.dirname(outputPathJson);
+  if (!fs.existsSync(distJsDir)) {
+    fs.mkdirSync(distJsDir, { recursive: true });
+  }
 
 // Определяем диапазоны Unicode символов для иконок
 const unicodeRanges = [
@@ -63,11 +60,11 @@ const unicodeRanges = [
     end: 0x22FF,
     description: 'Математические операторы (∑, ∏, ∫, etc.)'
   }
-];
+  ];
 
-const unicodeIcons = {};
+  const unicodeIcons = {};
 
-console.log('Начинаем извлечение Unicode символов...');
+  console.log('Начинаем извлечение Unicode символов...');
 
 unicodeRanges.forEach(range => {
   console.log(`\nОбрабатываем диапазон: ${range.name} (U+${range.start.toString(16).toUpperCase()} - U+${range.end.toString(16).toUpperCase()})`);
@@ -105,24 +102,28 @@ unicodeRanges.forEach(range => {
   }
   
   console.log(`\nНайдено ${validCount} валидных символов из ${count} проверенных`);
-});
+  });
 
-console.log(`\n\nВсего извлечено ${Object.keys(unicodeIcons).length} Unicode символов`);
+  console.log(`\n\nВсего извлечено ${Object.keys(unicodeIcons).length} Unicode символов`);
 
-// Сохраняем в JSON файл
-fs.writeFileSync(outputPathJson, JSON.stringify(unicodeIcons, null, 2));
-console.log(`JSON файл создан: ${outputPathJson}`);
+  // Сохраняем в JSON файл
+  fs.writeFileSync(outputPathJson, JSON.stringify(unicodeIcons, null, 2));
+  console.log(`JSON файл создан: ${outputPathJson}`);
 
-// Создаем статистику по диапазонам
-const rangeStats = {};
-Object.values(unicodeIcons).forEach(icon => {
-  if (!rangeStats[icon.range]) {
-    rangeStats[icon.range] = 0;
-  }
-  rangeStats[icon.range]++;
-});
+  // Создаем статистику по диапазонам
+  const rangeStats = {};
+  Object.values(unicodeIcons).forEach(icon => {
+    if (!rangeStats[icon.range]) {
+      rangeStats[icon.range] = 0;
+    }
+    rangeStats[icon.range]++;
+  });
 
-console.log('\nСтатистика по диапазонам:');
-Object.entries(rangeStats).forEach(([range, count]) => {
-  console.log(`  ${range}: ${count} символов`);
-});
+  console.log('\nСтатистика по диапазонам:');
+  Object.entries(rangeStats).forEach(([range, count]) => {
+    console.log(`  ${range}: ${count} символов`);
+  });
+}
+
+// Запускаем функцию
+extractUnicodeIcons().catch(console.error);
