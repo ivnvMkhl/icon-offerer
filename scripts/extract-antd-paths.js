@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
 
-export async function extractAntdPaths({ iconsPath, outputFile }) {
+export async function extractAntdPaths({ iconsPath, outputFile, pretty = false }) {
   // Нормализуем пути
   const normalizedIconsPath = path.resolve(iconsPath);
   const normalizedOutputPath = path.resolve(outputFile);
@@ -65,7 +65,7 @@ export async function extractAntdPaths({ iconsPath, outputFile }) {
   }
 
   // Сохраняем JSON файл
-  fs.writeFileSync(normalizedOutputPath, JSON.stringify(iconPaths, null, 2));
+  fs.writeFileSync(normalizedOutputPath, JSON.stringify(iconPaths, null, pretty ? 2 : 0));
   
   return {
     total: iconFiles.length,

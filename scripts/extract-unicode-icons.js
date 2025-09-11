@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export async function extractUnicodeIcons({ outputFile }) {
+export async function extractUnicodeIcons({ outputFile, pretty = false }) {
   // Нормализуем путь
   const normalizedOutputPath = path.resolve(outputFile);
 
@@ -78,12 +78,10 @@ unicodeRanges.forEach(range => {
       if (char.trim() && char !== '\uFEFF' && char !== '\u200B') {
         const unicodeName = `U+${codePoint.toString(16).toUpperCase().padStart(4, '0')}`;
         
-        unicodeIcons[unicodeName] = {
-          char: char,
-          code: codePoint,
-          range: range.name,
-          description: range.description
-        };
+                  unicodeIcons[unicodeName] = {
+                    char: char,
+                    code: codePoint
+                  };
         
         validCount++;
       }
@@ -98,7 +96,7 @@ unicodeRanges.forEach(range => {
   });
 
   // Сохраняем в JSON файл
-  fs.writeFileSync(normalizedOutputPath, JSON.stringify(unicodeIcons, null, 2));
+  fs.writeFileSync(normalizedOutputPath, JSON.stringify(unicodeIcons, null, pretty ? 2 : 0));
 
   // Создаем статистику по диапазонам
   const rangeStats = {};
