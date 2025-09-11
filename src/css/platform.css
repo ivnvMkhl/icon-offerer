@@ -1,3 +1,19 @@
+/* Стили для Unicode иконок */
+.unicode-icon {
+    font-size: 24px;
+    background: transparent;
+    color: var(--text-primary);
+    width: auto;
+    height: auto;
+    min-width: 32px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transition: color 0.3s ease;
+}
+
 /* Индикатор загрузки */
 .loading-indicator {
     display: flex;
@@ -171,24 +187,26 @@
     width: 100%;
     max-width: 600px;
     padding: 12px 16px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 14px;
     font-family: 'Fira Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
-    background: #fff;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 .search-input:focus {
     outline: none;
-    border-color: #666;
-    box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.2);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--shadow);
 }
 
 .search-results-info {
     font-size: 12px;
-    color: #999;
+    color: var(--text-muted);
     margin-bottom: 1rem;
+    transition: color 0.3s ease;
 }
 
 /* Сетка иконок */
@@ -245,7 +263,7 @@
 .icon-placeholder {
     width: 48px;
     height: 48px;
-    background: #f5f5f5;
+    background: var(--bg-secondary);
     border-radius: 6px;
     display: flex;
     align-items: center;
@@ -255,6 +273,7 @@
     border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Skeleton анимация только для пустых placeholder'ов (без контента) */
@@ -482,14 +501,15 @@
 }
 
 .ai-result-icon .copy-button {
-    background: #f5f5f5;
-    color: #262626;
-    border: 1px solid #d9d9d9;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .ai-result-icon .copy-button:hover {
-    background: #e6e6e6;
-    border-color: #bfbfbf;
+    background: var(--bg-tertiary);
+    border-color: var(--border-hover);
 }
 
 .ai-loading-indicator {
@@ -506,11 +526,12 @@
 .ai-loading-spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #666;
+    border: 3px solid var(--border-color);
+    border-top: 3px solid var(--accent-color);
     border-radius: 50%;
     animation: ai-spin 1s linear infinite;
     margin-bottom: 1rem;
+    transition: border-color 0.3s ease;
 }
 
 @keyframes ai-spin {
@@ -519,9 +540,9 @@
 }
 
 .ai-search-notification {
-    background: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid var(--success-color);
+    color: var(--success-color);
     padding: 1rem;
     margin-bottom: 1rem;
     border-radius: 4px;
@@ -529,12 +550,13 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .ai-search-notification.error {
-    background: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
+    background: rgba(220, 53, 69, 0.1);
+    border-color: var(--error-color);
+    color: var(--error-color);
 }
 
 .ai-search-clear {
@@ -566,7 +588,8 @@
 }
 
 .ai-search-error {
-    color: #dc3545;
+    color: var(--error-color);
+    transition: color 0.3s ease;
 }
 
 /* Дополнительные мобильные стили для страниц платформ */
