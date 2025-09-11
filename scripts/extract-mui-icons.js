@@ -1,94 +1,74 @@
 import fs from 'fs';
 import path from 'path';
+import { ensureDirForFile } from './utils.js';
 
 export async function extractMuiIcons({ iconsPath, outputFile, pretty = false }) {
-  // Нормализуем пути
-  const normalizedIconsPath = path.resolve(iconsPath);
-  const normalizedOutputPath = path.resolve(outputFile);
+  const iconsLibPath = path.resolve(iconsPath);
+  const outputFilePath = path.resolve(outputFile);
 
-  // Создаем директорию если её нет
-  const distJsDir = path.dirname(normalizedOutputPath);
-  if (!fs.existsSync(distJsDir)) {
-    fs.mkdirSync(distJsDir, { recursive: true });
-  }
+  ensureDirForFile(outputFilePath);
 
-  // Получаем список всех файлов иконок
-  const iconFiles = fs.readdirSync(normalizedIconsPath)
+  const iconFiles = fs.readdirSync(iconsLibPath)
     .filter(file => file.endsWith('.js') && !file.includes('.d.ts') && file !== 'index.js')
     .sort();
 
-
-  const iconPaths = {};
-  let successCount = 0;
-  let errorCount = 0;
-
-  // Функция для извлечения всех SVG path элементов из исходного кода файла
   function extractSvgPathsFromFile(filePath) {
-  try {
-    const content = fs.readFileSync(filePath, 'utf8');
-    
-    // Ищем все path элементы с d атрибутом
-    const pathMatches = content.match(/jsx\("path",\s*\{[^}]*d:\s*"([^"]+)"[^}]*\}/g);
-    if (pathMatches && pathMatches.length > 0) {
-      // Извлекаем все path элементы
-      const paths = pathMatches.map(match => {
-        const dMatch = match.match(/d:\s*"([^"]+)"/);
-        return dMatch ? dMatch[1] : null;
-      }).filter(Boolean);
+    try {
+      const content = fs.readFileSync(filePath, 'utf8');
       
-      if (paths.length > 0) {
-        // Объединяем все path элементы в один SVG
-        return paths.map(d => `<path d="${d}"/>`).join('');
+      const pathMatches = content.match(/jsx\("path",\s*\{[^}]*d:\s*"([^"]+)"[^}]*\}/g);
+      if (pathMatches && pathMatches.length > 0) {
+        const paths = pathMatches.map(match => {
+          const dMatch = match.match(/d:\s*"([^"]+)"/);
+          return dMatch ? dMatch[1] : null;
+        }).filter(Boolean);
+        
+        if (paths.length > 0) {
+          return paths.map(d => `<path d="${d}"/>`).join('');
+        }
       }
-    }
-    
-    // Альтернативный паттерн для других форматов - ищем все d атрибуты
-    const allPathMatches = content.match(/d:\s*"([^"]+)"/g);
-    if (allPathMatches && allPathMatches.length > 0) {
-      const paths = allPathMatches.map(match => {
-        const dMatch = match.match(/d:\s*"([^"]+)"/);
-        return dMatch ? dMatch[1] : null;
-      }).filter(Boolean);
       
-      if (paths.length > 0) {
-        return paths.map(d => `<path d="${d}"/>`).join('');
+      const allPathMatches = content.match(/d:\s*"([^"]+)"/g);
+      if (allPathMatches && allPathMatches.length > 0) {
+        const paths = allPathMatches.map(match => {
+          const dMatch = match.match(/d:\s*"([^"]+)"/);
+          return dMatch ? dMatch[1] : null;
+        }).filter(Boolean);
+        
+        if (paths.length > 0) {
+          return paths.map(d => `<path d="${d}"/>`).join('');
+        }
       }
+      
+      return null;
+    } catch (error) {
+      console.error(`Error reading file ${filePath}:`, error.message);
+      return null;
     }
-    
-    return null;
-  } catch (error) {
-    console.error(`Ошибка чтения файла ${filePath}:`, error.message);
-    return null;
-  }
   }
 
-  // Обрабатываем каждую иконку
-  iconFiles.forEach(file => {
-  try {
-    const iconPath = path.join(normalizedIconsPath, file);
-    const iconName = file.replace('.js', '');
-    
-    // Извлекаем все SVG path элементы из исходного кода
-    const svgPath = extractSvgPathsFromFile(iconPath);
-    
-    if (svgPath) {
-      iconPaths[iconName] = svgPath;
-      successCount++;
-    } else {
-      errorCount++;
+  const iconPaths = iconFiles.reduce((acc, file) => {
+    try {
+      const iconPath = path.join(iconsLibPath, file);
+      const iconName = file.replace('.js', '');
+      
+      const svgPath = extractSvgPathsFromFile(iconPath);
+      
+      if (svgPath) {
+        acc[iconName] = svgPath;
+      }
+    } catch (error) {
+      console.error(`Error processing ${file}:`, error.message);
     }
-  } catch (error) {
-    console.error(`Ошибка при обработке ${file}:`, error.message);
-    errorCount++;
-  }
-  });
+    
+    return acc;
+  }, {});
 
-  // Сохраняем JSON файл
-  fs.writeFileSync(normalizedOutputPath, JSON.stringify(iconPaths, null, pretty ? 2 : 0));
+  fs.writeFileSync(outputFilePath, JSON.stringify(iconPaths, null, pretty ? 2 : 0));
   
   return {
     total: iconFiles.length,
-    extracted: successCount,
-    errors: errorCount
+    extracted: Object.keys(iconPaths).length,
+    errors: iconFiles.length - Object.keys(iconPaths).length
   };
 }

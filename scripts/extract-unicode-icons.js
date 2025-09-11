@@ -1,17 +1,7 @@
 import fs from 'fs';
 import path from 'path';
+import { ensureDirForFile } from './utils.js';
 
-export async function extractUnicodeIcons({ outputFile, pretty = false }) {
-  // Нормализуем путь
-  const normalizedOutputPath = path.resolve(outputFile);
-
-  // Создаем директорию если не существует
-  const distJsDir = path.dirname(normalizedOutputPath);
-  if (!fs.existsSync(distJsDir)) {
-    fs.mkdirSync(distJsDir, { recursive: true });
-  }
-
-// Определяем диапазоны Unicode символов для иконок
 const unicodeRanges = [
   {
     name: 'Miscellaneous Symbols',
@@ -63,53 +53,36 @@ const unicodeRanges = [
   }
   ];
 
-  const unicodeIcons = {};
+export async function extractUnicodeIcons({ outputFile, pretty = false }) {
+  const outputFilePath = path.resolve(outputFile);
 
+  ensureDirForFile(outputFilePath);
 
-unicodeRanges.forEach(range => {
-  let count = 0;
-  let validCount = 0;
-  
-  for (let codePoint = range.start; codePoint <= range.end; codePoint++) {
-    try {
+  const unicodeIcons = unicodeRanges.reduce((acc, range) => {
+    const codePoints = Array.from({ length: range.end - range.start + 1 }, (_, i) => range.start + i);
+    
+    codePoints.forEach(codePoint => {
       const char = String.fromCodePoint(codePoint);
       
-      // Проверяем, что символ не является пробелом или невидимым
       if (char.trim() && char !== '\uFEFF' && char !== '\u200B') {
         const unicodeName = `U+${codePoint.toString(16).toUpperCase().padStart(4, '0')}`;
         
-                  unicodeIcons[unicodeName] = {
-                    char: char,
-                    code: codePoint
-                  };
-        
-        validCount++;
+        acc[unicodeName] = {
+          char: char,
+          code: codePoint
+        };
       }
-    } catch (error) {
-      // Пропускаем недопустимые кодовые точки
-    }
+    });
     
-    count++;
-    
-  }
-  
-  });
+    return acc;
+  }, {});
 
-  // Сохраняем в JSON файл
-  fs.writeFileSync(normalizedOutputPath, JSON.stringify(unicodeIcons, null, pretty ? 2 : 0));
-
-  // Создаем статистику по диапазонам
-  const rangeStats = {};
-  Object.values(unicodeIcons).forEach(icon => {
-    if (!rangeStats[icon.range]) {
-      rangeStats[icon.range] = 0;
-    }
-    rangeStats[icon.range]++;
-  });
+  fs.writeFileSync(outputFilePath, JSON.stringify(unicodeIcons, null, pretty ? 2 : 0));
 
   return {
     total: Object.keys(unicodeIcons).length,
-    ranges: rangeStats
+    extracted: Object.keys(unicodeIcons).length,
+    errors: 0
   };
 }
 
