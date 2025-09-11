@@ -1,6 +1,10 @@
-const fs = require("fs");
-const path = require("path");
-const crypto = require("crypto");
+import fs from "fs";
+import path from "path";
+import crypto from "crypto";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Создает хеш для файла на основе его содержимого
@@ -297,8 +301,9 @@ function main() {
   }
 }
 
-if (require.main === module) {
+// Проверяем, что скрипт запущен напрямую
+if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
 
-module.exports = { hashJavaScriptFiles, updateHtmlFiles, createHtaccess };
+export { hashJavaScriptFiles, updateHtmlFiles, createHtaccess };

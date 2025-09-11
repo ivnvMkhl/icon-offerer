@@ -1,6 +1,7 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
-module.exports = function(eleventyConfig) {
+export default function(eleventyConfig) {
   // Копируем статические файлы
   eleventyConfig.addPassthroughCopy("src/css/**/*");
   eleventyConfig.addPassthroughCopy("src/js/**/*");
@@ -26,8 +27,8 @@ module.exports = function(eleventyConfig) {
     dir: {
       input: "src",
       output: "dist",
-      includes: "_includes",
-      layouts: "_layouts"
+      includes: "includes",
+      layouts: "layouts"
     },
     templateFormats: ["md", "njk", "html", "liquid"],
     markdownTemplateEngine: "njk",

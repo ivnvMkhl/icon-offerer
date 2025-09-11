@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Приложение на 11ty для работы с иконками",
   "homepage": "https://ivnvMkhl.github.io/icon-offerer",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "extract-icons": "node scripts/extract-svg-paths.js && node scripts/extract-mui-icons.js && node scripts/extract-unicode-icons.js",
@@ -21,7 +22,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@11ty/eleventy": "2.0.1",
+    "@11ty/eleventy": "^3.1.2",
     "crypto": "1.0.1"
   },
   "dependencies": {
