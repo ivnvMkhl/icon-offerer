@@ -1,0 +1,38 @@
+name: PR Build Check
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (no artifacts)
+        run: npm run build
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          AI_SEARCH_URL: ${{ secrets.AI_SEARCH_URL }} 
+          SMART_CAPTCHA_SITEKEY: ${{ secrets.SMART_CAPTCHA_SITEKEY }}
+
+      - name: Build verification
+        run: |
+          echo "✅ Build completed successfully"
+          echo "📁 Dist directory contents:"
+          ls -la dist/
+          echo "📁 JS files:"
+          ls -la dist/js/ | head -5
+          echo "📁 CSS files:"
+          ls -la dist/css/ | head -5
