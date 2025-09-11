@@ -173,10 +173,14 @@ class IconPageBase {
                 iconCardWidth = 160;
                 iconCardHeight = 140;
                 gap = 12;
-            } else {
+            } else if (windowWidth >= 480) {
                 iconCardWidth = 130;
                 iconCardHeight = 140;
                 gap = 10;
+            } else {
+                iconCardWidth = 100;
+                iconCardHeight = 120;
+                gap = 8;
             }
             
             // Вычисляем количество колонок и строк
