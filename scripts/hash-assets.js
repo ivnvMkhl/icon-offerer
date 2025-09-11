@@ -248,31 +248,5 @@ function createHtaccess() {
   console.log("Created .htaccess file for caching");
 }
 
-function main() {
-  if (process.env.ELEVENTY_ENV !== "production") {
-    console.log("⚠️  Hashing disabled in development mode");
-    return;
-  }
 
-  console.log("🚀 Starting JavaScript file hashing...");
-
-  try {
-    const manifest = hashJavaScriptFiles();
-
-    if (Object.keys(manifest).length > 0) {
-      updateHtmlFiles(manifest);
-      cleanupOriginalFiles();
-      createHtaccess();
-      console.log("✅ Hashing completed successfully!");
-    } else {
-      console.log("⚠️  No JS files found for hashing");
-    }
-  } catch (error) {
-    console.error("❌ Error during hashing:", error.message);
-    process.exit(1);
-  }
-}
-
-main();
-
-export { hashJavaScriptFiles, updateHtmlFiles, createHtaccess };
+export { hashJavaScriptFiles, updateHtmlFiles, createHtaccess, cleanupOriginalFiles };

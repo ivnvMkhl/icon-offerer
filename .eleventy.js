@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+import { hashJavaScriptFiles, updateHtmlFiles, createHtaccess, cleanupOriginalFiles } from './scripts/hash-assets.js';
+
 dotenv.config();
 
 export default function(eleventyConfig) {
@@ -21,6 +23,28 @@ export default function(eleventyConfig) {
   eleventyConfig.addGlobalData("smartCaptchaSitekey", process.env.SMART_CAPTCHA_SITEKEY);
   eleventyConfig.addGlobalData("isDev", process.env.ELEVENTY_ENV === 'development');
   eleventyConfig.addGlobalData("isProduction", process.env.ELEVENTY_ENV === 'production');
+
+  // Хеширование файлов после сборки (только в production)
+  eleventyConfig.on('afterBuild', async () => {
+    if (process.env.ELEVENTY_ENV === 'production') {
+      console.log('🚀 Starting file hashing after build...');
+      
+      try {
+        const manifest = hashJavaScriptFiles();
+        
+        if (Object.keys(manifest).length > 0) {
+          updateHtmlFiles(manifest);
+          cleanupOriginalFiles();
+          createHtaccess();
+          console.log('✅ File hashing completed successfully!');
+        } else {
+          console.log('⚠️  No files found for hashing');
+        }
+      } catch (error) {
+        console.error('❌ Error during hashing:', error.message);
+      }
+    }
+  });
 
   // Настройки для входной и выходной директорий
   return {
