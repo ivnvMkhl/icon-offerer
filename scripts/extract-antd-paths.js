@@ -14,9 +14,7 @@ export async function extractAntdPaths({ iconsPath, outputFile, pretty = false }
     .sort();
 
 
-  const iconPaths = {};
-
-  for (const file of iconFiles) {
+  const iconPaths = iconFiles.reduce((acc, file) => {
     try {
       const iconPath = path.join(iconsLibPath, file);
       const require = createRequire(import.meta.url);
@@ -42,13 +40,15 @@ export async function extractAntdPaths({ iconsPath, outputFile, pretty = false }
         }
         
         if (svgPath) {
-          iconPaths[iconName] = svgPath;
+          acc[iconName] = svgPath;
         }
       }
     } catch (error) {
       console.error(`Error processing ${file}:`, error.message);
     }
-  }
+    
+    return acc;
+  }, {});
 
   fs.writeFileSync(outputFilePath, JSON.stringify(iconPaths, null, pretty ? 2 : 0));
   

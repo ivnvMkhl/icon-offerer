@@ -2,11 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import { ensureDirForFile } from './utils.js';
 
-export async function extractUnicodeIcons({ outputFile, pretty = false }) {
-  const outputFilePath = path.resolve(outputFile);
-
-  ensureDirForFile(outputFilePath);
-
 const unicodeRanges = [
   {
     name: 'Miscellaneous Symbols',
@@ -58,35 +53,29 @@ const unicodeRanges = [
   }
   ];
 
-  const unicodeIcons = {};
+export async function extractUnicodeIcons({ outputFile, pretty = false }) {
+  const outputFilePath = path.resolve(outputFile);
 
+  ensureDirForFile(outputFilePath);
 
-unicodeRanges.forEach(range => {
-  let count = 0;
-  let validCount = 0;
-  
-  for (let codePoint = range.start; codePoint <= range.end; codePoint++) {
-    try {
+  const unicodeIcons = unicodeRanges.reduce((acc, range) => {
+    const codePoints = Array.from({ length: range.end - range.start + 1 }, (_, i) => range.start + i);
+    
+    codePoints.forEach(codePoint => {
       const char = String.fromCodePoint(codePoint);
       
       if (char.trim() && char !== '\uFEFF' && char !== '\u200B') {
         const unicodeName = `U+${codePoint.toString(16).toUpperCase().padStart(4, '0')}`;
         
-        unicodeIcons[unicodeName] = {
+        acc[unicodeName] = {
           char: char,
           code: codePoint
         };
-        
-        validCount++;
       }
-    } catch (error) {
-      // Пропускаем недопустимые кодовые точки
-    }
+    });
     
-    count++;
-  }
-  
-  });
+    return acc;
+  }, {});
 
   fs.writeFileSync(outputFilePath, JSON.stringify(unicodeIcons, null, pretty ? 2 : 0));
 
