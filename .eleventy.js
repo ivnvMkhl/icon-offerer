@@ -6,12 +6,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/js/**/*");
   eleventyConfig.addPassthroughCopy("src/images/**/*");
   eleventyConfig.addPassthroughCopy("src/fonts/**/*");
-  eleventyConfig.addPassthroughCopy("src/favicon.ico");
-  eleventyConfig.addPassthroughCopy("src/apple-touch-icon.svg");
-  eleventyConfig.addPassthroughCopy("src/icon-192.png");
-  eleventyConfig.addPassthroughCopy("src/icon-512.png");
-  eleventyConfig.addPassthroughCopy("src/screenshot-*.png");
-  eleventyConfig.addPassthroughCopy("src/.htaccess");
+  eleventyConfig.addPassthroughCopy("src/static/**/*");
 
   eleventyConfig.addGlobalData("baseUrl", process.env.ELEVENTY_ENV === 'development' ? '' : process.env.BASE_URL);  
   eleventyConfig.addGlobalData("aiSearchUrl", process.env.AI_SEARCH_URL);
