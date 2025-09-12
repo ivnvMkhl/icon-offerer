@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { hashJavaScriptFiles, updateHtmlFiles, createHtaccess, cleanupOriginalFiles } from './scripts/hash-assets.js';
+import { hashAssets, updateHashedLinks } from './scripts/hash-assets.js';
 
 dotenv.config();
 
@@ -25,21 +25,25 @@ export default function(eleventyConfig) {
   eleventyConfig.addGlobalData("isProduction", process.env.ELEVENTY_ENV === 'production');
 
   // Хеширование файлов после сборки (только в production)
-  eleventyConfig.on('afterBuild', async () => {
+  eleventyConfig.on('afterBuild', async ({ runMode, outputMode, dir }) => {
     if (process.env.ELEVENTY_ENV === 'production') {
       console.log('🚀 Starting file hashing after build...');
       
       try {
-        const manifest = hashJavaScriptFiles();
+        // Передаем информацию о директории сборки
+        const hashManifest = hashAssets({
+          outputDir: dir.output,
+          extensions: ['.js', '.json', '.css'],
+          ignoredFiles: ['site.webmanifest.json']
+        });
         
-        if (Object.keys(manifest).length > 0) {
-          updateHtmlFiles(manifest);
-          cleanupOriginalFiles();
-          createHtaccess();
-          console.log('✅ File hashing completed successfully!');
-        } else {
-          console.log('⚠️  No files found for hashing');
-        }
+        updateHashedLinks({
+          hashManifest: hashManifest,
+          outputDir: dir.output,
+          extensions: ['.html'],
+          files: ['.htaccess']
+        });
+        console.log('✅ File hashing completed successfully!');
       } catch (error) {
         console.error('❌ Error during hashing:', error.message);
       }

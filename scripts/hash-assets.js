@@ -1,252 +1,119 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 function createFileHash(filePath) {
   const content = fs.readFileSync(filePath);
   return crypto.createHash("md5").update(content).digest("hex").substring(0, 8);
 }
 
-function hashJavaScriptFiles() {
-  const outputDir = process.env.BUILD_OUTPUT_DIR || 'dist/js';
-  const jsDir = path.join(__dirname, "..", outputDir);
-  const manifest = {};
-
-  if (!fs.existsSync(jsDir)) {
-    console.log("JS directory not found, skipping hashing");
-    return manifest;
+function findFilesByExtension(dirPath, extensions, ignoredFiles = []) {
+  if (!fs.existsSync(dirPath)) {
+    return [];
   }
 
-  const jsFiles = fs.readdirSync(jsDir).filter((file) => {
-    return (
-      (file.endsWith(".js") || file.endsWith(".json")) &&
-      !/\.([a-f0-9]{8})\.(js|json)$/.test(file)
-    );
-  });
+  const files = [];
+  const extensionPattern = extensions.map(ext => ext.replace('.', '\\.')).join('|');
+  const hashPattern = `\\.([a-f0-9]{8})\\.(${extensionPattern})$`;
 
-  const cssDir = path.join(__dirname, "../dist/css");
-  const cssFiles = fs.existsSync(cssDir)
-    ? fs.readdirSync(cssDir).filter((file) => {
-        return file.endsWith(".css") && !/\.([a-f0-9]{8})\.css$/.test(file);
-      })
-    : [];
-
-  console.log(`Found ${jsFiles.length} JS/JSON files for hashing:`);
-
-  jsFiles.forEach((file) => {
-    const originalPath = path.join(jsDir, file);
-    const hash = createFileHash(originalPath);
-    const extension = file.endsWith(".json") ? ".json" : ".js";
-    const newFileName = file.replace(extension, `.${hash}${extension}`);
-    const newPath = path.join(jsDir, newFileName);
-
-    fs.copyFileSync(originalPath, newPath);
-    fs.unlinkSync(originalPath);
-    manifest[file] = newFileName;
-
-    console.log(`  ${file} -> ${newFileName} (original removed)`);
-  });
-
-  if (cssFiles.length > 0) {
-    console.log(`Found ${cssFiles.length} CSS files for hashing:`);
-
-    cssFiles.forEach((file) => {
-      const originalPath = path.join(cssDir, file);
-      const hash = createFileHash(originalPath);
-      const newFileName = file.replace(".css", `.${hash}.css`);
-      const newPath = path.join(cssDir, newFileName);
-
-      fs.copyFileSync(originalPath, newPath);
-      fs.unlinkSync(originalPath);
-      manifest[file] = newFileName;
-
-      console.log(`  ${file} -> ${newFileName} (original removed)`);
-    });
-  }
-
-  const manifestPath = path.join(__dirname, "..", outputDir, "js-manifest.json");
-  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-  console.log(`Manifest saved: ${manifestPath}`);
-
-  return manifest;
-}
-
-/**
- * Обновляет HTML файлы с хешированными именами JS файлов
- */
-function updateHtmlFiles(manifest) {
-  const distDir = path.join(__dirname, "../dist");
-
-  function findHtmlFiles(dir) {
-    const files = [];
-    const items = fs.readdirSync(dir);
-
+  function searchRecursively(currentPath) {
+    const items = fs.readdirSync(currentPath);
+    
     for (const item of items) {
-      const fullPath = path.join(dir, item);
+      const fullPath = path.join(currentPath, item);
       const stat = fs.statSync(fullPath);
-
+      
       if (stat.isDirectory()) {
-        files.push(...findHtmlFiles(fullPath));
-      } else if (item.endsWith(".html")) {
-        files.push(fullPath);
+        searchRecursively(fullPath);
+      } else if (stat.isFile()) {
+        const hasValidExtension = extensions.some(ext => item.endsWith(ext));
+        const hasNoHash = !new RegExp(hashPattern).test(item);
+        
+        if (hasValidExtension && hasNoHash) {
+          const relativePath = path.relative(dirPath, fullPath);
+          const isIgnored = ignoredFiles.some(ignoredFile => 
+            relativePath === ignoredFile || relativePath.endsWith(ignoredFile)
+          );
+          
+          if (!isIgnored) {
+            files.push(relativePath);
+          }
+        }
       }
     }
-
-    return files;
   }
 
-  const htmlFiles = findHtmlFiles(distDir);
-  console.log(`Updating ${htmlFiles.length} HTML files:`);
-
-  htmlFiles.forEach((filePath) => {
-    let content = fs.readFileSync(filePath, "utf8");
-    let updated = false;
-
-    Object.entries(manifest).forEach(([original, hashed]) => {
-      const srcRegex = new RegExp(`src="[^"]*${original}"`, "g");
-      const newSrcContent = content.replace(
-        srcRegex,
-        `src="/icon-offerer/js/${hashed}"`,
-      );
-      if (newSrcContent !== content) {
-        content = newSrcContent;
-        updated = true;
-      }
-
-      const jsFileRegex = new RegExp(`jsFile: 'js/${original}'`, "g");
-      const newJsFileContent = content.replace(
-        jsFileRegex,
-        `jsFile: 'js/${hashed}'`,
-      );
-      if (newJsFileContent !== content) {
-        content = newJsFileContent;
-        updated = true;
-      }
-
-      if (original.endsWith(".json")) {
-        const dataFileRegex = new RegExp(`dataFile: '${original}'`, "g");
-        const newDataFileContent = content.replace(
-          dataFileRegex,
-          `dataFile: '${hashed}'`,
-        );
-        if (newDataFileContent !== content) {
-          content = newDataFileContent;
-          updated = true;
-        }
-      }
-
-      if (original.endsWith(".css")) {
-        const cssRegex = new RegExp(`href="[^"]*${original}"`, "g");
-        const newCssContent = content.replace(
-          cssRegex,
-          `href="/icon-offerer/css/${hashed}"`,
-        );
-        if (newCssContent !== content) {
-          content = newCssContent;
-          updated = true;
-        }
-      }
-    });
-
-    if (updated) {
-      fs.writeFileSync(filePath, content);
-      const relativePath = path.relative(distDir, filePath);
-      console.log(`  Updated: ${relativePath}`);
-    }
-  });
+  searchRecursively(dirPath);
+  return files;
 }
 
-/**
- * Удаляет оригинальные JS файлы без хешей
- */
-function cleanupOriginalFiles() {
-  const outputDir = process.env.BUILD_OUTPUT_DIR || 'dist/js';
-  const jsDir = path.join(__dirname, "..", outputDir);
+function hashFiles(outputDir, files, extensions) {
+  return files.reduce((fileMappings, file) => {
+    const originalPath = path.join(outputDir, file);
+    const hash = createFileHash(originalPath);
+    
+    const extension = extensions.find(ext => file.endsWith(ext));
+    const newFileName = file.replace(extension, `.${hash}${extension}`);
+    const newPath = path.join(outputDir, newFileName);
 
-  if (!fs.existsSync(jsDir)) {
-    console.log("JS directory not found, skipping cleanup");
+    fs.renameSync(originalPath, newPath);
+
+    return {
+      ...fileMappings,
+      [file]: newFileName
+    };
+  }, {});
+}
+
+function hashAssets({ outputDir, extensions, ignoredFiles = [] }) {
+  if (!outputDir) {
+    throw new Error('outputDir parameter is required for hashAssets');
+  }
+  
+  if (!extensions || !Array.isArray(extensions) || extensions.length === 0) {
+    return {};
+  }
+
+  const files = findFilesByExtension(outputDir, extensions, ignoredFiles);
+  const hashManifest = hashFiles(outputDir, files, extensions);
+  const totalFiles = Object.keys(hashManifest).length;
+  console.log(`Found ${totalFiles} files for hashing:`);
+  
+  Object.entries(hashManifest).forEach(([original, hashed]) => {
+    console.log(`  ${original} -> ${hashed} (original removed)`);
+  });
+
+  return hashManifest;
+}
+
+function updateHashedLinks({ hashManifest, outputDir, extensions = ['.html'], files = [] }) {
+  if (!outputDir) {
+    throw new Error('outputDir parameter is required for updateHashedLinks');
+  }
+
+  if (!hashManifest || Object.keys(hashManifest).length === 0) {
+    console.log('No files to update (empty manifest)');
     return;
   }
 
-  const allFiles = fs.readdirSync(jsDir);
-  const jsFiles = allFiles.filter(
-    (file) => file.endsWith(".js") || file.endsWith(".json"),
-  );
+  const filesByExtensions = findFilesByExtension(outputDir, extensions);
+  const allFiles = [...filesByExtensions, ...files];
+  
+  console.log(`Updating ${allFiles.length} files:`);
 
-  const cssDir = path.join(__dirname, "../dist/css");
-  if (fs.existsSync(cssDir)) {
-    const allCssFiles = fs.readdirSync(cssDir);
-    const cssFiles = allCssFiles.filter((file) => file.endsWith(".css"));
+  allFiles.forEach((relativePath) => {
+    const filePath = path.join(outputDir, relativePath);
+    const content = fs.readFileSync(filePath, "utf8");
+    
+    const updatedContent = Object.entries(hashManifest).reduce(
+      (acc, [original, hashed]) => acc.replaceAll(original, hashed),
+      content
+    );
 
-    cssFiles.forEach((file) => {
-      const hasHash = /\.([a-f0-9]{8})\.css$/.test(file);
-
-      if (!hasHash) {
-        const filePath = path.join(cssDir, file);
-        fs.unlinkSync(filePath);
-        console.log(`  Removed: ${file}`);
-      }
-    });
-  }
-
-  console.log("Cleaning up original files without hashes:");
-
-  jsFiles.forEach((file) => {
-    const hasHash = /\.([a-f0-9]{8})\.(js|json)$/.test(file);
-
-    if (!hasHash) {
-      const filePath = path.join(jsDir, file);
-      fs.unlinkSync(filePath);
-      console.log(`  Removed: ${file}`);
-    }
+    fs.writeFileSync(filePath, updatedContent);
+    console.log(`  Updated: ${relativePath}`);
   });
 }
 
-/**
- * Создает .htaccess файл для кеширования
- */
-function createHtaccess() {
-  const htaccessContent = `# Кеширование для JavaScript файлов с хешами
-<FilesMatch "\\.(js)$">
-    # Для файлов с хешами (содержат 8 символов после точки)
-    <If "%{REQUEST_URI} =~ m/\\.[a-f0-9]{8}\\.js$/">
-        Header set Cache-Control "public, max-age=31536000, immutable"
-        Header set Expires "Thu, 31 Dec 2037 23:55:55 GMT"
-    </If>
-    # Для обычных JS файлов (без хешей)
-    <Else>
-        Header set Cache-Control "public, max-age=86400"
-        Header set Expires "Thu, 31 Dec 2037 23:55:55 GMT"
-    </Else>
-</FilesMatch>
 
-# Кеширование для CSS файлов
-<FilesMatch "\\.(css)$">
-    Header set Cache-Control "public, max-age=86400"
-    Header set Expires "Thu, 31 Dec 2037 23:55:55 GMT"
-</FilesMatch>
-
-# Кеширование для изображений
-<FilesMatch "\\.(ico|png|jpg|jpeg|gif|svg|webp)$">
-    Header set Cache-Control "public, max-age=31536000"
-    Header set Expires "Thu, 31 Dec 2037 23:55:55 GMT"
-</FilesMatch>
-
-# Кеширование для шрифтов
-<FilesMatch "\\.(woff|woff2|ttf|eot)$">
-    Header set Cache-Control "public, max-age=31536000"
-    Header set Expires "Thu, 31 Dec 2037 23:55:55 GMT"
-</FilesMatch>
-`;
-
-  const htaccessPath = path.join(__dirname, "../dist/.htaccess");
-  fs.writeFileSync(htaccessPath, htaccessContent);
-  console.log("Created .htaccess file for caching");
-}
-
-
-export { hashJavaScriptFiles, updateHtmlFiles, createHtaccess, cleanupOriginalFiles };
+export { hashAssets, updateHashedLinks };
