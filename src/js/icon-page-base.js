@@ -48,7 +48,7 @@ class IconPageBase {
                 dataFile = dataFile.replace(/\.[a-f0-9]{8}\.json$/, '.json');
             }
             
-            const response = await fetch(`${baseUrl}/js/${dataFile}`);
+            const response = await fetch(`${baseUrl}/${dataFile}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
