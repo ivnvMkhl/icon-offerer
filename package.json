@@ -6,11 +6,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "extract-icons": "BUILD_OUTPUT_DIR=dist/js node scripts/extract-icons.js",
-    "build": "npm run extract-icons && ELEVENTY_ENV=production eleventy",
-    "serve": "npm run extract-icons && ELEVENTY_ENV=production eleventy --serve",
-    "dev": "npm run extract-icons && ELEVENTY_ENV=development eleventy --serve --watch",
-    "start": "npm run extract-icons && ELEVENTY_ENV=production eleventy --serve"
+    "build": "ELEVENTY_ENV=production eleventy",
+    "serve": "ELEVENTY_ENV=production eleventy --serve",
+    "dev": "ELEVENTY_ENV=development eleventy --serve --watch",
+    "start": "ELEVENTY_ENV=production eleventy --serve"
   },
   "keywords": [
     "11ty",
@@ -21,12 +20,12 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy": "3.1.2",
     "crypto": "1.0.1"
   },
   "dependencies": {
     "@ant-design/icons": "6.0.1",
-    "@emotion/react": "^11.7.1",
+    "@emotion/react": "11.7.1",
     "@emotion/styled": "11.14.1",
     "@mui/icons-material": "7.3.2",
     "dotenv": "17.2.2"

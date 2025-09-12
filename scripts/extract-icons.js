@@ -40,10 +40,8 @@ const extractor = async (accPromise, { name, extractor: extractorFn, config }, o
   return [...acc, { name, result }];
 };
 
-async function extractIcons() {
+async function extractIcons(outputDir) {
   console.log('Starting extraction of all icons...');
-  
-  const outputDir = process.env.BUILD_OUTPUT_DIR || 'dist/js';
   
   try {
     await EXTRACTORS_CONFIG.reduce(
@@ -57,10 +55,6 @@ async function extractIcons() {
     console.error('Error extracting icons:', error.message);
     process.exit(1);
   }
-}
-
-if (import.meta.url === `file://${process.argv[1]}`) {
-  extractIcons();
 }
 
 export { extractIcons };
