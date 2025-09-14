@@ -1,6 +1,8 @@
 /**
  * Пагинированный список иконок для оптимизации производительности
  */
+import { API } from './api.js';
+
 if (typeof PaginatedIcons === 'undefined') {
 class PaginatedIcons {
   constructor(container, options = {}) {
@@ -18,6 +20,7 @@ class PaginatedIcons {
     this.currentPage = 1;
     this.totalPages = 0;
     this.aiSearchResults = []; // Результаты AI поиска
+    this.aiSearchAPI = new API(window.aiSerchUrl); // Создаем экземпляр API
     this.isAISearchMode = false; // Режим AI поиска
     
     this.init();
@@ -308,14 +311,8 @@ class PaginatedIcons {
 
   // Методы для AI поиска
   async performAISearch(query) {
-    if (!this.options.enableAISearch || !window.aiSearch) {
-      window.logger.warn('AI поиск отключен или недоступен');
-      return false;
-    }
-
-    // Проверяем доступность AI-поиска
-    if (!window.aiSearch.isAISearchAvailable()) {
-      window.logger.warn('AI поиск недоступен из-за CORS ограничений');
+    if (!this.options.enableAISearch) {
+      window.logger.warn('AI поиск отключен');
       return false;
     }
 
@@ -327,7 +324,7 @@ class PaginatedIcons {
       this.hideFilterResults();
       
       // Выполняем AI поиск
-      const result = await window.aiSearch.searchIcons(this.options.platform, query);
+      const result = await this.aiSearchAPI.aiSearch(this.options.platform, query);
       
       if (result.success && result.icons && result.icons.length > 0) {
         window.logger.log(`AI вернул ${result.icons.length} результатов:`, result.icons);

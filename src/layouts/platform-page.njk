@@ -21,10 +21,9 @@ layout: base.njk
     window.aiSerchUrl = '{{ aiSearchUrl }}';
 </script>
 
-<script src="{{ baseUrl }}/js/ai-search.js" defer></script>
-<script src="{{ baseUrl }}/js/paginated-icons.js" defer></script>
-<script src="{{ baseUrl }}/js/icon-page-base.js" defer></script>
-<script src="{{ baseUrl }}/{{ jsFile }}" defer></script>
+<script type="module" src="{{ baseUrl }}/js/paginated-icons.js" defer></script>
+<script type="module" src="{{ baseUrl }}/js/icon-page-base.js" defer></script>
+<script type="module" src="{{ baseUrl }}/{{ jsFile }}" defer></script>
 {% endblock %}
 
 {% block content %}
