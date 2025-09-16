@@ -2,10 +2,11 @@
  * Модуль для Unicode иконок (рефакторированная версия)
  */
 
-if (typeof UnicodeIconPage === 'undefined') {
+import { IconPageBase } from './icon-page-base.js';
+
 class UnicodeIconPage extends IconPageBase {
-    constructor(config) {
-        super(config);
+    constructor() {
+        super('unicode');
     }
 
     getAdditionalIconData(name, path) {
@@ -62,10 +63,4 @@ class UnicodeIconPage extends IconPageBase {
     }
 }
 
-// Инициализация при загрузке DOM
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.iconPageConfig && window.iconPageConfig.platform === 'unicode') {
-        new UnicodeIconPage(window.iconPageConfig);
-    }
-});
-}
+new UnicodeIconPage();

@@ -2,6 +2,7 @@
 <html lang="ru">
     <head>
         {% include "base-meta.njk" %}
+        {% include "config.njk" %}
 
         <script>
             (function() {
@@ -15,8 +16,7 @@
         <link rel="stylesheet" href="{{ baseUrl }}/css/theme.css">
         <link rel="stylesheet" href="{{ baseUrl }}/css/common.css">
         
-        <script src="{{ baseUrl }}/js/logger.js" defer></script>
-        <script src="{{ baseUrl }}/js/theme.js" defer></script>
+        <script type="module" src="{{ baseUrl }}/js/theme.js" defer></script>
     </head>
     <body>
         <header class="header">

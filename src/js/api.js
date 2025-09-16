@@ -5,10 +5,37 @@
 import { LocalStorageCache } from './cache.js';
 
 export class API {
-  #searchApiUrl;
 
-  constructor(searchApiUrl) {
-    this.#searchApiUrl = searchApiUrl;
+  /**
+   * Gets icon paths data for specified platform
+   * @param {string} platform - Platform name (antd, mui, unicode)
+   * @returns {Promise<Object>} Icon paths data
+   */
+  async getPlatformIconPaths(platform) {
+    try {
+      const response = await fetch(`${window.appConfig.baseUrl}/js/${platform}-icon-paths.json`, {
+        credentials: 'omit'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const iconData = await response.json();
+      
+      return {
+        success: true,
+        data: iconData,
+        platform: platform
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message || 'Ошибка при загрузке данных иконок',
+        platform: platform
+      };
+    }
   }
 
   /**
@@ -32,7 +59,7 @@ export class API {
     }
 
     try {
-      const response = await fetch(this.#searchApiUrl, {
+      const response = await fetch(window.appConfig.aiSerchUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

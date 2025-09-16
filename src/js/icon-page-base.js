@@ -3,10 +3,14 @@
  * Содержит общую функциональность для всех платформ
  */
 
-if (typeof IconPageBase === 'undefined') {
-class IconPageBase {
-    constructor(config) {
-        this.config = config;
+import { PaginatedIcons } from "./paginated-icons.js";
+import { API } from "./api.js";
+import { Logger } from "./logger.js";
+
+
+export class IconPageBase {
+    constructor(platform) {
+        this.platform = platform;
         this.searchInput = document.getElementById('iconSearch');
         this.iconsContainer = document.getElementById('iconsContainer');
         this.loadingIndicator = document.getElementById('loadingIndicator');
@@ -15,7 +19,9 @@ class IconPageBase {
         
         this.allIcons = [];
         this.iconPaths = {};
-        this.paginatedIcons = null;
+        this.paginatedIcons = new PaginatedIcons(this.iconsContainer);
+        this.api = new API();
+        this.logger = new Logger();
         
         this.init();
     }
@@ -35,24 +41,13 @@ class IconPageBase {
 
     async loadIconPaths() {
         try {
-            const baseUrl = window.baseUrl || '';
+            const result = await this.api.getPlatformIconPaths(this.platform);
             
-            // В разработке используем оригинальное имя файла, в продакшене - хешированное
-            const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            let dataFile = this.config.dataFile;
-            
-            // Если это продакшен и файл хешированный, используем его
-            // Если это разработка, убираем хеш из имени файла
-            if (isDev && dataFile.includes('.')) {
-                // Убираем хеш из имени файла для разработки
-                dataFile = dataFile.replace(/\.[a-f0-9]{8}\.json$/, '.json');
+            if (!result.success) {
+                throw new Error(result.error);
             }
             
-            const response = await fetch(`${baseUrl}/${dataFile}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            this.iconPaths = await response.json();
+            this.iconPaths = result.data;
             
             // Преобразуем в массив объектов для пагинации
             this.allIcons = Object.keys(this.iconPaths).map(name => ({
@@ -66,7 +61,7 @@ class IconPageBase {
                 this.loadingIndicator.style.display = 'none';
             }
         } catch (error) {
-            window.logger.error(`Ошибка при загрузке ${this.config.dataFile}:`, error);
+            this.logger.error(`Ошибка при загрузке иконок для платформы ${this.platform}:`, error);
             if (this.loadingIndicator) {
                 this.loadingIndicator.innerHTML = '<div class="loading-spinner"></div>Ошибка загрузки иконок';
             }
@@ -113,7 +108,7 @@ class IconPageBase {
 
         this.paginatedIcons = new PaginatedIcons(this.iconsContainer, {
             itemsPerPage: itemsPerPage,
-            platform: this.config.platform,
+            platform: this.platform,
             enableAISearch: true,
             loadIcon: this.loadIcon.bind(this),
             copyIcon: this.copyIcon.bind(this),
@@ -190,7 +185,7 @@ class IconPageBase {
             // Ограничиваем разумными пределами
             const itemsPerPage = Math.max(6, Math.min(rows * columns, 100));
             
-            window.logger.info(`Адаптивная пагинация: ${windowWidth}x${windowHeight} -> контейнер: ${containerWidth}px, ${columns} колонок, ${rows} строк, ${itemsPerPage} элементов на странице (доступная высота: ${availableHeight}px)`);
+            this.logger.info(`Адаптивная пагинация: ${windowWidth}x${windowHeight} -> контейнер: ${containerWidth}px, ${columns} колонок, ${rows} строк, ${itemsPerPage} элементов на странице (доступная высота: ${availableHeight}px)`);
             
             return itemsPerPage;
         } finally {
@@ -252,20 +247,20 @@ class IconPageBase {
                     const newItemsPerPage = this.optimalItemsPerPage;
                     
                     if (newItemsPerPage !== this.paginatedIcons.options.itemsPerPage) {
-                        window.logger.log(`Ресайз: изменяем itemsPerPage с ${this.paginatedIcons.options.itemsPerPage} на ${newItemsPerPage}`);
+                        this.logger.log(`Ресайз: изменяем itemsPerPage с ${this.paginatedIcons.options.itemsPerPage} на ${newItemsPerPage}`);
                         
                         this.paginatedIcons.options.itemsPerPage = newItemsPerPage;
                         
                         // Пересчитываем общее количество страниц
                         this.paginatedIcons.totalPages = Math.ceil(this.paginatedIcons.filteredItems.length / newItemsPerPage);
                         
-                        window.logger.log(`Ресайз: новое количество страниц: ${this.paginatedIcons.totalPages} (элементов: ${this.paginatedIcons.filteredItems.length})`);
+                        this.logger.log(`Ресайз: новое количество страниц: ${this.paginatedIcons.totalPages} (элементов: ${this.paginatedIcons.filteredItems.length})`);
                         
                         // Проверяем, что текущая страница не превышает новое количество страниц
                         if (this.paginatedIcons.currentPage > this.paginatedIcons.totalPages) {
                             this.paginatedIcons.currentPage = Math.max(1, this.paginatedIcons.totalPages);
                             this.paginatedIcons.updateURL();
-                            window.logger.log(`Ресайз: корректируем текущую страницу на ${this.paginatedIcons.currentPage}`);
+                            this.logger.log(`Ресайз: корректируем текущую страницу на ${this.paginatedIcons.currentPage}`);
                         }
                         
                         this.paginatedIcons.renderIcons();
@@ -278,7 +273,7 @@ class IconPageBase {
 
     loadIcon(placeholder, iconName, iconPath) {
         // Переопределяется в дочерних классах
-        window.logger.warn('loadIcon не реализован для платформы:', this.config.platform);
+        this.logger.warn('loadIcon не реализован для платформы:', this.platform);
     }
 
     copyIcon(iconName, button) {
@@ -289,7 +284,7 @@ class IconPageBase {
                     this.showCopySuccess(button);
                 })
                 .catch(err => {
-                    window.logger.error('Не удалось скопировать текст: ', err);
+                    this.logger.error('Не удалось скопировать текст: ', err);
                     this.fallbackCopy(iconName, button);
                 });
         } else {
@@ -309,7 +304,7 @@ class IconPageBase {
             document.execCommand('copy');
             this.showCopySuccess(button);
         } catch (err) {
-            window.logger.error('Fallback: Не удалось скопировать текст: ', err);
+            this.logger.error('Fallback: Не удалось скопировать текст: ', err);
         }
         document.body.removeChild(textArea);
     }
@@ -430,7 +425,7 @@ class IconPageBase {
             const success = await this.paginatedIcons.performAISearch(query);
             
         } catch (error) {
-            window.logger.error('Ошибка AI поиска:', error);
+            this.logger.error('Ошибка AI поиска:', error);
             alert('Произошла ошибка при выполнении AI поиска');
         } finally {
             // Восстанавливаем кнопку
@@ -441,6 +436,3 @@ class IconPageBase {
     }
 }
 
-// Экспортируем класс для использования в других модулях
-window.IconPageBase = IconPageBase;
-}

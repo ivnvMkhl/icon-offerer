@@ -2,10 +2,12 @@
  * Модуль для Material Design иконок (рефакторированная версия)
  */
 
-if (typeof MuiIconPage === 'undefined') {
+import { IconPageBase } from './icon-page-base.js';
+
+
 class MuiIconPage extends IconPageBase {
-    constructor(config) {
-        super(config);
+    constructor() {
+        super('mui');
     }
 
     loadIcon(placeholder, iconName, iconPath) {
@@ -39,10 +41,4 @@ class MuiIconPage extends IconPageBase {
     }
 }
 
-// Инициализация при загрузке DOM
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.iconPageConfig && window.iconPageConfig.platform === 'mui') {
-        new MuiIconPage(window.iconPageConfig);
-    }
-});
-}
+new MuiIconPage();
