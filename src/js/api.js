@@ -13,7 +13,7 @@ export class API {
    */
   async getPlatformIconPaths(platform) {
     try {
-      const response = await fetch(`${window.appConfig.baseUrl}/js/${platform}-icon-paths.json`, {
+      const response = await fetch(`${location.origin}${window.appConfig.baseUrl}/${window.appConfig.iconFiles[platform]}`, {
         credentials: 'omit'
       });
       
