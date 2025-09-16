@@ -1,4 +1,4 @@
-class Logger {
+export class Logger {
     #devHostnames = new Set(['localhost', '127.0.0.1', '0.0.0.0']);
     #isDev;
 
@@ -21,9 +21,5 @@ class Logger {
     info(...args) {
         if (this.#isDev) console.info(...args);
     }
-}
-
-if (!window.logger) {
-    window.logger = new Logger();
 }
 

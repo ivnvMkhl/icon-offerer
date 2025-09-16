@@ -2,10 +2,11 @@
  * Модуль для Ant Design иконок (рефакторированная версия)
  */
 
-if (typeof AntdIconPage === 'undefined') {
+import { IconPageBase } from './icon-page-base.js';
+
 class AntdIconPage extends IconPageBase {
-    constructor(config) {
-        super(config);
+    constructor() {
+        super('antd');
     }
 
     loadIcon(placeholder, iconName, iconPath) {
@@ -39,10 +40,5 @@ class AntdIconPage extends IconPageBase {
     }
 }
 
-// Инициализация при загрузке DOM
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.iconPageConfig && window.iconPageConfig.platform === 'antd') {
-        new AntdIconPage(window.iconPageConfig);
-    }
-});
-}
+
+new AntdIconPage();

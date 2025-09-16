@@ -6,10 +6,11 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "ELEVENTY_ENV=production eleventy",
-    "serve": "ELEVENTY_ENV=production eleventy --serve",
-    "dev": "ELEVENTY_ENV=development eleventy --serve --watch",
-    "start": "ELEVENTY_ENV=production eleventy --serve"
+    "clean-dist": "rm -rf dist",
+    "build": "npm run clean-dist && ELEVENTY_ENV=production eleventy",
+    "serve": "npm run clean-dist && ELEVENTY_ENV=production eleventy --serve",
+    "dev": "npm run clean-dist && ELEVENTY_ENV=development eleventy --serve --watch",
+    "start": "npm run clean-dist && ELEVENTY_ENV=production eleventy --serve"
   },
   "keywords": [
     "11ty",
@@ -17,7 +18,7 @@
     "static-site-generator",
     "icons"
   ],
-  "author": "",
+  "author": "iMkhl",
   "license": "MIT",
   "devDependencies": {
     "@11ty/eleventy": "3.1.2",

@@ -3,28 +3,15 @@
 # Принимает параметры:
 # - platform: название платформы (antd, mui, unicode)
 # - platformTitle: заголовок платформы для отображения
-# - dataFile: путь к JSON файлу с данными иконок
-# - jsFile: путь к JS файлу для инициализации
 layout: base.njk
 ---
 
 {% block head %}
 {% include "platform-page-meta.njk" %}
 
-<script>
-    window.baseUrl = '{{ baseUrl }}';
-    window.iconPageConfig = {
-        platform: '{{ platform }}',
-        dataFile: '{{ dataFile }}',
-        jsFile: '{{ jsFile }}'
-    };
-    window.aiSerchUrl = '{{ aiSearchUrl }}';
-</script>
+<link rel="stylesheet" href="{{ baseUrl }}/css/platform.css">
 
-<script src="{{ baseUrl }}/js/ai-search.js" defer></script>
-<script src="{{ baseUrl }}/js/paginated-icons.js" defer></script>
-<script src="{{ baseUrl }}/js/icon-page-base.js" defer></script>
-<script src="{{ baseUrl }}/{{ jsFile }}" defer></script>
+<script type="module" src="{{ baseUrl }}/js/{{ platform }}-icons.js" defer></script>
 {% endblock %}
 
 {% block content %}

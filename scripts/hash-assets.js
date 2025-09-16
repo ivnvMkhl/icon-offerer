@@ -86,7 +86,7 @@ function hashAssets({ outputDir, extensions, ignoredFiles = [] }) {
   return hashManifest;
 }
 
-function updateHashedLinks({ hashManifest, outputDir, extensions = ['.html'], files = [] }) {
+function updateHashedLinks({ hashManifest, outputDir, extensions = ['.html'], files = [], replaceRule = {} }) {
   if (!outputDir) {
     throw new Error('outputDir parameter is required for updateHashedLinks');
   }
@@ -106,7 +106,19 @@ function updateHashedLinks({ hashManifest, outputDir, extensions = ['.html'], fi
     const content = fs.readFileSync(filePath, "utf8");
     
     const updatedContent = Object.entries(hashManifest).reduce(
-      (acc, [original, hashed]) => acc.replaceAll(original, hashed),
+      (acc, [original, hashed]) => {
+        const fileExtension = path.extname(filePath);
+        const rules = replaceRule[fileExtension];
+        
+        if (rules && Array.isArray(rules) && rules.length >= 2) {
+          const [fromPrefix, toPrefix] = rules;
+          const originalWithPrefix = original.replace(fromPrefix, toPrefix);
+          const hashedWithPrefix = hashed.replace(fromPrefix, toPrefix);
+          return acc.replaceAll(originalWithPrefix, hashedWithPrefix);
+        }
+        
+        return acc.replaceAll(original, hashed);
+      },
       content
     );
 
