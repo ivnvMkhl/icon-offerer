@@ -38,12 +38,15 @@ export default function(eleventyConfig) {
           extensions: ['.js', '.json', '.css'],
           ignoredFiles: ['site.webmanifest.json']
         });
-        
+
         updateHashedLinks({
           hashManifest: hashManifest,
           outputDir: dir.output,
-          extensions: ['.html'],
-          files: ['.htaccess']
+          extensions: ['.html', '.js'],
+          files: ['.htaccess'],
+          replaceRule: {
+            '.js': ['js/', './'],
+          },
         });
         console.log('✅ File hashing completed!');
       }
