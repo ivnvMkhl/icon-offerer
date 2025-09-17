@@ -23,9 +23,33 @@ export class API {
 
       const iconData = await response.json();
       
+      // Преобразуем в массив объектов для пагинации
+      const mappedIcons = Object.keys(iconData).map(name => {
+        const path = iconData[name];
+        const baseIcon = {
+          name,
+          path,
+          searchText: name.toLowerCase()
+        };
+
+        // Добавляем специфичные данные для Unicode иконок
+        if (platform === 'unicode' && typeof path === 'object' && path !== null) {
+          return {
+            ...baseIcon,
+            char: path.char,
+            code: path.code,
+            range: path.range,
+            description: path.description
+          };
+        }
+
+        return baseIcon;
+      }).sort((a, b) => a.name.localeCompare(b.name));
+      
       return {
         success: true,
-        data: iconData,
+        data: iconData, // исходные данные
+        mappedIcons: mappedIcons, // обработанные данные
         platform: platform
       };
 
