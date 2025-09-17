@@ -9,19 +9,6 @@ class UnicodeIconPage extends IconPageBase {
         super('unicode');
     }
 
-    getAdditionalIconData(name, path) {
-        // Для Unicode иконок path содержит объект с дополнительными данными
-        if (typeof path === 'object' && path !== null) {
-            return {
-                char: path.char,
-                code: path.code,
-                range: path.range,
-                description: path.description,
-                searchText: `${name} ${path.char} ${path.range}`.toLowerCase()
-            };
-        }
-        return {};
-    }
 
     loadIcon(placeholder, iconName, iconData) {
         // Для Unicode иконок нам не нужно загружать SVG, символ уже отображается
@@ -54,13 +41,6 @@ class UnicodeIconPage extends IconPageBase {
         }
     }
 
-    filterIcon(icon, query) {
-        // Для Unicode иконок используем расширенный поиск
-        if (icon.searchText) {
-            return icon.searchText.includes(query.toLowerCase());
-        }
-        return icon.name.toLowerCase().includes(query.toLowerCase());
-    }
 }
 
 new UnicodeIconPage();
